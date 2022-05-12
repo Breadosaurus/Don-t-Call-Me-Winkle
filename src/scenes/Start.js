@@ -5,7 +5,7 @@ class Start extends Phaser.Scene {
 
     create() {
 
-        this.clouds = this.add.tileSprite(0, 0, 825, 650, 'bg_1').setOrigin(0, 0);
+        this.clouds = this.add.tileSprite(0, 0, 825, 650, 'bg_1').setOrigin(0, 0).setSize(1050, 700);
         
     }
 
