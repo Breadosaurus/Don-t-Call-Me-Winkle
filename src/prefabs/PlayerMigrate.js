@@ -1,5 +1,5 @@
 class PlayerMigrate extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene, x, y, texture, frame, leftKey, rightKey, upKey, downKey) {
+    constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
         // add sprite to scene 
@@ -7,12 +7,6 @@ class PlayerMigrate extends Phaser.Physics.Arcade.Sprite {
         scene.physics.add.existing(this);
 
         // this.setBounce(1, 1);
-
-        // set keys
-        this.leftKey = leftKey;
-        this.rightKey = rightKey;
-        this.upKey = upKey;
-        this.downKey = downKey;
 
         // randomize function for hit sound
         // this.ouch_1 = scene.sound.add('ouch_1');
@@ -32,22 +26,22 @@ class PlayerMigrate extends Phaser.Physics.Arcade.Sprite {
     update() {
         // left/right/up/down mvt
         if(!this.bumped) {
-            if (this.rightKey.isDown) {
-                this.setVelocityX(this.moveSpeed);
+            if (cursors.left.isDown) {
+                this.setVelocityX(-this.moveSpeed);
                 // this.setFlip(true, false);
                 // this.anims.play('turn', true);
-            } else if (this.leftKey.isDown) {
-                this.setVelocityX(-this.moveSpeed);
+            } else if (cursors.right.isDown) {
+                this.setVelocityX(this.moveSpeed);
                 // this.resetFlip();
                 // this.anims.play('turn', true);
             } else {
                 this.setVelocityX(0);
             }
 
-            if (this.upKey.isDown) {
+            if (cursors.up.isDown) {
                 this.setVelocityY(-this.moveSpeed);
                 // this.anims.play('up', true);
-            } else if (this.downKey.isDown) {
+            } else if (cursors.down.isDown) {
                 this.setVelocityY(this.moveSpeed);
             } 
             else {
