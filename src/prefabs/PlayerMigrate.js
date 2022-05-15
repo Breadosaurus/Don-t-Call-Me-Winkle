@@ -1,4 +1,4 @@
-class Player extends Phaser.Physics.Arcade.Sprite {
+class PlayerMigrate extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame, leftKey, rightKey, upKey, downKey) {
         super(scene, x, y, texture, frame);
 
@@ -24,8 +24,8 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
         // speed boost
         // this.boostSpeed = 200;
-        // this.surf_1 = scene.sound.add('surf_1');
-        // this.surf_2 = scene.sound.add('surf_2');
+        // this.formed_1 = scene.sound.add('surf_1');
+        // this.formed_2 = scene.sound.add('surf_2');
 
     } // end constructor
 
