@@ -1,7 +1,7 @@
 let config = {
     type: Phaser.AUTO,
-    width: 1050,
-    height: 700,
+    width: 1024,
+    height: 768,
     physics: {
         default: 'arcade',
         arcade: { fps: 60 }
@@ -10,10 +10,8 @@ let config = {
     },
     scene: [Load, Game1]
 }
-let game = new Phaser.Game(config); 
+let game = new Phaser.Game(config);
 
-// reserve keyboard vars
-//let keyS, keySPACE, keyM, keyLEFT, keyRIGHT, keyUP, keyDOWN;
 let cursors;
 
 let borderUISize = game.config.height / 30; 
