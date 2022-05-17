@@ -1,6 +1,6 @@
 class Game1 extends Phaser.Scene {
     constructor() {
-        super("startScene");
+        super("game1Scene");
     }
 
     create() {
@@ -9,12 +9,15 @@ class Game1 extends Phaser.Scene {
         
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
+        keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 
         // peri in game
         this.periGame = new PlayerMigrate(this, game.config.width/2, game.config.height/2, 'periMigrate', 0).setScale(0.4);
 
         // level complete condition
         this.formComplete = false;
+
+
     }
 
     update() {
@@ -25,5 +28,10 @@ class Game1 extends Phaser.Scene {
 
         this.clouds.tilePositionX -= scrollSpeed;
         
+        // for the sake of FPB 
+        if (Phaser.Input.Keyboard.JustDown(keyT)) {
+            // this.sound.play('storyChoice');
+            this.scene.start('story1Scene');
+        }
     }
 }

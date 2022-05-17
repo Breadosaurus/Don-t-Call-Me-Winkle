@@ -8,12 +8,13 @@ let config = {
     },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Load, Game1]
+    scene: [Load, Tutorial, Game1, Story1 ]
 }
 let game = new Phaser.Game(config); 
 
 // reserve keyboard vars
 //let keyS, keySPACE, keyM, keyLEFT, keyRIGHT, keyUP, keyDOWN;
+let keyP, keyT;
 let cursors;
 
 let borderUISize = game.config.height / 30; 
