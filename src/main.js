@@ -4,11 +4,13 @@ let config = {
     height: 768,
     physics: {
         default: 'arcade',
-        arcade: { fps: 60 }
-    },
+        arcade: { 
+            debug: true,
+            fps: 60 }
+        },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Load, Game1]
+    scene: [Load, Migrate1]
 }
 let game = new Phaser.Game(config);
 
