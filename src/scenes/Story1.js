@@ -69,6 +69,7 @@ class Story1 extends Phaser.Scene {
         if (this.slowCheck1) {
             // if space is pressed then: fade NPC and their dialogue
             if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+                this.sound.play('spaceNPC');
                 this.He.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
                 this.slowCheck1 = false;
@@ -83,6 +84,7 @@ class Story1 extends Phaser.Scene {
             this.periBox.setAlpha(1);
             this.choices1.setAlpha(1);
             if (Phaser.Input.Keyboard.JustDown(key1)) {
+                this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
                 this.choices1.setAlpha(0);
@@ -90,6 +92,7 @@ class Story1 extends Phaser.Scene {
                 this.slowCheck2 = true;
             }
             if (Phaser.Input.Keyboard.JustDown(key2)) {
+                this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
                 this.choices1.setAlpha(0);
@@ -97,6 +100,7 @@ class Story1 extends Phaser.Scene {
                 this.slowCheck2 = true;
             }
             if (Phaser.Input.Keyboard.JustDown(key3)) {
+                this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
                 this.choices1.setAlpha(0);
@@ -114,6 +118,7 @@ class Story1 extends Phaser.Scene {
             this.NPCbox.setAlpha(1);
 
             if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+                this.sound.play('spaceNPC');
                 this.He.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
                 this.slowCheck2 = false;
@@ -128,6 +133,7 @@ class Story1 extends Phaser.Scene {
             this.periBox.setAlpha(1);
             this.choices2.setAlpha(1);
             if (Phaser.Input.Keyboard.JustDown(key1)) {
+                this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
                 this.choices2.setAlpha(0);
@@ -135,6 +141,7 @@ class Story1 extends Phaser.Scene {
                 this.slowCheck3 = true;
             }
             if (Phaser.Input.Keyboard.JustDown(key2)) {
+                this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
                 this.choices2.setAlpha(0);
@@ -142,6 +149,7 @@ class Story1 extends Phaser.Scene {
                 this.slowCheck3 = true;
             }
             if (Phaser.Input.Keyboard.JustDown(key3)) {
+                this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
                 this.choices2.setAlpha(0);
@@ -160,6 +168,7 @@ class Story1 extends Phaser.Scene {
             this.NPCbox.setAlpha(1);
 
             if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+                this.sound.play('spaceNPC');
                 this.He.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
                 this.slowCheck3 = false;
@@ -174,6 +183,7 @@ class Story1 extends Phaser.Scene {
             this.periCloseText.setAlpha(1);
 
             if (Phaser.Input.Keyboard.JustDown(keyP)) {
+                this.sound.play('menuSelect');
                 this.scene.start('game1Scene');
             }
         }
