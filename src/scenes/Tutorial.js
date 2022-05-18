@@ -4,10 +4,11 @@ class Tutorial extends Phaser.Scene {
     }
 
     create() {
-        
+        // define keys 
         keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
         keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
 
+        // text styling
         let textConfig = {
             fontFamily: 'Comic Sans MS',
             fontSize: '46px',
@@ -18,7 +19,8 @@ class Tutorial extends Phaser.Scene {
                 bottom: 5, 
             },
         } 
-        this.add.text(50, 300, "Don't Call Me Winkle (Please)", textConfig).setDepth(5);
+
+        this.add.text(50, 300, "Don't Call Me Winkle (Please ;^;)", textConfig).setDepth(5);
         // text wrap based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width
         this.make.text({
             x: 50,
