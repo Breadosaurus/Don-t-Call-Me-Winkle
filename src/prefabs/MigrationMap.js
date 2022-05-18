@@ -1,5 +1,0 @@
-class MigrationMap {
-    constructor() {
-        
-    }
-}

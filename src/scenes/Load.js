@@ -12,9 +12,8 @@ class Load extends Phaser.Scene {
         this.load.image('periMigrate', 'periMigrate.png');
         this.load.image('swanMigrate', 'swanMigrate.png');
 
-        // preload paths json file
-        //this.load.json('paths', 'paths.json');
-
+        // preload migration map json file
+        this.load.json('migrationMap', 'migrationMap.json');
     }
 
     create() {

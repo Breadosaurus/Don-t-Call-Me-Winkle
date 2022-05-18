@@ -5,6 +5,7 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // add sprite to scene 
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.setSize(this.width*0.5, this.height*0.5);
 
         // this.setBounce(1, 1);
 
@@ -27,8 +28,8 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // left/right/up/down mvt
         if (this.scene.formComplete) {
             this.setVelocity(0);
-            this.x = this.scene.periPos1[0];
-            this.y = this.scene.periPos1[1];
+            this.x = this.scene.map[this.scene.form].peri[0];
+            this.y = this.scene.map[this.scene.form].peri[1];
         } else if (!this.bumped) {
             if (cursors.left.isDown) {
                 this.setVelocityX(-this.moveSpeed);
