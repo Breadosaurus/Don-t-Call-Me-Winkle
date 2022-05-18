@@ -28,11 +28,9 @@ class PlayerMigrate extends Phaser.Physics.Arcade.Sprite {
         if(!this.bumped) {
             if (cursors.left.isDown) {
                 this.setVelocityX(-this.moveSpeed);
-                // this.setFlip(true, false);
                 // this.anims.play('turn', true);
             } else if (cursors.right.isDown) {
                 this.setVelocityX(this.moveSpeed);
-                // this.resetFlip();
                 // this.anims.play('turn', true);
             } else {
                 this.setVelocityX(0);
