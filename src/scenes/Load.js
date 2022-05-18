@@ -22,6 +22,8 @@ class Load extends Phaser.Scene {
         // temp for chapt 1 lol
         this.load.image('He', 'jeffrey_thomas.png');
 
+        // preload migration map json file
+        this.load.json('migrationMap', 'migrationMap.json');
     }
 
     create() {

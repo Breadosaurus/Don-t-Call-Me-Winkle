@@ -184,7 +184,7 @@ class Story1 extends Phaser.Scene {
 
             if (Phaser.Input.Keyboard.JustDown(keyP)) {
                 this.sound.play('menuSelect');
-                this.scene.start('game1Scene');
+                this.scene.start('mig1Scene');
             }
         }
 

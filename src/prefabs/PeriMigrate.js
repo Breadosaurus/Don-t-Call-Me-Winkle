@@ -1,10 +1,11 @@
-class PlayerMigrate extends Phaser.Physics.Arcade.Sprite {
+class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
         // add sprite to scene 
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.setSize(this.width*0.5, this.height*0.5);
 
         // this.setBounce(1, 1);
 
@@ -21,11 +22,16 @@ class PlayerMigrate extends Phaser.Physics.Arcade.Sprite {
         // this.formed_1 = scene.sound.add('surf_1');
         // this.formed_2 = scene.sound.add('surf_2');
 
+
     } // end constructor
 
     update() {
         // left/right/up/down mvt
-        if(!this.bumped) {
+        if (this.scene.formComplete) {
+            this.setVelocity(0);
+            this.x = this.scene.map[this.scene.form].peri[0];
+            this.y = this.scene.map[this.scene.form].peri[1];
+        } else if (!this.bumped) {
             if (cursors.left.isDown) {
                 this.setVelocityX(-this.moveSpeed);
                 // this.anims.play('turn', true);
