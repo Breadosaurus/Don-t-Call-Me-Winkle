@@ -5,7 +5,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: { 
-            debug: true,
+            debug: false,
             fps: 60 }
         },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
