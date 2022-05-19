@@ -1,6 +1,6 @@
 let config = {
     type: Phaser.AUTO,
-    width: 1050,
+    width: 1024,
     height: 768,
     physics: {
         default: 'arcade',
@@ -27,4 +27,6 @@ let scrollSpeed = 2.5; //1.6
 
 let leftBound = game.config.height/30;
 let rightBound = game.config.width - leftBound;
+
+let practice = true;
 

@@ -15,7 +15,7 @@ class Migrate1 extends Phaser.Scene {
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
         //-------------------------------------------------------------------------------------------------
-        keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        //keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         //-------------------------------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ class Migrate1 extends Phaser.Scene {
         for (let i = 0; i < 8; i++) {
             this[`swan${i}`] = new SwanMigrate(this, null, this.map[0].swans[i][0], this.map[0].swans[i][1], i).setScale(0.19);
             this.physics.add.collider(this.peri, this[`swan${i}`]);
-            this.moveSwan(this[`swan${i}`]);
+            //this.moveSwan(this[`swan${i}`]);
         }
 
         // formation complete condition
@@ -56,6 +56,8 @@ class Migrate1 extends Phaser.Scene {
         }, paused: true };
 
         this.zoneTimer = this.time.addEvent(this.zoneTimerConfig);
+
+        this.endMigration = false;
 
 
 
@@ -131,19 +133,6 @@ class Migrate1 extends Phaser.Scene {
         this.clouds.tilePositionX -= scrollSpeed;
 
     //-------------------------------------------------------------------------------------------------
-        if (this.formComplete && this.form == 3) {
-            this.time.delayedCall(2000, () => {
-                this.box.setAlpha(1);
-                this.pass.setAlpha(1);
-            });
-            if (Phaser.Input.Keyboard.JustDown(keyT)) {
-                this.sound.play('menuSelect');
-                this.scene.start('story1Scene');
-                
-            }
-        }
-        
-    //-------------------------------------------------------------------------------------------------
 
     }
 
@@ -177,7 +166,7 @@ class Migrate1 extends Phaser.Scene {
             });
 
         } else {
-            this.time.delayedCall(1000, () => {
+            this.time.delayedCall(2000, () => {
                 this.form++;
                 this.periZone.x = this.map[this.form].peri[0];
                 this.periZone.y = this.map[this.form].peri[1];

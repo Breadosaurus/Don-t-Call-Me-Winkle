@@ -20,7 +20,8 @@ class Load extends Phaser.Scene {
         this.load.audio('periChoice', 'periChoice.mp3');
 
         // temp for chapt 1 lol
-        this.load.image('He', 'jeffrey_thomas.png');
+        //this.load.image('He', 'jeffrey_thomas.png');
+        this.load.image('slowSwan', 'slowSwan.png');
 
         // preload migration map json file
         this.load.json('migrationMap', 'migrationMap.json');
