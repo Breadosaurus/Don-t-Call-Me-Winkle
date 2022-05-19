@@ -15,7 +15,7 @@ class Migrate1 extends Phaser.Scene {
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
         //-------------------------------------------------------------------------------------------------
-        keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+        //keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         //-------------------------------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ class Migrate1 extends Phaser.Scene {
         for (let i = 0; i < 8; i++) {
             this[`swan${i}`] = new SwanMigrate(this, null, this.map[0].swans[i][0], this.map[0].swans[i][1], i).setScale(0.19);
             this.physics.add.collider(this.peri, this[`swan${i}`]);
-            this.moveSwan(this[`swan${i}`]);
+            //this.moveSwan(this[`swan${i}`]);
         }
 
         // formation complete condition
@@ -56,6 +56,8 @@ class Migrate1 extends Phaser.Scene {
         }, paused: true };
 
         this.zoneTimer = this.time.addEvent(this.zoneTimerConfig);
+
+        this.endMigration = false;
 
 
 
@@ -72,8 +74,16 @@ class Migrate1 extends Phaser.Scene {
             },
         }
         this.box = this.add.rectangle(game.config.width/10, game.config.height/3, game.config.width - 200, game.config.height/3, 0x172230).setOrigin(0,0);
-        this.migrateTutorial = this.add.text(this.box.x + 20, this.box.y + 30, " Welcome to migration practice! Here you will practice getting in formation with the flock. Use the left, right, up, and down arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\ \n\ \n\ (Press SPACE to begin)", dialogueConfig).setWordWrapWidth(600);
-        this.pass = this.add.text(this.box.x + 20, this.box.y + 30, "Nice work! Can't wait to see you flex your skills for real. Take a break!! \n\ \n\ \n\ (Press T to socialize)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
+        
+        this.migrateTutorial = this.add.text(this.box.x + 20, this.box.y + 30,
+            practice ? 
+                "Welcome to migration practice! Here you will practice getting in formation with the flock. Use the left, right, up, and down arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\ \n\ \n\ (Press SPACE to begin)" : 
+
+                "Welcome to your first migration! Use the left, right, up, and down arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\ \n\ \n\ (Press SPACE to begin)"
+        , dialogueConfig).setWordWrapWidth(600);
+        
+        
+        this.pass = this.add.text(this.box.x + 20, this.box.y + 30, "Nice work! Can't wait to see you flex your skills for real. Take a break!! \n\ \n\ \n\ (Press SPACE to continue)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
 //----------------------------------------------------------------------------------------------------
 
 
@@ -89,7 +99,18 @@ class Migrate1 extends Phaser.Scene {
         if (!this.formComplete && Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.sound.play('migStart');
             this.box.setAlpha(0);
-            this.migrateTutorial.setAlpha(0);            
+            this.migrateTutorial.setAlpha(0);
+            this.peri.move = true;     
+            for (let i = 0; i < 8; i++) {
+                this.moveSwan(this[`swan${i}`]);
+            };
+        }
+
+        if (practice && this.endMigration && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            this.sound.play('menuSelect');
+            practice = false;
+            console.log(practice);
+            this.scene.restart();
         }
     //-------------------------------------------------------------------------------------------------
 
@@ -104,19 +125,6 @@ class Migrate1 extends Phaser.Scene {
         this.clouds.tilePositionX -= scrollSpeed;
 
     //-------------------------------------------------------------------------------------------------
-        if (this.formComplete && this.form == 3) {
-            this.time.delayedCall(2000, () => {
-                this.box.setAlpha(1);
-                this.pass.setAlpha(1);
-            });
-            if (Phaser.Input.Keyboard.JustDown(keyT)) {
-                this.sound.play('menuSelect');
-                this.scene.start('story1Scene');
-                
-            }
-        }
-        
-    //-------------------------------------------------------------------------------------------------
 
     }
 
@@ -129,13 +137,21 @@ class Migrate1 extends Phaser.Scene {
         // if this was the last formation, chapter is complete: progress to next chapter
         if (this.form == 3) {
             this.time.delayedCall(2000, () => {
-                this.add.text(game.config.width/2, game.config.height/4,'stage complete!', {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(1);
-                //this.scene.start('story2Scene');
-       
+                this.endMigration = true;
+
+                this.add.text(game.config.width/2, game.config.height/4, practice ? 'practice complete!':'stage complete!', {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(1);
+
+                if (practice) {
+                    // show end, move to next scene
+                    this.time.delayedCall(2000, () => {
+                        this.box.setAlpha(1);
+                        this.pass.setAlpha(1);
+                    });
+                }
             });
 
         } else {
-            this.time.delayedCall(1000, () => {
+            this.time.delayedCall(2000, () => {
                 this.form++;
                 this.periZone.x = this.map[this.form].peri[0];
                 this.periZone.y = this.map[this.form].peri[1];

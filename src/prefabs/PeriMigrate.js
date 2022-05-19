@@ -14,6 +14,7 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // this.ouch_2 = scene.sound.add('ouch_2');
         this.bumped = false;
 
+        this.move = false;
         // regular speed
         this.moveSpeed = 225;
 
@@ -31,7 +32,7 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
             this.setVelocity(0);
             this.x = this.scene.map[this.scene.form].peri[0];
             this.y = this.scene.map[this.scene.form].peri[1];
-        } else if (!this.bumped) {
+        } else if (this.move) {
             if (cursors.left.isDown) {
                 this.setVelocityX(-this.moveSpeed);
                 // this.anims.play('turn', true);
