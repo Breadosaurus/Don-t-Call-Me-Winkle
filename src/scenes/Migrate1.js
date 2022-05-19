@@ -109,7 +109,6 @@ class Migrate1 extends Phaser.Scene {
         if (practice && this.endMigration && Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.sound.play('menuSelect');
             practice = false;
-            console.log(practice);
             this.scene.restart();
         }
     //-------------------------------------------------------------------------------------------------
