@@ -58,7 +58,7 @@ class Story1 extends Phaser.Scene {
         this.periChoice2 = false;
         this.choices2 = this.add.text(this.periBox.x + 20, this.periBox.y + 30, " 1] I do! \n\ 2] Uh... \n\ 3] Feathers?", dialogueConfig).setAlpha(0).setWordWrapWidth(game.config.width/4 - 50);
         this.periClose = false;
-        this.periCloseText = this.add.text(this.periBox.x + 20, this.periBox.y + 30, "...??? \n\ \n\ \n\ \n\ \n\ Guess I'll go practice...(P)", dialogueConfig).setAlpha(0).setWordWrapWidth(game.config.width/4 - 50);
+        this.periCloseText = this.add.text(this.periBox.x + 20, this.periBox.y + 30, "...??? \n\ \n\ \n\ Guess I'll go get ready to migrate...[SPACE]", dialogueConfig).setAlpha(0).setWordWrapWidth(game.config.width/4 - 50);
 
         
 
