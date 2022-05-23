@@ -4,16 +4,20 @@ let config = {
     height: 768,
     physics: {
         default: 'arcade',
-        arcade: { fps: 60 }
-    },
+        arcade: { 
+            debug: false,
+            fps: 60 }
+        },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    scene: [Load, Start]
+    scene: [Load, Tutorial, Migrate1, Story1 ]
 }
-let game = new Phaser.Game(config); 
+let game = new Phaser.Game(config);
 
 // reserve keyboard vars
-let keyS, keySPACE, keyM, keyLEFT, keyRIGHT, keyUP, keyDOWN;
+//let keyS, keySPACE, keyM, keyLEFT, keyRIGHT, keyUP, keyDOWN;
+let keyP, keyT, keySPACE, key1, key2, key3;
+let cursors;
 
 let borderUISize = game.config.height / 30; 
 let borderPadding = borderUISize / 3; 
@@ -23,4 +27,6 @@ let scrollSpeed = 2.5; //1.6
 
 let leftBound = game.config.height/30;
 let rightBound = game.config.width - leftBound;
+
+let practice = true;
 
