@@ -9,6 +9,9 @@ class SwanMigrate extends Phaser.GameObjects.PathFollower {
         // add physics
         scene.physics.add.existing(this);
 
+        // set hitbox
+        this.body.setCircle(40, 30, 25);
+
         // can't be pushed
         this.body.setImmovable(true);
 

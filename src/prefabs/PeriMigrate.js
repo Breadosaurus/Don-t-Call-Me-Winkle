@@ -5,7 +5,7 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // add sprite to scene 
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.setSize(this.width*0.5, this.height*0.5);
+        this.setCircle(20, 4, 15);
 
         // this.setBounce(1, 1);
 

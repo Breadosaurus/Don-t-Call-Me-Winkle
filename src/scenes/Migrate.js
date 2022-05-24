@@ -1,21 +1,19 @@
-class Migrate1 extends Phaser.Scene {
+class Migrate extends Phaser.Scene {
     constructor() {
-        super("mig1Scene");
+        super("migrateScene");
     }
 
     create() {
-        // current chapter
-        this.chapter = 1;
-
+        game.config.pixelArt = false;
         // current formation
         this.form = 1;
         this.paths = new Phaser.Curves.Path(this.cache.json.get('paths'));
-        this.clouds = this.add.tileSprite(0, 0, 824, 650, 'bg_1').setOrigin(0, 0).setSize(1050, 768);
-        
+        this.bg = this.add.tileSprite(0, 0, 824, 650, `bg_${chapter}`).setOrigin(0, 0).setSize(1024, 768);
+        this.clouds = this.add.tileSprite(0, 0, 824, 650, `clouds_${chapter}`).setOrigin(0, 0).setSize(1024, 768);
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
         //-------------------------------------------------------------------------------------------------
-        //keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
+
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         //-------------------------------------------------------------------------------------------------
 
@@ -28,12 +26,12 @@ class Migrate1 extends Phaser.Scene {
         // this.rightBound = game.config.width - 200;
 
         // store ch1 portion of json file in this.map
-        this.map = this.cache.json.get('migrationMap').ch1;
+        this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
 
         // add peri
-        this.peri = new PeriMigrate(this, this.map[0].peri[0], this.map[0].peri[1], 'periMigrate', 0).setScale(0.2).setInteractive();
+        this.peri = new PeriMigrate(this, this.map[0].peri[0], this.map[0].peri[1], 'periMigrate', 0);
         
-        this.periZone = this.add.zone(this.map[1].peri[0], this.map[1].peri[1]).setSize(25, 25);
+        this.periZone = this.add.zone(this.map[1].peri[0], this.map[1].peri[1]).setSize(30, 30);
 
         this.physics.world.enable(this.periZone);
 
@@ -43,7 +41,7 @@ class Migrate1 extends Phaser.Scene {
         // add swans
         // create 8 swans; assign them names swan0 through swan8, and positions corresponding to the swanPos0 array
         for (let i = 0; i < 8; i++) {
-            this[`swan${i}`] = new SwanMigrate(this, null, this.map[0].swans[i][0], this.map[0].swans[i][1], i).setScale(0.19);
+            this[`swan${i}`] = new SwanMigrate(this, null, this.map[0].swans[i][0], this.map[0].swans[i][1], i);
             this.physics.add.collider(this.peri, this[`swan${i}`]);
             //this.moveSwan(this[`swan${i}`]);
         }
@@ -81,10 +79,10 @@ class Migrate1 extends Phaser.Scene {
 
                 "Welcome to your first migration! Use the left, right, up, and down arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\ \n\ \n\ (Press SPACE to begin)"
         , dialogueConfig).setWordWrapWidth(600);
-        
-        this.passPractice = this.add.text(this.box.x + 20, this.box.y + 30, "Nice work! Now, here comes the real deal, hope you remember the formations!! \n\ \n\ \n\ (Press SPACE to continue)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
-        this.passMigrate1 = this.add.text(this.box.x + 20, this.box.y + 30, "Alright, that was a lot of flying! You're probably tired, but please be sure to explore your options. (Not a permanent feature, just to show both core mechanics or our game: [SPACE] to return to main menu)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
 
+        this.passPractice = this.add.text(this.box.x + 20, this.box.y + 30, "Nice work! Now, here comes the real deal, hope you remember the formations!! \n\n\n(Press SPACE to continue)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
+        this.passMigrate1 = this.add.text(this.box.x + 20, this.box.y + 30, "Alright, that was a lot of flying! You're probably tired, but please be sure to explore your options. (Not a permanent feature, just to show both core mechanics or our game: [SPACE] to return to main menu)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
+        
 //----------------------------------------------------------------------------------------------------
 
 
@@ -95,32 +93,37 @@ class Migrate1 extends Phaser.Scene {
         
         this.peri.update();
 
-
     //-------------------------------------------------------------------------------------------------    
+        // 
         if (!this.formComplete && Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.sound.play('migStart');
             this.box.setAlpha(0);
             this.migrateTutorial.setAlpha(0);
-            this.peri.move = true;     
+            this.peri.move = true;    
+            // move swans to next formation
             for (let i = 0; i < 8; i++) {
                 this.moveSwan(this[`swan${i}`]);
             };
         }
 
         // practice to real migration space key transition
-        if (practice && this.endMigration && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        if (this.endMigration && Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.sound.play('menuSelect');
-            practice = false;
-            this.scene.restart();
+            // if practice mode is ON, restart scene with practice mode OFF
+            if (practice) {  
+                practice = false;
+                this.scene.restart();
+            // otherwise, progress to next chapter or ending
+            } else {
+                if (chapter < 3) {
+                    chapter++;
+                    practice = true;
+                    this.scene.start("storyScene");
+                } else this.scene.start("endScene");
+            }
         }
-        
-        // end migration can take back to top
-        if (!practice && Phaser.Input.Keyboard.JustDown(keySPACE)) {
-            this.sound.play('menuSelect');
-            this.scene.start('tutorialScene');
 
-        }
-    //-------------------------------------------------------------------------------------------------
+        //-------------------------------------------------------------------------------------------------
 
         if (!this.formComplete) {
             if (this.physics.overlap(this.peri, this.periZone)) {
@@ -130,7 +133,8 @@ class Migrate1 extends Phaser.Scene {
             };
         }
         
-        this.clouds.tilePositionX -= scrollSpeed;
+        this.bg.tilePositionX -= scrollSpeed;
+        this.clouds.tilePositionX -= scrollSpeed + 1.5;
 
     //-------------------------------------------------------------------------------------------------
 
@@ -150,18 +154,7 @@ class Migrate1 extends Phaser.Scene {
                 // end message appears shortly after form success
                 this.add.text(game.config.width/2, game.config.height/4, practice ? 'practice complete!':'stage complete!', {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(1);
                 this.box.setAlpha(1);
-                if (!practice) {
-                    this.passMigrate1.setAlpha(1);
-                }
-
-                if (practice) {
-                    // show end, move to next scene
-                    // this.time.delayedCall(2000, () => {
-                    this.box.setAlpha(1);
-                    this.passPractice.setAlpha(1);
-                    // });
-                }
-                
+                this[`pass${practice ? 'Practice' : 'Migrate1'}`].setAlpha(1);
 
             });
 
