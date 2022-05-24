@@ -121,7 +121,7 @@ class Migrate extends Phaser.Scene {
                 if (chapter < 3) {
                     chapter++;
                     practice = true;
-                    this.scene.start("storyScene");
+                    this.scene.start("tutorialScene");
                 } else this.scene.start("endScene");
             }
         }

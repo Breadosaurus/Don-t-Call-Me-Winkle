@@ -23,7 +23,7 @@ class Tutorial extends Phaser.Scene {
         } 
 
         // add bg
-        this.bg = this.add.tileSprite(0, 0, 1024, 768, 'bg_1').setOrigin(0, 0);
+        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
 
         this.add.text(50, 200, "Don't Call Me Winkle (Please ;^;)", textConfig).setDepth(5);
         // text wrap based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width

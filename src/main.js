@@ -11,7 +11,7 @@ let config = {
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
     pixelArt: true,
-    scene: [Load, Tutorial, Migrate, Story]
+    scene: [Load, Tutorial, Migrate, Story, Ending]
 }
 let game = new Phaser.Game(config);
 
