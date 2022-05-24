@@ -4,6 +4,6 @@ class Ending extends Phaser.Scene {
     }
 
     create() {
-        console.log("yeahhh ending!!!1");
+        this.add.image('jeff');;
     } 
 }

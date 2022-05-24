@@ -33,4 +33,4 @@ let rightBound = game.config.width - leftBound;
 let practice = true;
 
 // start game at chapter 1
-let chapter = 1;
+let chapter = 3;

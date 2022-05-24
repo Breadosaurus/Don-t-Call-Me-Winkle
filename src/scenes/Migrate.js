@@ -72,16 +72,18 @@ class Migrate extends Phaser.Scene {
             },
         }
         this.box = this.add.rectangle(game.config.width/10, game.config.height/3, game.config.width - 200, game.config.height/3, 0x172230).setOrigin(0,0);
+
+        this.tutorial = true;
         
         this.migrateTutorial = this.add.text(this.box.x + 20, this.box.y + 30,
             practice ? 
-                "Welcome to migration practice! Here you will practice getting in formation with the flock. Use the left, right, up, and down arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\ \n\ \n\ (Press SPACE to begin)" : 
+                "Welcome to migration practice! Here you will practice getting in formation with the flock. Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n\n(Press SPACE to begin)" : 
 
-                "Welcome to your first migration! Use the left, right, up, and down arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\ \n\ \n\ (Press SPACE to begin)"
+                "Welcome to your first migration! Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n\n(Press SPACE to begin)"
         , dialogueConfig).setWordWrapWidth(600);
 
         this.passPractice = this.add.text(this.box.x + 20, this.box.y + 30, "Nice work! Now, here comes the real deal, hope you remember the formations!! \n\n\n(Press SPACE to continue)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
-        this.passMigrate1 = this.add.text(this.box.x + 20, this.box.y + 30, "Alright, that was a lot of flying! You're probably tired, but please be sure to explore your options. (Not a permanent feature, just to show both core mechanics or our game: [SPACE] to return to main menu)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
+        this.passMigrate1 = this.add.text(this.box.x + 20, this.box.y + 30, "[formation success text]", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
         
 //----------------------------------------------------------------------------------------------------
 
@@ -94,11 +96,12 @@ class Migrate extends Phaser.Scene {
         this.peri.update();
 
     //-------------------------------------------------------------------------------------------------    
-        // 
-        if (!this.formComplete && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        // start migration when space key is pressed
+        if (this.tutorial && Phaser.Input.Keyboard.JustDown(keySPACE)) {
             this.sound.play('migStart');
             this.box.setAlpha(0);
             this.migrateTutorial.setAlpha(0);
+            this.tutorial = false;
             this.peri.move = true;    
             // move swans to next formation
             for (let i = 0; i < 8; i++) {
