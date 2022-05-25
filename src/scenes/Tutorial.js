@@ -23,7 +23,7 @@ class Tutorial extends Phaser.Scene {
         } 
 
         // add bg
-        this.bg = this.add.tileSprite(0, 0, 824, 650, 'bg_1').setOrigin(0, 0).setSize(1050, 768);
+        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
 
         this.add.text(50, 200, "Don't Call Me Winkle (Please ;^;)", textConfig).setDepth(5);
         // text wrap based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width
@@ -44,12 +44,12 @@ class Tutorial extends Phaser.Scene {
         
         if (Phaser.Input.Keyboard.JustDown(key1)) {
             this.sound.play('menuSelect');
-            this.scene.start('mig1Scene');
+            this.scene.start('migrateScene');
         }
 
         if (Phaser.Input.Keyboard.JustDown(key2)) {
             this.sound.play('menuSelect');
-            this.scene.start('story1Scene');
+            this.scene.start('storyScene');
         }
     }
 

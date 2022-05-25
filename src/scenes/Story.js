@@ -1,6 +1,6 @@
-class Story1 extends Phaser.Scene {
+class Story extends Phaser.Scene {
     constructor() {
-        super("story1Scene");
+        super("storyScene");
     }
 
     create() {
@@ -14,7 +14,7 @@ class Story1 extends Phaser.Scene {
         // choice picker collision object???
         // this.choiceSelect = this.physics.add.sprite((game.config.width - this.periBox.width) + 20, this.periBox.y + 30, 'He').setOrigin(0, 0).setAlpha(0);
 
-        this.bg = this.add.tileSprite(0, 0, 824, 650, 'bg_1').setOrigin(0, 0).setSize(1050, 768);
+        this.bg = this.add.tileSprite(0, 0, 1024, 768, 'bg_1').setOrigin(0, 0);
         
         // adding NPC dialogue box
         this.NPCbox = this.add.rectangle(game.config.width/8, game.config.height*(2/3), game.config.width - 200, game.config.height/3, 0xe0eefb).setOrigin(0,0);
@@ -187,7 +187,7 @@ class Story1 extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
                 this.sound.play('menuSelect');
                 practice = false;
-                this.scene.start('mig1Scene');
+                this.scene.start('migrateScene');
             }
         }
 

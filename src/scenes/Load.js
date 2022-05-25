@@ -9,9 +9,16 @@ class Load extends Phaser.Scene {
 
         // all the good good visual boys we need!!
         this.load.image('bg_1', 'bg_001.png');
+        this.load.image('bg_2', 'bg_002.png');
+        this.load.image('bg_3', 'bg_003.png');
+        this.load.image('clouds_1', 'bg_001_clouds.png');
+        this.load.image('clouds_2', 'bg_002_clouds.png');
+        this.load.image('clouds_3', 'bg_003_clouds.png');
         this.load.image('periMigrate', 'periMigrate.png');
         this.load.image('swanMigrate', 'swanMigrate.png');
         this.load.image('periStory', 'periStory.png');
+
+        this.load.image('jeff', 'jeffrey_thomas.png');
 
         // all the good good audio boys we need
         this.load.audio('menuSelect', 'menuSelect.mp3');
