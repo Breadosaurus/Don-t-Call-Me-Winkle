@@ -10,13 +10,12 @@ let config = {
         },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    pixelArt: true,
+    pixelArt: false,
     scene: [Load, Tutorial, Migrate, Story, Ending]
 }
 let game = new Phaser.Game(config);
 
 // reserve keyboard vars
-//let keyS, keySPACE, keyM, keyLEFT, keyRIGHT, keyUP, keyDOWN;
 let keyP, keyT, keySPACE, key1, key2, key3;
 let cursors;
 
@@ -33,4 +32,4 @@ let rightBound = game.config.width - leftBound;
 let practice = true;
 
 // start game at chapter 1
-let chapter = 3;
+let chapter = 1;

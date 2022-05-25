@@ -12,7 +12,7 @@ class Tutorial extends Phaser.Scene {
 
         // text styling
         let textConfig = {
-            fontFamily: 'Comic Sans MS',
+            fontFamily: 'handwrite',
             fontSize: '46px',
             color: '#8e87f1',
             align: 'center',

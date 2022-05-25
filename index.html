@@ -5,12 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Don't Call Me Winkle ;^;</title>
+    
+    <!-- custom font coding with help from https://learn.yorkcs.com/2019/09/28/phaser-3-basics-custom-fonts/ -->
+    <div style="font-family: handwrite; position: absolute; left:-1000px; visibility:hidden;">.</div>
     <style>
         body {
             background-color: #8e87f1; 
         }    
         .img-container {
             text-align: center; 
+        }
+
+        @font-face {
+            font-family: handwrite;
+            src: url('./assets/basic_handwrite_neat.ttf');
+            font-weight: 400;
+            font-weight: normal;
         }
     </style>
 </head>
@@ -25,12 +35,6 @@
     <script src="./src/scenes/Story.js"></script>
     <script src="./src/scenes/Migrate.js"></script>
     <script src="./src/scenes/Ending.js"></script>
-    <!-- <script src="./src/scenes/VN_1.js"></script>
-    <script src="./src/scenes/Game_2.js"></script>
-    <script src="./src/scenes/VN_2.js"></script>
-    <script src="./src/scenes/Game_3.js"></script>
-    <script src="./src/scenes/VN_3.js"></script>
-    <script src="./src/scenes/Outro.js"></script> -->
     <script src="./src/main.js"></script>
 </body>
 </html>

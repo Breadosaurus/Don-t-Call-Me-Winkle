@@ -30,7 +30,7 @@ class Story extends Phaser.Scene {
 
         // text style for dialogue
         let dialogueConfig = {
-            fontFamily: 'Comic Sans MS',
+            fontFamily: 'handwrite',
             fontSize: '18px',
             color: '#172230',
             align: 'left',
@@ -74,6 +74,7 @@ class Story extends Phaser.Scene {
                 this.sound.play('spaceNPC');
                 this.slowSwan.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
+                this.slowLine1.setAlpha(0.5);
                 this.slowCheck1 = false;
                 this.periChoice1 = true
             }
@@ -123,6 +124,7 @@ class Story extends Phaser.Scene {
                 this.sound.play('spaceNPC');
                 this.slowSwan.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
+                this.slowLine2.setAlpha(0.5);
                 this.slowCheck2 = false;
                 this.periChoice2 = true;
             }
@@ -173,6 +175,7 @@ class Story extends Phaser.Scene {
                 this.sound.play('spaceNPC');
                 this.slowSwan.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
+                this.slowLine3.setAlpha(0.5);
                 this.slowCheck3 = false;
                 this.periClose = true;
             }
