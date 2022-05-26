@@ -5,7 +5,7 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // setup
         scene.add.existing(this);
         scene.physics.add.existing(this);
-        this.setCollideWorldBounds(true);
+        this.setCollideWorldBounds(true, 0, 0);
 
         // hitbox
         this.setCircle(27, 2, 7);
@@ -18,7 +18,8 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         this.setMaxVelocity(this.speed);
 
 
-        // this.setBounce(1, 1);
+        this.setBounce(1, 1);
+        this.setMass(100);
 
         // randomize function for hit sound
         // this.ouch_1 = scene.sound.add('ouch_1');
