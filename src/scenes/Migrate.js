@@ -8,8 +8,8 @@ class Migrate extends Phaser.Scene {
         // current formation
         this.form = 1;
         this.paths = new Phaser.Curves.Path(this.cache.json.get('paths'));
-        this.bg = this.add.tileSprite(0, 0, 824, 650, `bg_${chapter}`).setOrigin(0, 0).setSize(1024, 768);
-        this.clouds = this.add.tileSprite(0, 0, 824, 650, `clouds_${chapter}`).setOrigin(0, 0).setSize(1024, 768);
+        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
+        this.clouds = this.add.tileSprite(0, 0, 1024, 768, `clouds_${chapter}`).setOrigin(0, 0);
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
         //-------------------------------------------------------------------------------------------------
@@ -17,44 +17,42 @@ class Migrate extends Phaser.Scene {
         keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         //-------------------------------------------------------------------------------------------------
 
-        this.centerX = game.config.width/2;
-        this.centerY = game.config.height/2;
-
-        // this.topBound = 50;
-        // this.btmBound = game.config.height - 50;
-        // this.leftBound = 200;
-        // this.rightBound = game.config.width - 200;
-
         // store ch1 portion of json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
 
         // add peri
         this.peri = new PeriMigrate(this, this.map[0].peri[0], this.map[0].peri[1], 'periMigrate', 0);
         
+        // add zone representing peri's spot in formation 1
         this.periZone = this.add.zone(this.map[1].peri[0], this.map[1].peri[1]).setSize(30, 30);
-
         this.physics.world.enable(this.periZone);
 
         this.points = [];
-        this.path = new Phaser.Curves.Spline(this.points);
+        this.path = new Phaser.Curves.Line(this.points);
 
         // add swans
         // create 8 swans; assign them names swan0 through swan8, and positions corresponding to the swanPos0 array
+        this.swanGroup = this.physics.add.group();
         for (let i = 0; i < 8; i++) {
             this[`swan${i}`] = new SwanMigrate(this, null, this.map[0].swans[i][0], this.map[0].swans[i][1], i);
-            this.physics.add.collider(this.peri, this[`swan${i}`]);
-            //this.moveSwan(this[`swan${i}`]);
+            this.swanGroup.add(this[`swan${i}`]);
+            //this.physics.add.collider(this.peri, this[`swan${i}`]);
         }
+        
+        // set colliders between peri and swans
+        this.physics.add.collider(this.peri, this.swanGroup);
 
         // formation complete condition
         this.formComplete = false; 
 
+        // create zone timer to measure how long peri has been in correct zone.
+        // if peri is within zone for 1 second in a row, end formation.
         this.zoneTimerConfig = { delay: 1000, callback: () => {
             this.endForm();
         }, paused: true };
-
         this.zoneTimer = this.time.addEvent(this.zoneTimerConfig);
 
+        // migration end condition
         this.endMigration = false;
 
 
@@ -84,13 +82,10 @@ class Migrate extends Phaser.Scene {
 
         this.passPractice = this.add.text(this.box.x + 20, this.box.y + 30, "Nice work! Now, here comes the real deal, hope you remember the formations!! \n\n\n(Press SPACE to continue)", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
         this.passMigrate1 = this.add.text(this.box.x + 20, this.box.y + 30, "[formation success text]", dialogueConfig).setWordWrapWidth(600).setAlpha(0);
+    }
         
 //----------------------------------------------------------------------------------------------------
-
-
-
-    }
-
+   
     update() {
         
         this.peri.update();
@@ -128,6 +123,8 @@ class Migrate extends Phaser.Scene {
 
         //-------------------------------------------------------------------------------------------------
 
+        // if formation has not been completed, start timer when peri is in correct zone.
+        // if peri moves outside of zone, restart timer.
         if (!this.formComplete) {
             if (this.physics.overlap(this.peri, this.periZone)) {
                 this.zoneTimer.paused = false;
@@ -136,6 +133,7 @@ class Migrate extends Phaser.Scene {
             };
         }
         
+        // scroll background and clouds
         this.bg.tilePositionX -= scrollSpeed;
         this.clouds.tilePositionX -= scrollSpeed + 1.5;
 
@@ -155,8 +153,8 @@ class Migrate extends Phaser.Scene {
                 this.endMigration = true;
 
                 // end message appears shortly after form success
-                this.add.text(game.config.width/2, game.config.height/4, practice ? 'practice complete!':'stage complete!', {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(1);
                 this.box.setAlpha(1);
+                this.add.text(game.config.width/2, game.config.height/4, practice ? 'practice complete!':'stage complete!', {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(2);
                 this[`pass${practice ? 'Practice' : 'Migrate1'}`].setAlpha(1);
 
             });
@@ -182,7 +180,7 @@ class Migrate extends Phaser.Scene {
             swan.x, swan.y,
             this.map[this.form].swans[swan.num][0], this.map[this.form].swans[swan.num][1]
         ];
-        swan.path = new Phaser.Curves.Spline(points);
+        swan.path = new Phaser.Curves.Line(points);
         swan.startFollow({
             ease: 'Sine.easeInOut',
             duration: 3000

@@ -13,7 +13,7 @@ class SwanMigrate extends Phaser.GameObjects.PathFollower {
         this.body.setCircle(40, 30, 25);
 
         // can't be pushed
-        this.body.setImmovable(true);
+        this.body.setFriction(0);
 
         // number label
         this.num = num;

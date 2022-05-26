@@ -19,7 +19,7 @@ class Tutorial extends Phaser.Scene {
             padding: {
                 top: 5,
                 bottom: 5, 
-            },
+            }
         } 
 
         // add bg

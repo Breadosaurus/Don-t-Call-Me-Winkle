@@ -2,10 +2,21 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
     constructor(scene, x, y, texture, frame) {
         super(scene, x, y, texture, frame);
 
-        // add sprite to scene 
+        // setup
         scene.add.existing(this);
         scene.physics.add.existing(this);
+        this.setCollideWorldBounds(true);
+
+        // hitbox
         this.setCircle(27, 2, 7);
+
+        this.speed = 270;
+        this.accel = 1500;
+        this.setDrag(this.accel);
+
+        // 
+        this.setMaxVelocity(this.speed);
+
 
         // this.setBounce(1, 1);
 
@@ -16,7 +27,7 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
 
         this.move = false;
         // regular speed
-        this.moveSpeed = 225;
+        
 
         // speed boost
         // this.boostSpeed = 200;
@@ -34,23 +45,22 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
             this.y = this.scene.map[this.scene.form].peri[1];
         } else if (this.move) {
             if (cursors.left.isDown) {
-                this.setVelocityX(-this.moveSpeed);
+                this.setAccelerationX(-this.accel);
                 // this.anims.play('turn', true);
             } else if (cursors.right.isDown) {
-                this.setVelocityX(this.moveSpeed);
+                this.setAccelerationX(this.accel);
                 // this.anims.play('turn', true);
             } else {
-                this.setVelocityX(0);
+                this.setAccelerationX(0);
             }
 
             if (cursors.up.isDown) {
-                this.setVelocityY(-this.moveSpeed);
+                this.setAccelerationY(-this.accel);
                 // this.anims.play('up', true);
             } else if (cursors.down.isDown) {
-                this.setVelocityY(this.moveSpeed);
-            } 
-            else {
-                this.setVelocityY(0);
+                this.setAccelerationY(this.accel);
+            } else {
+                this.setAccelerationY(0);
             }
         }
         // if (!this.boost) {
