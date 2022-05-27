@@ -5,8 +5,7 @@ class Tutorial extends Phaser.Scene {
 
     create() {
         // define keys 
-        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
-        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        cursors = this.input.keyboard.createCursorKeys();
 
         // text styling
         let textConfig = {
@@ -42,12 +41,12 @@ class Tutorial extends Phaser.Scene {
 
     update() {
         
-        if (Phaser.Input.Keyboard.JustDown(key1)) {
+        if (Phaser.Input.Keyboard.JustDown(cursors.one)) {
             this.sound.play('menuSelect');
             this.scene.start('migrateScene');
         }
 
-        if (Phaser.Input.Keyboard.JustDown(key2)) {
+        if (Phaser.Input.Keyboard.JustDown(cursors.two)) {
             this.sound.play('menuSelect');
             this.scene.start('storyScene');
         }

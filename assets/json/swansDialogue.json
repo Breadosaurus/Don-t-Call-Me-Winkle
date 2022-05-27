@@ -9,7 +9,7 @@
             "noTint" : "true"
         },
         {
-            "dialogue" : "Now see, I take it nice and slow and I don’t have to worry about <i/>anything<i/>. I don’t bump into other birds and I have all the time I want to get to my spot."
+            "dialogue" : "Now see, I take it nice and slow and I don’t have to worry about anything. I don’t bump into other birds and I have all the time I want to get to my spot."
         },
         {
             "dialogue" : "It’s just me, this pillow, and the sky above me. Understand? (And don’t ask where I got the feathers for the pillow...)"
@@ -22,22 +22,65 @@
 
     "strong": [      
         {
-            "dialogue" : "HELLO GOOD SIR!\n \n &sup[hello! hello!]",
+            "dialogue" : "HELLO GOOD SIR!\n \nhello! hello!",
             "noTint" : "true"
         },
         {
-            "dialogue" : "Let me cut you off there little guy, you’re going a liiiitle too fast for me--*yaaaaawn*...",
+            "dialogue" : "I AM STRONG BIRD! Strongest bird in this flock and your new MENTOR, my fine fellow! \n \nnew mentor! new mentor!",
             "noTint" : "true"
         },
         {
-            "dialogue" : "Now see, I take it nice and slow and I don’t have to worry about <i/>anything<i/>. I don’t bump into other birds and I have all the time I want to get to my spot."
+            "dialogue" : "My stature says nothing about my true strength, my feathered friend. It’s about COURAGE, VULNERABILITY, and the strength to follow your HEART that matters!",
+            "noTint" : "true",
+            "choice1" : "true"
         },
         {
-            "dialogue" : "It’s just me, this pillow, and the sky above me. Understand? (And don’t ask where I got the feathers for the pillow...)"
+            "dialogue" : "YES! YOUR MENTOR! A guardian to teach you courage and the meaning of TRUE strength, what lies in your heart!",
+            "noTint" : "true",
+            "choice2" : "true"
         },
         {
-            "dialogue" : "Exaaaactly. Now let’s taaaaalk abooouutt-  *snoooooooooore*",
+            "dialogue" : "I CAN ALSO TEACH YOU SO MANY OTHER THINGS, YOUNG LAD! SUCH AS FLYING AND…and…um…uh…not hitting other birds!"
+        },
+        {
+            "dialogue" : "NOT HITTING THE OTHER BIRDS! Yes, what a brilliant idea from one such as myself! Such strong ideas from a strong bird! You, too, can be as shining as me, young one! What say you? \n \nsay you? say you?",
             "noTint" : "true"
+        }
+    ],
+
+    "kind": [      
+        {
+            "dialogue" : "Astounding! You’re a much better flier than I thought you would be. You’ve crossed off all of the beginner’s flying techniques on my list, and it’s not been more than your fifth time up there!",
+            "noTint" : "true"
+        },
+        {
+            "dialogue" : "Let me introduce myself. I’m Kind bird! I’m the wisest bird in the flock and I’m here to help you with whatever you need, my little Polioptila Caerulea!",
+            "noTint" : "true"
+        },
+        {
+            "dialogue" : "Well, according to my statistics I can see that you’re having a little trouble with finding your spot in the formations. With every bird flying all over the place, I completely understand why! That being said, what if I told you that I could calculate the exact spot you need to go to before we take off?",
+            "noTint" : "true"            
+        },
+        {
+            "dialogue" : "I do what I can to help anyone in need because it’s the right thing to do!",
+            "noTint" : "true",
+            "choice1" : "true"
+        },
+        {
+            "dialogue" : "We go through this world with so much strife on our wings, so what good is living if we can’t help out our fellow birds?",
+            "choice1" : "true"
+        },
+        {
+            "dialogue" : "I do what I can to help anyone in need because it’s the right thing to do!",
+            "noTint" : "true",
+            "choice2" : "true"
+        },
+        {
+            "dialogue" : "We go through this world with so much strife on our wings, so what good is living if we can’t help out our fellow birds?",
+            "choice2" : "true"
+        },
+        {
+            "dialogue" : "Now then, I could lay out the math of how exactly I calculate your trajectory, but maybe it’d be best if we just do it in practice. Let’s take to the skies!"
         }
     ]
 }

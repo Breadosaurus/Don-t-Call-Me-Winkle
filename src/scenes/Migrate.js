@@ -5,17 +5,15 @@ class Migrate extends Phaser.Scene {
 
     create() {
         game.config.pixelArt = false;
+        
         // current formation
         this.form = 1;
         this.paths = new Phaser.Curves.Path(this.cache.json.get('paths'));
         this.bg = this.add.tileSprite(0, 0, 824, 650, `bg_${chapter}`).setOrigin(0, 0).setSize(1024, 768);
         this.clouds = this.add.tileSprite(0, 0, 824, 650, `clouds_${chapter}`).setOrigin(0, 0).setSize(1024, 768);
+        
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
-        //-------------------------------------------------------------------------------------------------
-
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        //-------------------------------------------------------------------------------------------------
 
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
@@ -112,7 +110,7 @@ class Migrate extends Phaser.Scene {
         }
 
         // practice to real migration space key transition
-        if (this.endMigration && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        if (this.endMigration && Phaser.Input.Keyboard.JustDown(cursors.space)) {
             this.sound.play('menuSelect');
             // if practice mode is ON, restart scene with practice mode OFF
             if (practice) {  

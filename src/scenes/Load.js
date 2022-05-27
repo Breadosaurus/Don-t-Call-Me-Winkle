@@ -31,8 +31,8 @@ class Load extends Phaser.Scene {
 
         // preload migration map json file
         this.load.json('migrationMap', 'json/migrationMap.json');
-        this.load.json('swanDialogue', 'json/swanDialogue.json');
-        this.load.json('periDialogue', 'json/periDialogue.json');
+        this.load.json('swanDialogue', 'json/swansDialogue.json');
+        // this.load.json('periDialogue', 'json/periDialogue.json');
     }
 
     create() {

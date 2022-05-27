@@ -1,15 +1,14 @@
 class Story extends Phaser.Scene {
     constructor() {
         super("storyScene");
+
+        this.swanBox_X = game.config.width/3;
+        this.swanBox_Y = game.config.height*(2/3);
     }
 
     create() {
         // define keys
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
-        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
-        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
-        //keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
+        cursors = this.input.keyboard.createCursorKeys();
 
         // choice picker collision object???
         // this.choiceSelect = this.physics.add.sprite((game.config.width - this.periBox.width) + 20, this.periBox.y + 30, 'He').setOrigin(0, 0).setAlpha(0);
@@ -17,7 +16,7 @@ class Story extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 1024, 768, 'bg_1').setOrigin(0, 0);
         
         // adding NPC dialogue box
-        this.NPCbox = this.add.rectangle(game.config.width/8, game.config.height*(2/3), game.config.width - 200, game.config.height/3, 0xe0eefb).setOrigin(0,0);
+        this.swanBox = this.add.sprite(this.swanBox_X, this.swanBox_Y, 'jeff').setOrigin(0,0);
 
         // peri choice box
         this.periBox = this.add.rectangle(game.config.width - game.config.width/2.7, game.config.height*(2/3) - game.config.height/2, game.config.width/4, game.config.height/2.2, 0xe0eefb).setOrigin(0, 0).setAlpha(0);
@@ -69,10 +68,10 @@ class Story extends Phaser.Scene {
     } // end create()
 
     update() {
-        // slow bird starts convo (not canon)
+        // slow bird starts convo 
         if (this.slowCheck1) {
             // if space is pressed then: fade NPC and their dialogue
-            if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
                 this.sound.play('spaceNPC');
                 this.slowSwan.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
@@ -88,7 +87,7 @@ class Story extends Phaser.Scene {
             this.peri.setAlpha(1);
             this.periBox.setAlpha(1);
             this.choices1.setAlpha(1);
-            if (Phaser.Input.Keyboard.JustDown(key1)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.one)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -96,7 +95,7 @@ class Story extends Phaser.Scene {
                 this.periChoice1 = false;
                 this.slowCheck2 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(key2)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.two)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -104,7 +103,7 @@ class Story extends Phaser.Scene {
                 this.periChoice1 = false;
                 this.slowCheck2 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(key3)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.three)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -122,7 +121,7 @@ class Story extends Phaser.Scene {
             this.slowSwan.setAlpha(1);
             this.NPCbox.setAlpha(1);
 
-            if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
                 this.sound.play('spaceNPC');
                 this.slowSwan.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
@@ -138,7 +137,7 @@ class Story extends Phaser.Scene {
             this.peri.setAlpha(1);
             this.periBox.setAlpha(1);
             this.choices2.setAlpha(1);
-            if (Phaser.Input.Keyboard.JustDown(key1)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.one)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -146,7 +145,7 @@ class Story extends Phaser.Scene {
                 this.periChoice2 = false;
                 this.slowCheck3 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(key2)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.two)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -154,7 +153,7 @@ class Story extends Phaser.Scene {
                 this.periChoice2 = false;
                 this.slowCheck3 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(key3)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.three)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -173,7 +172,7 @@ class Story extends Phaser.Scene {
             this.slowSwan.setAlpha(1);
             this.NPCbox.setAlpha(1);
 
-            if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
                 this.sound.play('spaceNPC');
                 this.slowSwan.setAlpha(0.5);
                 this.NPCbox.setAlpha(0.5);
@@ -189,7 +188,7 @@ class Story extends Phaser.Scene {
             this.periBox.setAlpha(1);
             this.periCloseText.setAlpha(1);
 
-            if (Phaser.Input.Keyboard.JustDown(keySPACE)) {
+            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
                 this.sound.play('menuSelect');
                 practice = false;
                 this.scene.start('migrateScene');
