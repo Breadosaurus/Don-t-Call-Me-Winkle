@@ -8,43 +8,25 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true, 0, 0);
 
         // hitbox
-        this.setCircle(27, 2, 7);
+        this.setCircle(20, 10, 15);
 
+        // set speed and acceleration
         this.speed = 270;
+        this.setMaxVelocity(this.speed);
         this.accel = 1500;
         this.setDrag(this.accel);
 
-        // 
-        this.setMaxVelocity(this.speed);
-
-
+        // set bounce and mass
         this.setBounce(1, 1);
         this.setMass(100);
 
-        // randomize function for hit sound
-        // this.ouch_1 = scene.sound.add('ouch_1');
-        // this.ouch_2 = scene.sound.add('ouch_2');
-        this.bumped = false;
-
+        // peri cannot move at first
         this.move = false;
-        // regular speed
-        
-
-        // speed boost
-        // this.boostSpeed = 200;
-        // this.formed_1 = scene.sound.add('surf_1');
-        // this.formed_2 = scene.sound.add('surf_2');
-
-
     } // end constructor
 
     update() {
         // left/right/up/down mvt
-        if (this.scene.formComplete) {
-            this.setVelocity(0);
-            this.x = this.scene.map[this.scene.form].peri[0];
-            this.y = this.scene.map[this.scene.form].peri[1];
-        } else if (this.move) {
+        if (this.move) {
             if (cursors.left.isDown) {
                 this.setAccelerationX(-this.accel);
                 // this.anims.play('turn', true);
@@ -63,10 +45,8 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
             } else {
                 this.setAccelerationY(0);
             }
+        } else {
+            this.setAcceleration(0);
         }
-        // if (!this.boost) {
-        //     this.y += scrollSpeed;
-        // }
-        
     } // end update()
 }
