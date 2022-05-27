@@ -8,30 +8,31 @@ class Load extends Phaser.Scene {
         this.load.path = 'assets/';
 
         // all the good good visual boys we need!!
-        this.load.image('bg_1', 'bg_001.png');
-        this.load.image('bg_2', 'bg_002.png');
-        this.load.image('bg_3', 'bg_003.png');
-        this.load.image('clouds_1', 'bg_001_clouds.png');
-        this.load.image('clouds_2', 'bg_002_clouds.png');
-        this.load.image('clouds_3', 'bg_003_clouds.png');
-        this.load.image('periMigrate', 'periMigrate.png');
-        this.load.image('swanMigrate', 'swanMigrate.png');
-        this.load.image('periStory', 'periStory.png');
+        this.load.image('bg_1', 'img/bg_001.png');
+        this.load.image('bg_2', 'img/bg_002.png');
+        this.load.image('bg_3', 'img/bg_003.png');
+        this.load.image('clouds_1', 'img/bg_001_clouds.png');
+        this.load.image('clouds_2', 'img/bg_002_clouds.png');
+        this.load.image('clouds_3', 'img/bg_003_clouds.png');
+        this.load.image('periMigrate', 'img/periMigrate.png');
+        this.load.image('swanMigrate', 'img/swanMigrate.png');
+        this.load.image('periStory', 'img/periStory.png');
+        this.load.image('slowSwan', 'img/slowSwan.png');
+        this.load.image('strongSwan', 'img/strongSwan.png');
 
-        this.load.image('jeff', 'jeffrey_thomas.png');
+        this.load.image('jeff', 'img/jeffrey_thomas.png');
 
         // all the good good audio boys we need
-        this.load.audio('menuSelect', 'menuSelect.mp3');
-        this.load.audio('migStart', 'migrateStart.mp3');
-        this.load.audio('spaceNPC', 'NPC_done.mp3');
-        this.load.audio('periChoice', 'periChoice.mp3');
+        this.load.audio('menuSelect', 'audio/menuSelect.mp3');
+        this.load.audio('migStart', 'audio/migrateStart.mp3');
+        this.load.audio('spaceNPC', 'audio/NPC_done.mp3');
+        this.load.audio('periChoice', 'audio/periChoice.mp3');
 
-        // temp for chapt 1 lol
-        //this.load.image('He', 'jeffrey_thomas.png');
-        this.load.image('slowSwan', 'slowSwan.png');
 
         // preload migration map json file
-        this.load.json('migrationMap', 'migrationMap.json');
+        this.load.json('migrationMap', 'json/migrationMap.json');
+        this.load.json('swanDialogue', 'json/swanDialogue.json');
+        this.load.json('periDialogue', 'json/periDialogue.json');
     }
 
     create() {

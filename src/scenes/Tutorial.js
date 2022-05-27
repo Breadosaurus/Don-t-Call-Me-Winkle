@@ -5,8 +5,6 @@ class Tutorial extends Phaser.Scene {
 
     create() {
         // define keys 
-        // keyP = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
-        // keyT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.T);
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
 
@@ -20,12 +18,13 @@ class Tutorial extends Phaser.Scene {
                 top: 5,
                 bottom: 5, 
             },
+            autoRound: true,
         } 
 
         // add bg
         this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
 
-        this.add.text(50, 200, "Don't Call Me Winkle (Please ;^;)", textConfig).setDepth(5);
+        this.add.text(50, 200, "Periwinkle", textConfig).setDepth(5);
         // text wrap based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width
         this.make.text({
             x: 50,
@@ -34,7 +33,8 @@ class Tutorial extends Phaser.Scene {
             style: {
                 font: 'bold 25px Comic Sans MS',
                 fill: '#8e87f1',
-                wordWrap: { width: 800 }
+                wordWrap: { width: 800 },
+                autoRound: true,
             }
         });
         this.add.text(50, 600, "Press 1 to PRACTICE or 2 to SOCIALIZE", textConfig);

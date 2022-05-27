@@ -31,13 +31,15 @@ class Story extends Phaser.Scene {
         // text style for dialogue
         let dialogueConfig = {
             fontFamily: 'handwrite',
-            fontSize: '18px',
+            fontSize: '25px',
             color: '#172230',
             align: 'left',
             padding: {
                 top: 5,
                 bottom: 5, 
             },
+            autoRound: true,
+            resolution: 2
         }
 
         // set up typewriter text for NPC

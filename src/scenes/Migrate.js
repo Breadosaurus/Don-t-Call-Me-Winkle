@@ -20,10 +20,10 @@ class Migrate extends Phaser.Scene {
         this.centerX = game.config.width/2;
         this.centerY = game.config.height/2;
 
-        // this.topBound = 50;
-        // this.btmBound = game.config.height - 50;
-        // this.leftBound = 200;
-        // this.rightBound = game.config.width - 200;
+        this.topBound = 50;
+        this.btmBound = game.config.height - 50;
+        this.leftBound = 200;
+        this.rightBound = game.config.width - 200;
 
         // store ch1 portion of json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
@@ -62,7 +62,7 @@ class Migrate extends Phaser.Scene {
 //-------------------------------------------------------------------------------------------------
         // for the sake of First Playable Build
         let dialogueConfig = {
-            fontFamily: 'Comic Sans MS',
+            fontFamily: 'handwrite',
             fontSize: '20px',
             color: '#e0eefb',
             align: 'left',
@@ -70,6 +70,8 @@ class Migrate extends Phaser.Scene {
                 top: 5,
                 bottom: 5, 
             },
+            autoRound: true,
+            resolution: 2.5
         }
         this.box = this.add.rectangle(game.config.width/10, game.config.height/3, game.config.width - 200, game.config.height/3, 0x172230).setOrigin(0,0);
 
@@ -97,7 +99,7 @@ class Migrate extends Phaser.Scene {
 
     //-------------------------------------------------------------------------------------------------    
         // start migration when space key is pressed
-        if (this.tutorial && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        if (this.tutorial && Phaser.Input.Keyboard.JustDown(cursors.space)) {
             this.sound.play('migStart');
             this.box.setAlpha(0);
             this.migrateTutorial.setAlpha(0);

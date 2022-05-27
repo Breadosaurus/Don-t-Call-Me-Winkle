@@ -1,0 +1,44 @@
+{
+    "slow": [      
+        {
+            "dialogue" : "Heeeeeey Peri...*yawn*...winkle. How goes it? Having fuuuuun with the new flock?",
+            "noTint" : "true"
+        },
+        {
+            "dialogue" : "Let me cut you off there little guy, you’re going a liiiitle too fast for me--*yaaaaawn*...",
+            "noTint" : "true"
+        },
+        {
+            "dialogue" : "Now see, I take it nice and slow and I don’t have to worry about <i/>anything<i/>. I don’t bump into other birds and I have all the time I want to get to my spot."
+        },
+        {
+            "dialogue" : "It’s just me, this pillow, and the sky above me. Understand? (And don’t ask where I got the feathers for the pillow...)"
+        },
+        {
+            "dialogue" : "Exaaaactly. Now let’s taaaaalk abooouutt-  *snoooooooooore*",
+            "noTint" : "true"
+        }
+    ],
+
+    "strong": [      
+        {
+            "dialogue" : "HELLO GOOD SIR!\n \n &sup[hello! hello!]",
+            "noTint" : "true"
+        },
+        {
+            "dialogue" : "Let me cut you off there little guy, you’re going a liiiitle too fast for me--*yaaaaawn*...",
+            "noTint" : "true"
+        },
+        {
+            "dialogue" : "Now see, I take it nice and slow and I don’t have to worry about <i/>anything<i/>. I don’t bump into other birds and I have all the time I want to get to my spot."
+        },
+        {
+            "dialogue" : "It’s just me, this pillow, and the sky above me. Understand? (And don’t ask where I got the feathers for the pillow...)"
+        },
+        {
+            "dialogue" : "Exaaaactly. Now let’s taaaaalk abooouutt-  *snoooooooooore*",
+            "noTint" : "true"
+        }
+    ]
+}
+

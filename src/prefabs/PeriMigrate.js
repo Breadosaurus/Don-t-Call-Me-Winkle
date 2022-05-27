@@ -18,8 +18,6 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // regular speed
         this.moveSpeed = 225;
 
-        // speed boost
-        // this.boostSpeed = 200;
         // this.formed_1 = scene.sound.add('surf_1');
         // this.formed_2 = scene.sound.add('surf_2');
 
@@ -35,17 +33,14 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         } else if (this.move) {
             if (cursors.left.isDown) {
                 this.setVelocityX(-this.moveSpeed);
-                // this.anims.play('turn', true);
             } else if (cursors.right.isDown) {
                 this.setVelocityX(this.moveSpeed);
-                // this.anims.play('turn', true);
             } else {
                 this.setVelocityX(0);
             }
 
             if (cursors.up.isDown) {
                 this.setVelocityY(-this.moveSpeed);
-                // this.anims.play('up', true);
             } else if (cursors.down.isDown) {
                 this.setVelocityY(this.moveSpeed);
             } 
@@ -53,9 +48,6 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
                 this.setVelocityY(0);
             }
         }
-        // if (!this.boost) {
-        //     this.y += scrollSpeed;
-        // }
         
     } // end update()
 }
