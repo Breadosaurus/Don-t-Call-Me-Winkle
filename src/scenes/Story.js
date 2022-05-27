@@ -2,8 +2,28 @@ class Story extends Phaser.Scene {
     constructor() {
         super("storyScene");
 
-        this.swanBox_X = game.config.width/3;
+        /* structure and code for this scene will heavily reference
+        Professor Nathan Altice's Dialogging example @ https://github.com/nathanaltice/Dialogging */
+        
+        // dialogue box placements and font
+        this.swanBox_X = game.config.width/8;           
         this.swanBox_Y = game.config.height*(2/3);
+        this.dialogFont = 'handwrite';
+        // swan text configs
+        this.swanText_X = game.config.width/3.4;
+        this.swanText_Y = game.config.height*(2/3)+30;
+        this.textSize = 25;
+        this.textWrapWidth = 600;
+        this.next = '[SPACE]';
+        this.next_X = 
+
+        // lining up the swans for player to choose
+        this.swanChoice1_X = game.config.width/3;
+        this.swanChoice1_Y = game.config.height/2.30;
+        this.swanChoice2_X = game.config.width*(2/3);
+        this.swanChoice2_Y = game.config.height/2.3;
+        this.swanChoice3_X = game.config.width/3;
+        this.swanChoice3_Y = game.config.height/2.3;
     }
 
     create() {
@@ -13,7 +33,7 @@ class Story extends Phaser.Scene {
         // choice picker collision object???
         // this.choiceSelect = this.physics.add.sprite((game.config.width - this.periBox.width) + 20, this.periBox.y + 30, 'He').setOrigin(0, 0).setAlpha(0);
 
-        this.bg = this.add.tileSprite(0, 0, 1024, 768, 'bg_1').setOrigin(0, 0);
+        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
         
         // adding NPC dialogue box
         this.swanBox = this.add.sprite(this.swanBox_X, this.swanBox_Y, 'jeff').setOrigin(0,0);

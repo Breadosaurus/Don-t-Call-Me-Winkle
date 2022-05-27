@@ -37,7 +37,7 @@ class Load extends Phaser.Scene {
 
     create() {
         
-        this.scene.start('tutorialScene');
+        this.scene.start('storyScene');
 
     }
 
