@@ -5,7 +5,7 @@ let config = {
     physics: {
         default: 'arcade',
         arcade: { 
-            debug: false,
+            debug: true,
             fps: 60 }
         },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
@@ -36,7 +36,7 @@ let btmBound = game.config.height - topBound;
 let practice = false;
 
 // start game at chapter 1
-let chapter = 1;
+let chapter = 3;
 
 // variable to hold power ups
 let power;

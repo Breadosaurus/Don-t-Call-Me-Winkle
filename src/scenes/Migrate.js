@@ -4,7 +4,7 @@ class Migrate extends Phaser.Scene {
     }
 
     create() {
-        // store current chapter's portion of json file in this.map
+        // store current chapter's portion of migration map json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
 
         // add background and clouds
@@ -48,17 +48,18 @@ class Migrate extends Phaser.Scene {
         }
 
         // create zone timer to measure how long peri has been in correct zone.
-        // if peri stays within zone for 700 ms, end formation.
-        this.zoneTimerConfig = { delay: 700, callback: () => {
-            this.timeLimit.remove();                // stop timer
+        // if peri stays within zone for 500 ms, end formation.
+        this.zoneTimerConfig = { delay: 500, callback: () => {
+            console.log("success");
+            this.timeLimit.paused = true;
             // [ADD CODE HERE]                      // play formation complete sound
+
+            this.formActive = false;                // form is complete
 
             // immobilize peri and move him to exact correct location
             this.peri.move = false;              
             this.peri.x = this.map[this.form].peri[0];
             this.peri.y = this.map[this.form].peri[1];
-
-            this.formComplete = true;               // form is complete
             this.pass++;                            // increment number of formations passed
             this.endForm();                         // move to next formation
         }, paused: true };
@@ -67,20 +68,23 @@ class Migrate extends Phaser.Scene {
         // create time limit timer to measure whether peri passes formation in time
         // callback fires 2 seconds after swans stop moving
         this.timeLimitConfig = { delay: this.duration + 2000, callback: () => {
+            console.log("failed");
             // if practice mode, don't move to next form; indicate which spot peri should be in
             if (practice) {
                 // show correct spot
                 // [ADD CODE HERE]
             // if not practice mode, formation is failed; swans move to next formation
             } else {  
+                this.zoneTimer.paused = true;
+                this.formActive = false;            // form has ended
                 this.peri.move = false;             // immobilize peri
                 this.endForm();                     // move to next formation
             }
         }, paused: true }; 
         this.timeLimit = this.time.addEvent(this.timeLimitConfig);
         
-        // formation complete condition; initialized as true so zone check doesn't start until swans have moved
-        this.formComplete = true; 
+        // formation active condition
+        this.formActive = false; 
 
         // migration end condition
         this.endMigration = false;
@@ -161,15 +165,15 @@ class Migrate extends Phaser.Scene {
             // start time limit timer
             this.timeLimit.paused = false;
 
+            // when swans are done moving, set formActive to true, activating the zone check
+            this.time.delayedCall(this.duration, () => {
+                this.formActive = true;
+            });
+
             // move swans to formation 1
             for (let swan of this.swanGroup.getChildren()) {
                 this.moveSwan(swan);
             }
-
-            // when swans are done moving, set formComplete to false, activating the zone check
-            this.time.delayedCall(this.duration, () => {
-                this.formComplete = false;
-            });
         }
 
         // if migration is over, space key progresses you to next chapter or ending
@@ -191,13 +195,16 @@ class Migrate extends Phaser.Scene {
 
         //-------------------------------------------------------------------------------------------------
 
-        // if formation is not complete, start timer when peri is in correct zone.
+        // if formation is active, start timer when peri is in correct zone.
         // if peri moves outside of zone, restart timer.
-        if (!this.formComplete) {
-            if (this.physics.overlap(this.peri, this.periZone)) {
+        if (this.formActive) {
+            if (this.physics.overlap(this.peri, this.periZone) && this.zoneTimer.paused) {
+                console.log("start timer");
                 this.zoneTimer.paused = false;
-            } else if (!this.zoneTimer.paused) {
+            } else if (!this.physics.overlap(this.peri, this.periZone) && !this.zoneTimer.paused) {
+                console.log("stop timer");
                 this.zoneTimer.reset(this.zoneTimerConfig);
+                this.time.addEvent(this.zoneTimer);
             }
         }
         
@@ -232,14 +239,17 @@ class Migrate extends Phaser.Scene {
         } else {
             // if this was not the last formation, start next formation after delay
             this.time.delayedCall(1000, () => {
-                this.form++;                                               
+                this.form++;       
+                console.log(`start formation ${this.form}`);                                   
 
                 // reset zone timer
-                this.zoneTimer.remove();
-                this.zoneTimer = this.time.addEvent(this.zoneTimerConfig);
+                console.log(`reset timer`);   
+                this.zoneTimer.reset(this.zoneTimerConfig);
+                this.time.addEvent(this.zoneTimer);
 
-                // re-add and start time limit timer
-                this.timeLimit = this.time.addEvent(this.timeLimitConfig);
+                // reset time limit timer
+                this.timeLimit.reset(this.timeLimitConfig);
+                this.time.addEvent(this.timeLimit);
                 this.timeLimit.paused = false;
 
                 // let peri move
@@ -252,9 +262,10 @@ class Migrate extends Phaser.Scene {
 
                 // after swans have finished moving, set periZone to next correct spot
                 this.time.delayedCall(this.duration, () => {
-                    this.formComplete = false;
                     this.periZone.x = this.map[this.form].peri[0];
                     this.periZone.y = this.map[this.form].peri[1];
+                    this.formActive = true;
+                    console.log(`end formation ${this.form}`); 
                 });
             });     
         }
