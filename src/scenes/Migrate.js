@@ -21,6 +21,9 @@ class Migrate extends Phaser.Scene {
         this.periZone = this.add.zone(this.map[1].peri[0], this.map[1].peri[1]).setSize(30, 30);
         this.physics.world.enable(this.periZone);
 
+        // add arrow, set to invisible
+        this.arrow = this.add.image(this.periZone.getBottomRight().x + 10, this.periZone.getBottomRight().y + 10, 'arrow').setOrigin(0, 0).setAlpha(0);
+
         // create group of swans
         this.swanGroup = this.physics.add.group();
 
@@ -70,7 +73,12 @@ class Migrate extends Phaser.Scene {
             // if practice mode, don't move to next form; indicate which spot peri should be in
             if (practice) {
                 // show correct spot
-                // [ADD CODE HERE]
+                this.tweens.add({
+                    targets: this.arrow,
+                    alpha: { from: 0, to: 1 },
+                    yoyo: true,
+                    repeat: -1
+                });
             // if not practice mode, formation is failed; swans move to next formation
             } else {  
                 this.peri.move = false;             // immobilize peri
