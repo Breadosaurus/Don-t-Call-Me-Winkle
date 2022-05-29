@@ -53,22 +53,19 @@ class Migrate extends Phaser.Scene {
         // create zone timer to measure how long peri has been in correct zone.
         // if peri stays within zone for 500 ms, end formation.
         this.zoneTimerConfig = { delay: 500, callback: () => {
-            console.log("success");
             this.timeLimit.paused = true;
-            // [ADD CODE HERE]                      // play formation complete sound
+            // [ADD CODE HERE]                          // play formation complete sound
 
-            if (this.arrowTween.isPlaying()) {
+            if (this.arrowTween.isPlaying()) {          // fade out arrow if visible
                 this.arrowTween.stop();
             }
 
-            this.formActive = false;                // form is complete
-
-            // immobilize peri and move him to exact correct location
-            this.peri.move = false;              
+            this.formActive = false;                    // form is complete
+            this.peri.move = false;                     // immobilize peri and move him to exact correct location
             this.peri.x = this.map[this.form].peri[0];
             this.peri.y = this.map[this.form].peri[1];
-            this.pass++;                            // increment number of formations passed
-            this.endForm();                         // move to next formation
+            this.pass++;                                // increment number of formations passed
+            this.endForm();                             // move to next formation
         }, paused: true };
         this.zoneTimer = this.time.addEvent(this.zoneTimerConfig);
 
@@ -90,7 +87,6 @@ class Migrate extends Phaser.Scene {
                 });
             // if not practice mode, formation is failed; swans move to next formation
             } else {  
-                console.log("failed");
                 this.zoneTimer.paused = true;
                 this.formActive = false;            // form has ended
                 this.peri.move = false;             // immobilize peri
@@ -215,10 +211,8 @@ class Migrate extends Phaser.Scene {
         // if peri moves outside of zone, restart timer.
         if (this.formActive) {
             if (this.physics.overlap(this.peri, this.periZone) && this.zoneTimer.paused) {
-                console.log("start timer");
                 this.zoneTimer.paused = false;
             } else if (!this.physics.overlap(this.peri, this.periZone) && !this.zoneTimer.paused) {
-                console.log("stop timer");
                 this.zoneTimer.reset(this.zoneTimerConfig);
                 this.time.addEvent(this.zoneTimer);
             }
@@ -255,11 +249,9 @@ class Migrate extends Phaser.Scene {
         } else {
             // if this was not the last formation, start next formation after delay
             this.time.delayedCall(1000, () => {
-                this.form++;       
-                console.log(`start formation ${this.form}`);                                   
+                this.form++;                                    
 
                 // reset zone timer
-                console.log(`reset timer`);   
                 this.zoneTimer.reset(this.zoneTimerConfig);
                 this.time.addEvent(this.zoneTimer);
 
