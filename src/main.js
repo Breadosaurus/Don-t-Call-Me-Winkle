@@ -33,10 +33,10 @@ let topBound = 20;
 let btmBound = game.config.height - topBound;
 
 // start game in practice mode (turns off after player completes first practice or story)
-let practice = false;
+let practice = true;
 
 // start game at chapter 1
-let chapter = 3;
+let chapter = 1;
 
 // variable to hold power ups
 let power;
