@@ -40,13 +40,13 @@ class Migrate extends Phaser.Scene {
         // swans switch formations faster as chapters progress
         switch (chapter) {
             case 1:
-                this.duration = 4000;
+                this.duration = 3500;
                 break;
             case 2:
                 this.duration = 3000;
                 break;
             case 3:
-                this.duration = 2000;
+                this.duration = 2500;
                 break;
         }
 
@@ -56,6 +56,10 @@ class Migrate extends Phaser.Scene {
             console.log("success");
             this.timeLimit.paused = true;
             // [ADD CODE HERE]                      // play formation complete sound
+
+            if (this.arrowTween.isPlaying()) {
+                this.arrowTween.stop();
+            }
 
             this.formActive = false;                // form is complete
 
@@ -71,18 +75,22 @@ class Migrate extends Phaser.Scene {
         // create time limit timer to measure whether peri passes formation in time
         // callback fires 2 seconds after swans stop moving
         this.timeLimitConfig = { delay: this.duration + 2000, callback: () => {
-            console.log("failed");
             // if practice mode, don't move to next form; indicate which spot peri should be in
             if (practice) {
                 // show correct spot
-                this.tweens.add({
+                this.arrowTween = this.tweens.add({
                     targets: this.arrow,
+                    duration: 700,
                     alpha: { from: 0, to: 1 },
+                    ease: 'Cubic',
                     yoyo: true,
-                    repeat: -1
+                    loop: -1,
+                    callbackScope: this,
+                    onStop: this.fadeOut
                 });
             // if not practice mode, formation is failed; swans move to next formation
             } else {  
+                console.log("failed");
                 this.zoneTimer.paused = true;
                 this.formActive = false;            // form has ended
                 this.peri.move = false;             // immobilize peri
@@ -272,6 +280,8 @@ class Migrate extends Phaser.Scene {
                 this.time.delayedCall(this.duration, () => {
                     this.periZone.x = this.map[this.form].peri[0];
                     this.periZone.y = this.map[this.form].peri[1];
+                    this.arrow.x = this.periZone.getBottomRight().x + 10;
+                    this.arrow.y = this.periZone.getBottomRight().y + 10;
                     this.formActive = true;
                     console.log(`end formation ${this.form}`); 
                 });
@@ -296,6 +306,15 @@ class Migrate extends Phaser.Scene {
         swan.startFollow({
             ease: 'Sine.easeInOut',
             duration: this.duration
+        });
+    }
+
+    fadeOut(tween, targets) {
+        this.tweens.add({
+            targets: targets,
+            alpha: { from: targets.alpha, to: 0 },
+            duration: 500,
+            repeat: 0
         });
     }
 }
