@@ -16,8 +16,12 @@ class Tutorial extends Phaser.Scene {
             padding: {
                 top: 5,
                 bottom: 5, 
+<<<<<<< HEAD
             },
             autoRound: true,
+=======
+            }
+>>>>>>> d4578936c3e08b687d118fc8d9ac0611de74e4c2
         } 
 
         // add bg
