@@ -17,8 +17,11 @@ class Load extends Phaser.Scene {
         this.load.image('periMigrate', 'img/periMigrate.png');
         this.load.image('swanMigrate', 'img/swanMigrate.png');
         this.load.image('periStory', 'img/periStory.png');
-        this.load.image('slowSwan', 'img/slowSwan.png');
-        this.load.image('strongSwan', 'img/strongSwan.png');
+        this.load.image('pilot', 'img/pilot.png');
+        this.load.image('swan1', 'img/slowSwan.png');
+        this.load.image('swan2', 'img/strongSwan.png');
+        // this.load.image('swan3', 'img/kindSwan.png');
+        this.load.image('swanBox', 'img/textBox.png');
 
         this.load.image('jeff', 'img/jeffrey_thomas.png');
 
@@ -37,7 +40,7 @@ class Load extends Phaser.Scene {
 
     create() {
         
-        this.scene.start('storyScene');
+        this.scene.start('tutorialScene');
 
     }
 

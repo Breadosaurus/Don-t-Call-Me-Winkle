@@ -14,10 +14,11 @@ class Story extends Phaser.Scene {
         this.swanText_Y = game.config.height*(2/3)+30;
         this.textSize = 25;
         this.textWrapWidth = 600;
-        this.next = '[SPACE]';
-        this.next_X = 
+        this.prompt = '[SPACE]';
+        this.prompt_X = game.config.width/3.4 + 620;
+        this.prompt_Y = game.config.height*(2/3)+130
 
-        // lining up the swans for player to choose
+        // lining up the swans for player to choose + setup selection history
         this.swanChoice1_X = game.config.width/3;
         this.swanChoice1_Y = game.config.height/2.30;
         this.swanChoice2_X = game.config.width*(2/3);
@@ -36,13 +37,13 @@ class Story extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
         
         // adding NPC dialogue box
-        this.swanBox = this.add.sprite(this.swanBox_X, this.swanBox_Y, 'jeff').setOrigin(0,0);
+        this.swanBox = this.add.sprite(this.swanBox_X, this.swanBox_Y, 'swanBox').setOrigin(0,0);
 
         // peri choice box
         this.periBox = this.add.rectangle(game.config.width - game.config.width/2.7, game.config.height*(2/3) - game.config.height/2, game.config.width/4, game.config.height/2.2, 0xe0eefb).setOrigin(0, 0).setAlpha(0);
 
         // adding npc sprite
-        this.slowSwan = this.physics.add.sprite(120, game.config.height - 200, 'slowSwan').setScale(0.45);
+        this.swan = this.physics.add.sprite(120, game.config.height - 200, `swan${swanChoice}`).setScale(0.45);
         // add Peri sprite
         this.peri = this.physics.add.sprite(game.config.width - 100, game.config.height/2 + 20, 'periStory').setScale(0.4).setAlpha(0.5);
 
@@ -88,6 +89,7 @@ class Story extends Phaser.Scene {
     } // end create()
 
     update() {
+        
         // slow bird starts convo 
         if (this.slowCheck1) {
             // if space is pressed then: fade NPC and their dialogue

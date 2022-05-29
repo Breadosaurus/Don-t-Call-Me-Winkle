@@ -35,7 +35,10 @@ let btmBound = game.config.height - topBound;
 let practice = true;
 
 // start game at chapter 1
-let chapter = 1;
+let chapter = 0;
 
 // variable to hold power ups
 let power;
+
+// variable for which swan is chosen if socializing
+let swanChoice = null
