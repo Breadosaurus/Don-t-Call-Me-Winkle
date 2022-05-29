@@ -17,6 +17,7 @@ class Load extends Phaser.Scene {
         this.load.image('periMigrate', 'periMigrate.png');
         this.load.image('swanMigrate', 'swanMigrate.png');
         this.load.image('periStory', 'periStory.png');
+        this.load.image('arrow', 'arrow.png');
 
         this.load.image('jeff', 'jeffrey_thomas.png');
 
