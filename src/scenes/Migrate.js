@@ -24,6 +24,12 @@ class Migrate extends Phaser.Scene {
         // add arrow, set to invisible
         this.arrow = this.add.image(this.periZone.getBottomRight().x + 10, this.periZone.getBottomRight().y + 10, 'arrow').setOrigin(0, 0).setAlpha(0);
 
+        this.anims.create({
+            key: 'periGreen',
+            frames: this.anims.generateFrameNumbers('periGreen', {start: 0, end: 10, first: 0}),
+            duration: 700
+        });
+
         // create group of swans
         this.swanGroup = this.physics.add.group();
 
@@ -51,14 +57,24 @@ class Migrate extends Phaser.Scene {
         }
 
         // create zone timer to measure how long peri has been in correct zone.
-        // if peri stays within zone for 500 ms, end formation.
-        this.zoneTimerConfig = { delay: 500, callback: () => {
+        // if peri stays within zone for 700 ms, end formation.
+        this.zoneTimerConfig = { delay: 700, callback: () => {
             this.timeLimit.paused = true;
             // [ADD CODE HERE]                          // play formation complete sound
 
-            if (this.arrowTween.isPlaying()) {          // fade out arrow if visible
+            if (this.arrowTween && this.arrowTween.isPlaying()) {          // fade out arrow if visible
                 this.arrowTween.stop();
             }
+
+            // this.flash = this.tweens.add({
+            //     targets: this.peri,
+            //     duration: 100,
+            //     tintFill: true,
+            //     tint: 0xffffff
+            // });
+
+            this.peri.anims.stop();
+            this.peri.anims.setProgress(0);
 
             this.formActive = false;                    // form is complete
             this.peri.move = false;                     // immobilize peri and move him to exact correct location
@@ -210,9 +226,15 @@ class Migrate extends Phaser.Scene {
         // if formation is active, start timer when peri is in correct zone.
         // if peri moves outside of zone, restart timer.
         if (this.formActive) {
-            if (this.physics.overlap(this.peri, this.periZone) && this.zoneTimer.paused) {
-                this.zoneTimer.paused = false;
-            } else if (!this.physics.overlap(this.peri, this.periZone) && !this.zoneTimer.paused) {
+            if (this.physics.overlap(this.peri, this.periZone)) {
+                if (this.zoneTimer.paused) {
+                    this.zoneTimer.paused = false;
+                    this.peri.anims.play('periGreen');
+                }
+            } else if (!this.zoneTimer.paused) {
+                this.peri.anims.reverse();
+                this.peri.anims.stopOnFrame(0);
+                this.peri.clearTint();
                 this.zoneTimer.reset(this.zoneTimerConfig);
                 this.time.addEvent(this.zoneTimer);
             }
@@ -275,7 +297,6 @@ class Migrate extends Phaser.Scene {
                     this.arrow.x = this.periZone.getBottomRight().x + 10;
                     this.arrow.y = this.periZone.getBottomRight().y + 10;
                     this.formActive = true;
-                    console.log(`end formation ${this.form}`); 
                 });
             });     
         }

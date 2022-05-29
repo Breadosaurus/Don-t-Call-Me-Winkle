@@ -18,8 +18,10 @@ class Load extends Phaser.Scene {
         this.load.image('swanMigrate', 'swanMigrate.png');
         this.load.image('periStory', 'periStory.png');
         this.load.image('arrow', 'arrow.png');
-
         this.load.image('jeff', 'jeffrey_thomas.png');
+
+        // load spritesheets
+        this.load.spritesheet('periGreen', 'periGreen.png', {frameWidth: 56, frameHeight: 60, startFrame: 0, endFrame: 10});
 
         // all the good good audio boys we need
         this.load.audio('menuSelect', 'menuSelect.mp3');
