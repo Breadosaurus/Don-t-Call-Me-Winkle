@@ -88,25 +88,28 @@ class Migrate extends Phaser.Scene {
         // create time limit timer to measure whether peri passes formation in time
         // callback fires 2 seconds after swans stop moving
         this.timeLimitConfig = { delay: this.duration + 2000, callback: () => {
-            // if practice mode, don't move to next form; indicate which spot peri should be in
-            if (practice) {
-                // show correct spot
-                this.arrowTween = this.tweens.add({
-                    targets: this.arrow,
-                    duration: 700,
-                    alpha: { from: 0, to: 1 },
-                    ease: 'Cubic',
-                    yoyo: true,
-                    loop: -1,
-                    callbackScope: this,
-                    onStop: this.fadeOut
-                });
-            // if not practice mode, formation is failed; swans move to next formation
-            } else {  
-                this.zoneTimer.paused = true;
-                this.formActive = false;            // form has ended
-                this.peri.move = false;             // immobilize peri
-                this.endForm();                     // move to next formation
+            // if peri is currently in zone, don't trigger callback
+            if (!this.physics.overlap(this.peri, this.periZone)){
+                // if practice mode, don't move to next form; indicate which spot peri should be in
+                if (practice) {
+                    // show correct spot
+                    this.arrowTween = this.tweens.add({
+                        targets: this.arrow,
+                        duration: 700,
+                        alpha: { from: 0, to: 1 },
+                        ease: 'Cubic',
+                        yoyo: true,
+                        loop: -1,
+                        callbackScope: this,
+                        onStop: this.fadeOut
+                    });
+                // if not practice mode, formation is failed; swans move to next formation
+                } else {  
+                    this.zoneTimer.paused = true;
+                    this.formActive = false;            // form has ended
+                    this.peri.move = false;             // immobilize peri
+                    this.endForm();                     // move to next formation
+                }
             }
         }, paused: true }; 
         this.timeLimit = this.time.addEvent(this.timeLimitConfig);
@@ -234,7 +237,6 @@ class Migrate extends Phaser.Scene {
             } else if (!this.zoneTimer.paused) {
                 this.peri.anims.reverse();
                 this.peri.anims.stopOnFrame(0);
-                this.peri.clearTint();
                 this.zoneTimer.reset(this.zoneTimerConfig);
                 this.time.addEvent(this.zoneTimer);
             }
