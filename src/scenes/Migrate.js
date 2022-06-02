@@ -30,6 +30,12 @@ class Migrate extends Phaser.Scene {
             duration: 700
         });
 
+        this.anims.create({
+            key: 'win',
+            frames: this.anims.generateFrameNumbers('win', {start: 0, end: 3, first: 0}),
+            fps: 30
+        });
+
         // create group of swans
         this.swanGroup = this.physics.add.group();
 
@@ -66,28 +72,33 @@ class Migrate extends Phaser.Scene {
                 this.arrowTween.stop();
             }
 
-            // this.flash = this.tweens.add({
-            //     targets: this.peri,
-            //     duration: 100,
-            //     tintFill: true,
-            //     tint: 0xffffff
-            // });
-
             this.peri.anims.stop();
             this.peri.anims.setProgress(0);
 
             this.formActive = false;                    // form is complete
-            this.peri.move = false;                     // immobilize peri and move him to exact correct location
-            this.peri.x = this.map[this.form].peri[0];
+            this.peri.x = this.map[this.form].peri[0];  // immobilize peri and move him to exact correct location
             this.peri.y = this.map[this.form].peri[1];
+            this.peri.move = false;
+
             this.pass++;                                // increment number of formations passed
-            this.endForm();                             // move to next formation
+
+            // add frame around peri, fade out after anim
+            let frame = this.add.sprite(this.peri.x -5, this.peri.y, 'win');
+            frame.anims.play('win');
+            frame.on('animationcomplete', () => {
+                this.fadeOut(null, frame);
+            });
+
+            this.time.delayedCall(2000, () => {
+                frame.destroy();
+                this.endForm();                             // move to next formation
+            })
         }, paused: true };
         this.zoneTimer = this.time.addEvent(this.zoneTimerConfig);
 
         // create time limit timer to measure whether peri passes formation in time
-        // callback fires 2 seconds after swans stop moving
-        this.timeLimitConfig = { delay: this.duration + 2000, callback: () => {
+        // callback fires 1.5 seconds after swans stop moving
+        this.timeLimitConfig = { delay: this.duration + 1500, callback: () => {
             // if peri is currently in zone, don't trigger callback
             if (!this.physics.overlap(this.peri, this.periZone)){
                 // if practice mode, don't move to next form; indicate which spot peri should be in
@@ -108,7 +119,9 @@ class Migrate extends Phaser.Scene {
                     this.zoneTimer.paused = true;
                     this.formActive = false;            // form has ended
                     this.peri.move = false;             // immobilize peri
-                    this.endForm();                     // move to next formation
+                    this.time.delayedCall(2000, () => {
+                        this.endForm();                     // move to next formation
+                    })
                 }
             }
         }, paused: true }; 
@@ -252,55 +265,51 @@ class Migrate extends Phaser.Scene {
     endForm() {
         // if this was the last formation, chapter is complete: progress to next chapter after delay
         if (this.form == 3) {
-            this.time.delayedCall(2000, () => {
-                this.endMigration = true;
+            this.endMigration = true;
 
-                // end message appears
-                this.box.setAlpha(1);
-                this.add.text(game.config.width/2, game.config.height/4, 
-                    practice ? 'practice complete!':'stage complete!',
-                {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(2);
-                
-                this.passMigrate.text = `You passed ${this.pass} out of 3 formations.\n\n${
-                    this.pass == 0 ? "Don't give up!" :
-                    this.pass == 1 ? "Getting there!" :
-                    this.pass == 2 ? "Not bad!" :
-                    "Fantastic flying!"}`
+            // end message appears
+            this.box.setAlpha(1);
+            this.add.text(game.config.width/2, game.config.height/4, 
+                practice ? 'practice complete!':'stage complete!',
+            {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(2);
             
-                this[`pass${practice ? 'Practice' : 'Migrate'}`].setAlpha(1);
-            });
+            this.passMigrate.text = `You passed ${this.pass} out of 3 formations.\n\n${
+                this.pass == 0 ? "Don't give up!" :
+                this.pass == 1 ? "Getting there!" :
+                this.pass == 2 ? "Not bad!" :
+                "Fantastic flying!"}`
+        
+            this[`pass${practice ? 'Practice' : 'Migrate'}`].setAlpha(1);
 
         } else {
-            // if this was not the last formation, start next formation after delay
-            this.time.delayedCall(1000, () => {
-                this.form++;                                    
+            // if this was not the last formation, start next formation
+            this.form++;                                    
 
-                // reset zone timer
-                this.zoneTimer.reset(this.zoneTimerConfig);
-                this.time.addEvent(this.zoneTimer);
+            // reset zone timer
+            this.zoneTimer.reset(this.zoneTimerConfig);
+            this.time.addEvent(this.zoneTimer);
 
-                // reset time limit timer
-                this.timeLimit.reset(this.timeLimitConfig);
-                this.time.addEvent(this.timeLimit);
-                this.timeLimit.paused = false;
+            // reset time limit timer
+            this.timeLimit.reset(this.timeLimitConfig);
+            this.time.addEvent(this.timeLimit);
+            this.timeLimit.paused = false;
 
-                // let peri move
-                this.peri.move = true;
+            // let peri move
+            this.peri.move = true;
 
-                // move swans
-                for (let swan of this.swanGroup.getChildren()) {
-                    this.moveSwan(swan);
-                }
+            // move swans
+            for (let swan of this.swanGroup.getChildren()) {
+                this.moveSwan(swan);
+            }
 
-                // after swans have finished moving, set periZone to next correct spot
-                this.time.delayedCall(this.duration, () => {
-                    this.periZone.x = this.map[this.form].peri[0];
-                    this.periZone.y = this.map[this.form].peri[1];
-                    this.arrow.x = this.periZone.getBottomRight().x + 10;
-                    this.arrow.y = this.periZone.getBottomRight().y + 10;
-                    this.formActive = true;
-                });
-            });     
+            // after swans have finished moving, set periZone to next correct spot
+            this.time.delayedCall(this.duration, () => {
+                this.periZone.x = this.map[this.form].peri[0];
+                this.periZone.y = this.map[this.form].peri[1];
+                this.arrow.x = this.periZone.getBottomRight().x + 10;
+                this.arrow.y = this.periZone.getBottomRight().y + 10;
+                this.formActive = true;
+            });
         }
     }
 
