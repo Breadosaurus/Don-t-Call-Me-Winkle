@@ -16,7 +16,8 @@ class Story extends Phaser.Scene {
         this.textWrapWidth = 600;
         this.prompt = '[SPACE]';
         this.prompt_X = game.config.width/3.4 + 620;
-        this.prompt_Y = game.config.height*(2/3)+130
+        this.prompt_Y = game.config.height*(2/3)+130;
+        this.typeSpeed = 50;
 
         // lining up the swans for player to choose + setup selection history
         this.swanChoice1_X = game.config.width/3;
@@ -25,11 +26,31 @@ class Story extends Phaser.Scene {
         this.swanChoice2_Y = game.config.height/2.3;
         this.swanChoice3_X = game.config.width/3;
         this.swanChoice3_Y = game.config.height/2.3;
+
+        // dialogue configuration
+        this.dialogConvo = 0;			// current "conversation" []?
+        this.dialogLine = 0;			// current line of conversation
+        this.dialogSpeaker = null;		// current speaker
+        this.dialogLastSpeaker = null;	// last speaker
+        this.dialogTyping = false;		// flag to lock player input while text is "typing"
+        this.dialogText = null;			// the actual dialog text
+        this.nextText = null;	
+
+        // participators
+        this.swan = null;
+        this.peri = null; 
+        this.tweenDuration = 500;
+
+        this.OFFSCREEN_X = -500;        // x,y values to place characters offscreen
+        this.OFFSCREEN_Y = 1000;
     }
 
     create() {
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
+
+        // grab swan and peri dialogue
+        this.dialog = this.cache.json.get('dialog');
 
         // choice picker collision object???
         // this.choiceSelect = this.physics.add.sprite((game.config.width - this.periBox.width) + 20, this.periBox.y + 30, 'He').setOrigin(0, 0).setAlpha(0);

@@ -1,24 +1,62 @@
 class Tutorial extends Phaser.Scene {
     constructor() {
         super("tutorialScene");
+
+        // place peri and jet
+        this.peri_X = game.config.width - 100;        // x,y values to place peri
+        this.peri_Y = game.config.height - 100;
+        this.jet_X = game.config.width - 900;
+        this.jet_Y = game.config.height/3;
+
+        // dialogue box placements and font
+        this.jetBox_X = this.jet_X + 50;           
+        this.jetBox_Y = this.jet_y;
+        this.dialogFont = 'handwrite';
+        // jet text configs
+        this.jetText_X = this.jetBox_X + 100;
+        this.jetText_Y = this.jetBox_Y + 100;
+        this.textSize = 25;
+        this.textWrapWidth = 600;
+        this.prompt = '[SPACE]';
+        this.prompt_X = game.config.width/3.4 + 620;
+        this.prompt_Y = game.config.height*(2/3)+130;
+        this.typeSpeed = 50;
+
+
+        // dialogue configuration
+        this.dialogConvo = 0;			// current "conversation" []?
+        this.dialogLine = 0;			// current line of conversation
+        this.dialogSpeaker = null;		// current speaker
+        this.dialogLastSpeaker = null;	// last speaker
+        this.dialogTyping = false;		// flag to lock player input while text is "typing"
+        this.dialogText = null;			// the actual dialog text
+        this.nextText = null;	
+
+        // participators
+        this.jet = null;
+        this.peri = null; 
+        this.tweenDuration = 500;
     }
 
     create() {
         // define keys 
         cursors = this.input.keyboard.createCursorKeys();
 
+        // grab tutorial section of dialogue json
+        this.tutorialTxt = this.map = this.cache.json.get('swansDialogue')[`${swanChoice}`];
+
         // text styling
-        let textConfig = {
-            fontFamily: 'handwrite',
-            fontSize: '46px',
-            color: '#8e87f1',
-            align: 'center',
-            padding: {
-                top: 5,
-                bottom: 5, 
-            },
-            autoRound: true,
-        } 
+        // let textConfig = {
+        //     fontFamily: 'handwrite',
+        //     fontSize: '46px',
+        //     color: '#8e87f1',
+        //     align: 'center',
+        //     padding: {
+        //         top: 5,
+        //         bottom: 5, 
+        //     },
+        //     autoRound: true,
+        // } 
 
         // add bg
         this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);

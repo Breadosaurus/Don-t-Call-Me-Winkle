@@ -41,4 +41,4 @@ let chapter = 0;
 let power;
 
 // variable for which swan is chosen if socializing
-let swanChoice = null
+let swanChoice = "jet"
