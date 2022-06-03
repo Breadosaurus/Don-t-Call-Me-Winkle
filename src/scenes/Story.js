@@ -30,11 +30,14 @@ class Story extends Phaser.Scene {
     create() {
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
+        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
 
         // choice picker collision object???
         // this.choiceSelect = this.physics.add.sprite((game.config.width - this.periBox.width) + 20, this.periBox.y + 30, 'He').setOrigin(0, 0).setAlpha(0);
 
-        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
+        this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);
         
         // adding NPC dialogue box
         this.swanBox = this.add.sprite(this.swanBox_X, this.swanBox_Y, 'swanBox').setOrigin(0,0);
@@ -109,7 +112,7 @@ class Story extends Phaser.Scene {
             this.peri.setAlpha(1);
             this.periBox.setAlpha(1);
             this.choices1.setAlpha(1);
-            if (Phaser.Input.Keyboard.JustDown(cursors.one)) {
+            if (Phaser.Input.Keyboard.JustDown(key1)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -117,7 +120,7 @@ class Story extends Phaser.Scene {
                 this.periChoice1 = false;
                 this.slowCheck2 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(cursors.two)) {
+            if (Phaser.Input.Keyboard.JustDown(key2)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -125,7 +128,7 @@ class Story extends Phaser.Scene {
                 this.periChoice1 = false;
                 this.slowCheck2 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(cursors.three)) {
+            if (Phaser.Input.Keyboard.JustDown(key3)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -159,7 +162,7 @@ class Story extends Phaser.Scene {
             this.peri.setAlpha(1);
             this.periBox.setAlpha(1);
             this.choices2.setAlpha(1);
-            if (Phaser.Input.Keyboard.JustDown(cursors.one)) {
+            if (Phaser.Input.Keyboard.JustDown(key1)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -167,7 +170,7 @@ class Story extends Phaser.Scene {
                 this.periChoice2 = false;
                 this.slowCheck3 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(cursors.two)) {
+            if (Phaser.Input.Keyboard.JustDown(key2)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -175,7 +178,7 @@ class Story extends Phaser.Scene {
                 this.periChoice2 = false;
                 this.slowCheck3 = true;
             }
-            if (Phaser.Input.Keyboard.JustDown(cursors.three)) {
+            if (Phaser.Input.Keyboard.JustDown(key3)) {
                 this.sound.play('periChoice');
                 this.peri.setAlpha(0.5);
                 this.periBox.setAlpha(0);
@@ -221,7 +224,6 @@ class Story extends Phaser.Scene {
 
     // typewriter effect functions based on example from https://blog.ourcade.co/posts/2020/phaser-3-typewriter-text-effect-bitmap/
     typewriteText(text) {
-	
         const length = text.length;
         
         let i = 0;
@@ -232,7 +234,6 @@ class Story extends Phaser.Scene {
             },
             repeat: length - 1,
             delay: 50
-        
         });
     }
 

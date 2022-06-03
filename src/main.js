@@ -10,7 +10,7 @@ let config = {
         },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    pixelArt: false,
+    pixelArt: true,
     scene: [Load, Tutorial, Migrate, Story, Ending]
 }
 
@@ -35,10 +35,10 @@ let btmBound = game.config.height - topBound;
 let practice = true;
 
 // start game at chapter 1
-let chapter = 0;
+let chapter = 1;
 
 // variable to hold power ups
 let power;
 
 // variable for which swan is chosen if socializing
-let swanChoice = null
+let swanChoice = null;

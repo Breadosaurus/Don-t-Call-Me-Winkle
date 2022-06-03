@@ -5,7 +5,9 @@ class Tutorial extends Phaser.Scene {
 
     create() {
         // define keys 
-        cursors = this.input.keyboard.createCursorKeys();
+        //cursors = this.input.keyboard.createCursorKeys();
+        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
 
         // text styling
         let textConfig = {
@@ -17,14 +19,14 @@ class Tutorial extends Phaser.Scene {
                 top: 5,
                 bottom: 5, 
             },
-            autoRound: true,
+            autoRound: true
         } 
 
         // add bg
-        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
+        this.bg = this.add.tileSprite(0, 0, 1024, 768, `sky${chapter}`).setOrigin(0, 0);
 
         // add dialogue box for Pilot Swan
-        this.pilot = this.add.sprite(game.config.width/3, game.config.height)
+        //this.pilot = this.add.sprite(game.config.width/3, game.config.height);
         // this.add.text(50, 200, "Periwinkle", textConfig).setDepth(5);
         // // text wrap based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width
         // this.make.text({
@@ -43,12 +45,12 @@ class Tutorial extends Phaser.Scene {
 
     update() {
         
-        if (Phaser.Input.Keyboard.JustDown(cursors.one)) {
+        if (Phaser.Input.Keyboard.JustDown(key1)) {
             this.sound.play('menuSelect');
             this.scene.start('migrateScene');
         }
 
-        if (Phaser.Input.Keyboard.JustDown(cursors.two)) {
+        if (Phaser.Input.Keyboard.JustDown(key2)) {
             this.sound.play('menuSelect');
 
             this.scene.start('storyScene');

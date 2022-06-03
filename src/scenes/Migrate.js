@@ -4,12 +4,14 @@ class Migrate extends Phaser.Scene {
     }
 
     create() {
+        
         // store current chapter's portion of migration map json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
 
         // add background and clouds
-        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
-        this.clouds = this.add.tileSprite(0, 0, 1024, 768, `clouds_${chapter}`).setOrigin(0, 0);
+        this.bg = this.add.tileSprite(0, 0, 1024, 768, `sky${chapter}`).setOrigin(0, 0);
+        this.clouds = this.add.tileSprite(0, 0, 1024, 768, `clouds${chapter}`).setOrigin(0, 0);
+        
 
         // set world bounds
         this.physics.world.setBounds(leftBound, topBound, game.config.width - leftBound*2, game.config.height - topBound*2);
@@ -23,18 +25,6 @@ class Migrate extends Phaser.Scene {
 
         // add arrow, set to invisible
         this.arrow = this.add.image(this.periZone.getBottomRight().x + 10, this.periZone.getBottomRight().y + 10, 'arrow').setOrigin(0, 0).setAlpha(0);
-
-        this.anims.create({
-            key: 'periGreen',
-            frames: this.anims.generateFrameNumbers('periGreen', {start: 0, end: 10, first: 0}),
-            duration: 700
-        });
-
-        this.anims.create({
-            key: 'win',
-            frames: this.anims.generateFrameNumbers('win', {start: 0, end: 3, first: 0}),
-            fps: 30
-        });
 
         // create group of swans
         this.swanGroup = this.physics.add.group();
@@ -153,14 +143,14 @@ class Migrate extends Phaser.Scene {
 
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
-        keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+        //keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
 //-------------------------------------------------------------------------------------------------
         
         // for the sake of First Playable Build
         let dialogueConfig = {
             fontFamily: 'handwrite',
-            fontSize: '20px',
+            fontSize: '24px',
             color: '#e0eefb',
             align: 'left',
             padding: {
@@ -197,7 +187,7 @@ class Migrate extends Phaser.Scene {
 
     //-------------------------------------------------------------------------------------------------    
         // if tutorial is active, space key starts migration
-        if (this.tutorial && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        if (this.tutorial && Phaser.Input.Keyboard.JustDown(cursors.space)) {
             this.sound.play('migStart');
 
             // hide tutorial
@@ -223,7 +213,7 @@ class Migrate extends Phaser.Scene {
         }
 
         // if migration is over, space key progresses you to next chapter or ending
-        if (this.endMigration && Phaser.Input.Keyboard.JustDown(keySPACE)) {
+        if (this.endMigration && Phaser.Input.Keyboard.JustDown(cursors.space)) {
             this.sound.play('menuSelect');
             // if this was practice mode, restart scene with practice mode OFF
             if (practice) {
