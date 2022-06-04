@@ -5,26 +5,30 @@ class Story extends Phaser.Scene {
         /* structure and code for this scene will heavily reference
         Professor Nathan Altice's Dialogging example @ https://github.com/nathanaltice/Dialogging */
         
-        // dialogue box placements and font
-        this.swanBox_X = game.config.width/8;           
-        this.swanBox_Y = game.config.height*(2/3);
-        this.dialogFont = 'handwrite';
-        // swan text configs
-        this.swanText_X = game.config.width/3.4;
-        this.swanText_Y = game.config.height*(2/3)+30;
-        this.textSize = 25;
-        this.textWrapWidth = 600;
-        this.prompt = '[SPACE]';
-        this.prompt_X = game.config.width/3.4 + 620;
-        this.prompt_Y = game.config.height*(2/3)+130
+        // swan dialogue box and text position
+        this.SWANBOX_X = game.config.width - 30;        
+        this.SWANBOX_Y = game.config.height - 30;        
+        this.SWANTEXT_X = this.swanBoxX + 200;
+        this.SWANTEXT_Y = this.swanBoxY;
+        this.SWANTEXT_WIDTH = 600;
 
-        // lining up the swans for player to choose + setup selection history
-        this.swanChoice1_X = game.config.width/3;
-        this.swanChoice1_Y = game.config.height/2.30;
-        this.swanChoice2_X = game.config.width*(2/3);
-        this.swanChoice2_Y = game.config.height/2.3;
-        this.swanChoice3_X = game.config.width/3;
-        this.swanChoice3_Y = game.config.height/2.3;
+        // swan positions
+        this.sloaneX = 330;
+        this.sloaneY = 740;
+        this.siestaX = 340;
+        this.siestaY = 700;
+        this.kennethX = 320;
+        this.kennethY = 740;
+
+        // peri dialogue box and text position
+        this.PERIBOX_X = game.config.width - 350;                                  
+        this.PERIBOX_Y = 350;         
+        this.PERITEXT_X = 0;
+        this.PERITEXT_Y = 0;
+        
+        this.FONT_SIZE = 25;
+        this.swanChoice = 'kenneth';
+        this.choice = true;
     }
 
     create() {
@@ -32,24 +36,19 @@ class Story extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
         key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
-        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
-
-        // choice picker collision object???
-        // this.choiceSelect = this.physics.add.sprite((game.config.width - this.periBox.width) + 20, this.periBox.y + 30, 'He').setOrigin(0, 0).setAlpha(0);
+        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
 
         this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);
         
         // adding NPC dialogue box
-        this.swanBox = this.add.sprite(this.swanBox_X, this.swanBox_Y, 'swanBox').setOrigin(0,0);
+        this.swanBox = this.add.image(this.SWANBOX_X, this.SWANBOX_Y, 'swanBox').setOrigin(1, 1);
 
         // peri choice box
-        this.periBox = this.add.rectangle(game.config.width - game.config.width/2.7, game.config.height*(2/3) - game.config.height/2, game.config.width/4, game.config.height/2.2, 0xe0eefb).setOrigin(0, 0).setAlpha(0);
+        this.periBox = this.add.image(this.PERIBOX_X, this.PERIBOX_Y, 'periBox').setScale(0.7);
 
-        // adding npc sprite
-        this.swan = this.physics.add.sprite(120, game.config.height - 200, `swan${swanChoice}`).setScale(0.45);
+        
         // add Peri sprite
-        this.peri = this.physics.add.sprite(game.config.width - 100, game.config.height/2 + 20, 'periStory').setScale(0.4).setAlpha(0.5);
-
+        this.peri = this.physics.add.sprite(game.config.width - 20, game.config.height - 220, 'periStory').setScale(0.35).setOrigin(1, 1);
 
         // text style for dialogue
         let dialogueConfig = {
@@ -64,166 +63,30 @@ class Story extends Phaser.Scene {
             autoRound: true,
             resolution: 2
         }
-
-        // set up typewriter text for NPC
-        // (x, y, 'text'). wrap size
-        // this.NPCdialogue = this.add.text((game.config.width/3)+20, (game.config.height*(2/3))+30, '', dialogueConfig).setWordWrapWidth(600).setOrigin(0, 0);
-        
-
-        // NPC dialogue checks + dialogue :: really scuffed cuz im not sure how to organize yet
-        this.slowCheck1 = true;
-        // this.slowLine1 = this.typewriteTextWrapped('Heeeeeey Periwinkle *yawn* ... How goes it? Having fuuuuun with the new flock?');
-        this.slowLine1 = this.add.text(game.config.width/3.4, (game.config.height*(2/3))+30, "Heeeeeey Periwinkle *yawn* ... How goes it? Having fuuuuun with the new flock? \n\ \n\ \n\ \n\ \n\ (Press SPACE to continue)", dialogueConfig).setWordWrapWidth(600).setOrigin(0, 0);
-        this.slowCheck2 = false;
-        this.slowLine2 = this.add.text(game.config.width/3.4, (game.config.height*(2/3))+30, "Let me cut you off there little guy, you’re going a liiiitle too fast for me *yawn* Now see, I take it nice and slow and I don’t have to worry about anything. I don’t bump into other birds and I have all the time I want to get to my spot. It’s just me, this pillow, and the sky above me. Understand? (And don’t ask where I got the feathers for the pillow)...", dialogueConfig).setWordWrapWidth(600).setOrigin(0, 0).setAlpha(0);
-        this.slowCheck3 = false;
-        this.slowLine3 = this.add.text(game.config.width/3.4, (game.config.height*(2/3))+30, "Exaaaactly. Now let’s taaaaalk abooouutt-  *snore*", dialogueConfig).setWordWrapWidth(600).setOrigin(0, 0).setAlpha(0);
-
-        // peri choices
-        this.periChoice1 = false;
-        this.choices1 = this.add.text(this.periBox.x + 20, this.periBox.y + 30, " 1] Yeah! \n\ 2] No. \n\ 3] Kinda? ", dialogueConfig).setAlpha(0).setWordWrapWidth(game.config.width/4 - 50);
-        this.periChoice2 = false;
-        this.choices2 = this.add.text(this.periBox.x + 20, this.periBox.y + 30, " 1] I do! \n\ 2] Uh... \n\ 3] Feathers?", dialogueConfig).setAlpha(0).setWordWrapWidth(game.config.width/4 - 50);
-        this.periClose = false;
-        this.periCloseText = this.add.text(this.periBox.x + 20, this.periBox.y + 30, "...??? \n\ \n\ \n\ Guess I'll go get ready to migrate...[SPACE]", dialogueConfig).setAlpha(0).setWordWrapWidth(game.config.width/4 - 50);
-
-        
-
     } // end create()
 
     update() {
-        
-        // slow bird starts convo 
-        if (this.slowCheck1) {
-            // if space is pressed then: fade NPC and their dialogue
-            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
-                this.sound.play('spaceNPC');
-                this.slowSwan.setAlpha(0.5);
-                this.NPCbox.setAlpha(0.5);
-                this.slowLine1.setAlpha(0.5);
-                this.slowCheck1 = false;
-                this.periChoice1 = true
-            }
-        }
-
-        // peri response :: choice 1
-        if (this.periChoice1) {
-            // if NPC not talking: Peri and choices visible
-            this.peri.setAlpha(1);
-            this.periBox.setAlpha(1);
-            this.choices1.setAlpha(1);
+        // if choice segment is active, set swanChoice to chosen swan
+        if (this.choice = true) {
             if (Phaser.Input.Keyboard.JustDown(key1)) {
-                this.sound.play('periChoice');
-                this.peri.setAlpha(0.5);
-                this.periBox.setAlpha(0);
-                this.choices1.setAlpha(0);
-                this.periChoice1 = false;
-                this.slowCheck2 = true;
+                this.swanChoice = 'siesta';
+            } else if (Phaser.Input.Keyboard.JustDown(key2)) {
+                this.swanChoice = 'sloane';
+            } else if (Phaser.Input.Keyboard.JustDown(key3)) {
+                this.swanChoice = 'kenneth';
             }
-            if (Phaser.Input.Keyboard.JustDown(key2)) {
-                this.sound.play('periChoice');
-                this.peri.setAlpha(0.5);
-                this.periBox.setAlpha(0);
-                this.choices1.setAlpha(0);
-                this.periChoice1 = false;
-                this.slowCheck2 = true;
-            }
-            if (Phaser.Input.Keyboard.JustDown(key3)) {
-                this.sound.play('periChoice');
-                this.peri.setAlpha(0.5);
-                this.periBox.setAlpha(0);
-                this.choices1.setAlpha(0);
-                this.periChoice1 = false;
-                this.slowCheck2 = true;
-            }
-
+            this.choice = false;
+            
+            // adding npc sprite
+            this.swan = this.physics.add.sprite(this[`${this.swanChoice}X`], this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
+            
         }
-
-        if (this.slowCheck2) {
-            // if Peri done choice 1: NPC say line 2
-            this.slowLine1.setAlpha(0);
-            this.slowLine2.setAlpha(1);
-            this.slowSwan.setAlpha(1);
-            this.NPCbox.setAlpha(1);
-
-            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
-                this.sound.play('spaceNPC');
-                this.slowSwan.setAlpha(0.5);
-                this.NPCbox.setAlpha(0.5);
-                this.slowLine2.setAlpha(0.5);
-                this.slowCheck2 = false;
-                this.periChoice2 = true;
-            }
-
-        }
-
-        // peri response :: choice 2
-        if (this.periChoice2) {
-            this.peri.setAlpha(1);
-            this.periBox.setAlpha(1);
-            this.choices2.setAlpha(1);
-            if (Phaser.Input.Keyboard.JustDown(key1)) {
-                this.sound.play('periChoice');
-                this.peri.setAlpha(0.5);
-                this.periBox.setAlpha(0);
-                this.choices2.setAlpha(0);
-                this.periChoice2 = false;
-                this.slowCheck3 = true;
-            }
-            if (Phaser.Input.Keyboard.JustDown(key2)) {
-                this.sound.play('periChoice');
-                this.peri.setAlpha(0.5);
-                this.periBox.setAlpha(0);
-                this.choices2.setAlpha(0);
-                this.periChoice2 = false;
-                this.slowCheck3 = true;
-            }
-            if (Phaser.Input.Keyboard.JustDown(key3)) {
-                this.sound.play('periChoice');
-                this.peri.setAlpha(0.5);
-                this.periBox.setAlpha(0);
-                this.choices2.setAlpha(0);
-                this.periChoice2 = false;
-                this.slowCheck3 = true;
-            }
-
-        }
-
-        if (this.slowCheck3) {
-            // if Peri done choice 2: NPC say line 3
-            this.slowLine1.setAlpha(0);
-            this.slowLine2.setAlpha(0);
-            this.slowLine3.setAlpha(1);
-            this.slowSwan.setAlpha(1);
-            this.NPCbox.setAlpha(1);
-
-            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
-                this.sound.play('spaceNPC');
-                this.slowSwan.setAlpha(0.5);
-                this.NPCbox.setAlpha(0.5);
-                this.slowLine3.setAlpha(0.5);
-                this.slowCheck3 = false;
-                this.periClose = true;
-            }
-
-        }
-
-        if (this.periClose) {
-            this.peri.setAlpha(1);
-            this.periBox.setAlpha(1);
-            this.periCloseText.setAlpha(1);
-
-            if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
-                this.sound.play('menuSelect');
-                practice = false;
-                this.scene.start('migrateScene');
-            }
-        }
-
     } // end update()
 
     // typewriter effect functions based on example from https://blog.ourcade.co/posts/2020/phaser-3-typewriter-text-effect-bitmap/
-    typewriteText(text) {
+    typeText(text) {
+        // currently typing
+        this.typing = true;
         const length = text.length;
         
         let i = 0;
