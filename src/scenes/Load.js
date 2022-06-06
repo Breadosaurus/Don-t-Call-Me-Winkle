@@ -7,7 +7,7 @@ class Load extends Phaser.Scene {
         // set load path weehee
         this.load.path = 'assets/';
 
-        // all the good good visual boys we need!!
+        // migration assets
         this.load.image('bg_1', 'img/bg_001.png');
         this.load.image('bg_2', 'img/bg_002.png');
         this.load.image('bg_3', 'img/bg_003.png');
@@ -16,19 +16,47 @@ class Load extends Phaser.Scene {
         this.load.image('clouds_3', 'img/bg_003_clouds.png');
         this.load.image('periMigrate', 'img/periMigrate.png');
         this.load.image('swanMigrate', 'img/swanMigrate.png');
+        // story assets
         this.load.image('periStory', 'img/periStory.png');
         this.load.image('pilot', 'img/pilot.png');
         this.load.image('swan1', 'img/slowSwan.png');
         this.load.image('swan2', 'img/strongSwan.png');
-        // this.load.image('swan3', 'img/kindSwan.png');
+        this.load.image('swan3', 'img/kindSwan.png');
         this.load.image('swanBox', 'img/textBox.png');
+        // misc/ui
+        this.load.image('credits', 'img/credButton.png');
+        this.load.image('start', 'img/startButton.png');
+        this.load.image('credStrip', 'img/credStrip.png');
+        this.load.image('menuStrip', 'img/menuStrip.png');
 
+        
         this.load.image('jeff', 'img/jeffrey_thomas.png');
 
-        // all the good good audio boys we need
+        // load texture atlas for animations
+        this.load.atlas('peri_atlas', 'img/periSheet.png', 'json/periSheet.json');
+
+
+        // migration sfx
+        this.load.audio('win', 'audio/victory.mp3');
+        this.load.audio('fail', 'audio/failForm.mp3');
+        this.load.audio('bump1', 'audio/bump1.mp3');
+        this.load.audio('bump2', 'audio/bump2.mp3');
+        this.load.audio('bump3', 'audio/bump3.mp3');
+        this.load.audio('bump4', 'audio/bump4.mp3');
+        this.load.audio('bump5', 'audio/bump5.mp3');
+        this.load.audio('bump6', 'audio/bump6.mp3');
+        this.load.audio('flap', 'audio/wingBeat1.mp3');
+        // ui sfx
         this.load.audio('menuSelect', 'audio/menuSelect.mp3');
         this.load.audio('migStart', 'audio/migrateStart.mp3');
-        this.load.audio('spaceNPC', 'audio/NPC_done.mp3');
+        // story sfx
+        this.load.audio('siesta', 'audio/siestaChosen.mp3');
+        this.load.audio('sloane', 'audio/sloaneChosen.mp3');
+        this.load.audio('kenneth', 'audio/kennethChosen.mp3');
+        this.load.audio('siestaVoice', 'audio/siestaDialogue.mp3');
+        this.load.audio('sloaneVoice', 'audio/sloaneDialogue.mp3');
+        this.load.audio('kennethVoice', 'audio/kennethDialogue.mp3');
+        this.load.audio('jettVoice', 'audio/jettDialogue.mp3');
         this.load.audio('periChoice', 'audio/periChoice.mp3');
 
 

@@ -5,16 +5,16 @@ class Tutorial extends Phaser.Scene {
         // place peri and jet
         this.peri_X = game.config.width - 100;        // x,y values to place peri
         this.peri_Y = game.config.height - 100;
-        this.jet_X = game.config.width - 900;
-        this.jet_Y = game.config.height/3;
+        this.jett_X = game.config.width - 900;
+        this.jett_Y = game.config.height/3;
 
         // dialogue box placements and font
-        this.jetBox_X = this.jet_X + 50;           
-        this.jetBox_Y = this.jet_y;
+        this.jettBox_X = this.jet_X + 50;           
+        this.jettBox_Y = this.jet_y;
         this.dialogFont = 'handwrite';
         // jet text configs
-        this.jetText_X = this.jetBox_X + 100;
-        this.jetText_Y = this.jetBox_Y + 100;
+        this.jettText_X = this.jetBox_X + 100;
+        this.jettText_Y = this.jetBox_Y + 100;
         this.textSize = 25;
         this.textWrapWidth = 600;
         this.prompt = '[SPACE]';
@@ -33,7 +33,7 @@ class Tutorial extends Phaser.Scene {
         this.nextText = null;	
 
         // participators
-        this.jet = null;
+        this.jett = null;
         this.peri = null; 
         this.tweenDuration = 500;
     }
@@ -43,7 +43,7 @@ class Tutorial extends Phaser.Scene {
         cursors = this.input.keyboard.createCursorKeys();
 
         // grab tutorial section of dialogue json
-        this.tutorialTxt = this.map = this.cache.json.get('swansDialogue')[`${swanChoice}`];
+        this.tutorialTxt = this.cache.json.get('swansDialogue')[`tutorial`];
 
         // text styling
         // let textConfig = {
@@ -62,7 +62,7 @@ class Tutorial extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
 
         // add dialogue box for Pilot Swan
-        this.pilot = this.add.sprite(game.config.width/3, game.config.height)
+        this.jet = this.add.sprite(game.config.width/3, game.config.height)
         // this.add.text(50, 200, "Periwinkle", textConfig).setDepth(5);
         // // text wrap based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width
         // this.make.text({

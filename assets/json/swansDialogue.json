@@ -1,38 +1,38 @@
 {
    "tutorial": [
        {
-           "speaker" : "jet",
+            "speaker" : "Jett",
             "dialogue" : "ALRIGHT EVERYBODY LISTEN UP, and especially *you*, Periwinkle.",
             "startScale" : "true",
             "shake" : "true"
        },
        {
-            "speaker" : "peri",
+            "speaker" : "Peri",
             "dialogue" : "( Aw man, I know I’m new but does he have to single me out like this?! )",
             "noTint" : "true"
         },
         {
-            "speaker" : "jet",
+            "speaker" : "Jett",
             "dialogue" : "YOU ALL KNOW THE DRILL! Move into formation with the **ARROW KEYS**! I’d advise you all to *NOT* bump into each other back there like a batch of squabbling penguins, YOU HEAR ME? If you do, there’ll be some tough consequences, no doubt about it!",
             "shake" : "true"
         },
         {
-            "speaker" : "peri",
+            "speaker" : "Peri",
             "dialogue" : "Yes, Sir!",
             "startScale" : "true"        
         },
         {
-            "speaker" : "jet",
-            "dialogue" : "Once we’ve all clicked into our designated spots, it’ll be easy breezy beautiful from there and we’ll be at our destination in no time. THEN you can mingle amongst yourselves. Make some friends, or get ready for the next migration or something. Just come back to the flock in one piece and we’ll set off. ***LET’S MOVE OUT!***",
+            "speaker" : "Jett",
+            "dialogue" : "Once we’ve all *clicked* into our designated spots, it’ll be easy breezy beautiful from there and we’ll be at our destination in no time. THEN you can mingle amongst yourselves. Make some friends, or get ready for the next migration or something. Just come back to the flock in one piece and we’ll set off. ***LET’S MOVE OUT!***",
             "shake" : "true"
         },
         {
-            "speaker" : "peri",
-            "dialogue" : "*sigh* here we go…"
+            "speaker" : "Peri",
+            "dialogue" : "*sigh*...Here we go..."
         }
    ],
    
-    "slow": [      
+    "siesta": [      
         {
             "dialogue" : "Heeeeeey Peri...*yawn*...winkle. How goes it? Having fuuuuun with the new flock?",
             "noTint" : "true",
@@ -56,7 +56,7 @@
         }
     ],
 
-    "strong": [      
+    "sloane": [      
         {
             "dialogue" : "HELLO GOOD SIR!\n \nhello! hello!",
             "noTint" : "true",
@@ -89,7 +89,7 @@
         }
     ],
 
-    "kind": [      
+    "kenneth": [      
         {
             "dialogue" : "Astounding! You’re a much better flier than I thought you would be. You’ve crossed off all of the beginner’s flying techniques on my list, and it’s not been more than your fifth time up there!",
             "noTint" : "true",
