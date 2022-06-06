@@ -63,6 +63,7 @@ class Load extends Phaser.Scene {
         
         // ui sfx
         this.load.audio('menuSelect', 'audio/menuSelect.mp3');
+        this.load.audio('uiSelect', 'audio/uiSelect.mp3');
         this.load.audio('migStart', 'audio/migrateStart.mp3');
         
         // story sfx
@@ -132,7 +133,7 @@ class Load extends Phaser.Scene {
                 zeroPad: 3
             }),
             frameRate: 8,
-            repeat: 4,
+            repeat: 2,
         });
         
         // start first real game scene

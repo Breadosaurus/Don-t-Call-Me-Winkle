@@ -87,12 +87,13 @@ class Tutorial extends Phaser.Scene {
     update() {
         
         if (Phaser.Input.Keyboard.JustDown(keyS)) {
-            this.sound.play('menuSelect');
+            this.sound.play('uiSelect');
             this.scene.start('migrateScene');
+            // this.tweens.add
         }
 
         if (Phaser.Input.Keyboard.JustDown(keyC)) {
-            this.sound.play('menuSelect');
+            this.sound.play('uiSelect');
             this.scene.start('storyScene');
         }
     }

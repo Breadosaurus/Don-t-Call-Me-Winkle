@@ -4,12 +4,32 @@ class Ending extends Phaser.Scene {
     }
 
     create() {
-        this.jeff = this.add.image(game.config.width/2, game.config.height/2, 'jeff');
+        // define keys
+        keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
 
-        this.add.text(game.config.width/2, game.config.height/5, 'ENDING!', {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(1);
-    } 
+        this.end = this.add.sprite(0, 0, 'ending').setOrigin(0, 0);         // end screen sprite to "hold" animation
+        this.end.play('endAnim', true);                     // play end screen animation
+
+        // lock C input when menu is the only option
+        this.endingOn = true;
+        
+
+    }
 
     update() {
+        // check for input to switch scenes
+        if (this.endingOn && Phaser.Input.Keyboard.JustDown(keyC)) {
+            this.sound.play('menuSelect');
+            this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
+            this.credits.play('creditAnim');
+            this.endingOn = false;
+            
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyM)) {
+            this.sound.play('uiSelect');
+            this.scene.start('tutorialScene');
+        }
 
     }
 }
