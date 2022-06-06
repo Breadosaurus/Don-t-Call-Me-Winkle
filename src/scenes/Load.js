@@ -22,7 +22,7 @@ class Load extends Phaser.Scene {
 
         // load story assets
         this.load.image('bg', 'img/bg.png');
-        this.load.image('jet', 'img/jet.png');
+        this.load.image('jett', 'img/jett.png');
         this.load.image('periStory', 'img/periStory.png');
         this.load.image('sloane', 'img/sloane.png');
         this.load.image('siesta', 'img/siesta.png');
@@ -30,6 +30,9 @@ class Load extends Phaser.Scene {
         this.load.image('swanBox', 'img/swanBox.png');
         this.load.image('periBox', 'img/periBox.png');
         //this.load.image('jeff', 'img/jeffrey_thomas.png');
+
+        // load font
+        this.load.bitmapFont('handwrite', 'font/handwrite.png', 'font/handwrite.xml');
 
         // all the good good audio boys we need
         this.load.audio('menuSelect', 'audio/menuSelect.mp3');
@@ -56,6 +59,5 @@ class Load extends Phaser.Scene {
             fps: 30
         });
         this.scene.start('tutorialScene');
-
     }
 }

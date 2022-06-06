@@ -10,7 +10,7 @@ let config = {
         },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    pixelArt: true,
+    roundPixels: true,
     scene: [Load, Tutorial, Migrate, Story, Ending]
 }
 
@@ -31,8 +31,8 @@ let rightBound = game.config.width - leftBound;
 let topBound = 20;
 let btmBound = game.config.height - topBound;
 
-// start game in practice mode (turns off after player completes first practice or story)
-let practice = true;
+// practice mode boolean
+let practice;
 
 // start game at chapter 1
 let chapter = 1;
@@ -40,5 +40,5 @@ let chapter = 1;
 // variable to hold power ups
 let power;
 
-// variable for which swan is chosen if socializing
-let swanChoice = null;
+// array to hold names of swans talked to
+let swansTalked = [];
