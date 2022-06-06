@@ -5,16 +5,16 @@ class Tutorial extends Phaser.Scene {
         // place peri and jett x, y coords
         this.peri_X = game.config.width - 100;        
         this.peri_Y = game.config.height - 100;
-        this.jett_X = game.config.width - 900;
-        this.jett_Y = game.config.height/3;
+        this.jett_X = game.config.width - 875;
+        this.jett_Y = game.config.height/2.5;
 
         // dialogue box placements and font
-        this.jettBox_X = this.jet_X + 50;           
-        this.jettBox_Y = this.jet_y;
+        this.jettBox_X = this.jett_X + 10;           
+        this.jettBox_Y = this.jett_Y - 10;
         this.dialogFont = 'handwrite';
         // jett text configs
-        this.jettText_X = this.jetBox_X + 100;
-        this.jettText_Y = this.jetBox_Y + 100;
+        this.jettText_X = this.jettBox_X + 100;
+        this.jettText_Y = this.jettBox_Y + 100;
         this.textSize = 25;
         this.textWrapWidth = 600;
         this.prompt = '[SPACE]';
@@ -39,11 +39,15 @@ class Tutorial extends Phaser.Scene {
     }
 
     create() {
+        practice = true;
+
         // define keys 
         cursors = this.input.keyboard.createCursorKeys();
+        keyS = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        keyC = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
 
         // grab tutorial section of dialogue json
-        this.tutorialTxt = this.cache.json.get('swansDialogue')[`tutorial`];
+        // this.tutorialTxt = this.cache.json.get('swansDialogue')[`tutorial`];
 
         // text styling
         // let textConfig = {
@@ -59,11 +63,12 @@ class Tutorial extends Phaser.Scene {
         // } 
 
         // add title screen to initiate game
-        this.title = this.add.sprite(0, 0, 1024, 768, 'titleScreen').setOrigin(0, 0);
+        this.title = this.add.sprite(0, 0, 'titleScreen').setOrigin(0, 0);
+        this.title.play('titleAnim', true);
 
-        // add dialogue box for Pilot Swan
-        this.jet = this.add.sprite(game.config.width/3, game.config.height)
-        // this.add.text(50, 200, "Periwinkle", textConfig).setDepth(5);
+        // add jett + jett's box
+        this.jettBox = this.add.sprite(this.jettBox_X, this.jettBox_Y, 'swanBox').setOrigin(0, 0);
+        this.jett = this.add.sprite(this.jett_X, this.jett_Y, 'jett');        // this.add.text(50, 200, "Periwinkle", textConfig).setDepth(5);
         // // text wrap based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width
         // this.make.text({
         //     x: 50,
@@ -81,16 +86,24 @@ class Tutorial extends Phaser.Scene {
 
     update() {
         
-        if (Phaser.Input.Keyboard.JustDown(key1)) {
+        if (Phaser.Input.Keyboard.JustDown(keyS)) {
             this.sound.play('menuSelect');
             this.scene.start('migrateScene');
         }
 
-        if (Phaser.Input.Keyboard.JustDown(key2)) {
+        if (Phaser.Input.Keyboard.JustDown(keyC)) {
             this.sound.play('menuSelect');
-
             this.scene.start('storyScene');
         }
     }
+
+    // // camera fade-to-black transition
+    // this.time.delayedCall(750, () => {
+    //     this.cameras.main.fadeOut(400);
+    //     this.time.delayedCall(500, () => {
+    //         this.choiceGroup[this.swanChoice].setAlpha(0);
+    //         this.cameras.main.fadeIn(400, 0, 0, 0);
+    //     });
+    // });
 
 }

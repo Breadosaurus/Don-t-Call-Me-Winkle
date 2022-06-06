@@ -1,0 +1,271 @@
+{
+    "kenneth": [      
+        {
+            "speaker": "kenneth",
+            "dialogue": "Astounding! You're a much better flier than I thought you would be. You've crossed off all of the beginner's flying techniques on my list, and it's only your first day!"
+        },
+        {
+            "speaker": "peri",
+            "choice": true,
+            "dialogue": [
+                "Thanks?",
+                "Thank you!",
+                "What's that supposed to mean..."
+            ]
+        },
+        {
+            "speaker": "kenneth",
+            "dialogue": "Let me introduce myself. I'm Kenneth! I'm the wisest bird in the flock and I'm here to help you with whatever you need, my little Polioptila Caerulea!"
+        },
+        {
+            "speaker": "peri",
+            "choice": true,
+            "dialogue": [
+                "Really? Like what?",
+                "Poliopawhata?!"
+            ]
+        },
+        {
+            "speaker": "kenneth",
+            "dialogue": "Well, according to my statistics, I can see that you're having a little trouble with finding your spot in the formations. With every bird flying all over the place, I completely understand why!"
+        },
+        {
+            "speaker": "kenneth",
+            "dialogue": "That being said, what if I told you that I could calculate the exact spot you need to go to BEFORE we take off?"
+        },
+        {
+            "speaker": "peri",
+            "choice": true,
+            "dialogue": [
+                "That'd be amazing!",
+                "Why are you helping me, anyway?"
+            ]
+        },
+        {
+            "speaker": "kenneth",
+            "branch": true,
+            "dialogue": [
+                "No problem, my fellow passerine! It's my mission to help any bird in need because it's the right thing to do.",
+                "I do what I can to help anyone in need because it's the right thing to do!"
+            ]
+        },
+        {
+            "speaker": "kenneth",
+            "branch": true,
+            "dialogue": [
+                "No matter where life takes you, remember always to be kind! You'll make new friends and fly through life much, much easier that way.",
+                "We go through this world with so much strife on our wings, so what good is living if we can't help out our fellow birds?"
+            ]
+        },
+        {
+            "speaker": "kenneth",
+            "dialogue": "Now, then! I could lay out the math of how exactly I calculate your trajectory, but maybe it'd be best if I show you. Let's take to the skies!"
+        }
+    ],
+
+    "siesta": [      
+        {
+            "speaker": "siesta",
+            "dialogue": "Heeyyy, Periwinkle... *yawn* How goes it? Having fuuuuun with the new flock?"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "Kind of? No one's talking to me and everyone is so much bigger and what if I say something wr -"
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "Let me cut you off there, little guy, you're going a liiiittle too fast for me... *yaaaaawn*"
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "Now see, I take it nice and slow, and I don't have to worry about anything. I don't bump into other birds, and I have all the time I want to get to my spot."
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "It's just me, this pillow, and the sky above me. (And don't ask where I got the feathers for the pillow...) Understand?"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "I do! I do! As long as I take it easy and don't stress too much, I'll fit into the flock just fine!"
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "Exaaactly. Now, let's taaaaalk abooouutt... *snooooooore*"   
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "...Siesta?"
+        }
+    ],
+
+    "sloane": [      
+        {
+            "speaker": "sloane",
+            "dialogue": "HELLO, GOOD SIR!",
+            "ducklings": "hello! hello!"
+        },
+        {
+            "speaker": "peri",
+            "choice": true,
+            "dialogue": [
+                "Hello!",
+                "Who?! Who are you?!",
+                "HELP SHE'S GOT A WEAPON!!!"
+            ]
+        },
+        {
+            "speaker": "sloane",
+            "dialogue": "I AM SLOANE! Strongest bird in this flock and your new MENTOR, my fine fellow!",
+            "ducklings": "new mentor! new mentor!"
+        },
+        {
+            "speaker": "peri",
+            "choice": true,
+            "dialogue": [
+                "My mentor?",
+                "For the strongest bird in the flock, you seem pretty frail..."
+            ]
+        },
+        {
+            "speaker": "sloane",
+            "branch": true,
+            "dialogue": [
+                "YES! YOUR MENTOR! A guardian to teach you courage and the meaning of TRUE strength, what lies in your heart!",
+                "My stature says nothing about my true strength, my feathered friend. It's COURAGE, VULNERABILITY, and the strength to follow your HEART that matters!"
+            ]
+        },
+        {
+            "speaker": "sloane",
+            "dialogue": "I CAN ALSO TEACH YOU SO MANY OTHER THINGS, YOUNG LAD! SUCH AS FLYING AND... and... um... uh..."
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "Not hitting the other birds?"
+        },
+        {
+            "speaker": "sloane",
+            "dialogue": "NOT HITTING THE OTHER BIRDS! Yes, what a brilliant idea from one such as myself! Such strong ideas from a strong bird! You, too, can be as shining as me, young one! What say you?",
+            "ducklings": "say you? say you?"
+        },
+        {
+            "speaker": "peri",
+            "choice": true,
+            "dialogue": [
+                "...I guess?",
+                "Yeah!!!",
+                "Who even is this swan..."
+            ]
+        }
+    ],
+
+    "ending1": [
+        {
+            "speaker": "all",
+            "dialogue": "CONGRATULATIONS, PERIWINKLE!!"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "Congratulations?"
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "You - *yawn* - just got through your first day! And you did so well that you had me on the edge of my seat! (And way past my bedtime...)"
+        },
+        {
+            "speaker": "kenneth",
+            "dialogue": "Your statistics are off the speakerts! I've never seen anything like it! You must let me do a study on you some time."
+        },
+        {
+            "speaker": "sloane",
+            "dialogue": "EXCELLENT WORK, YOUNG ONE! I've never seen such strength in such a tiny body! You'll fit into this flock just fine, I just know it!",
+            "ducklings": "tiny body! tiny body!"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "I can't believe it's only the first day and I've already met so many new birds! I couldn't have done it without you guys pushing me forward, thank you so much!"
+        }
+    ],
+
+    "ending3": {
+        "intro": [
+            {
+                "speaker": "peri",
+                "dialogue": "Man, I didn't do that well today. Maybe I should get some advice."
+            }
+        ],
+
+        "kenneth": [
+            {
+                "speaker": "kenneth",
+                "dialogue": "Greetings Periwinkle! How are you feeling today?"
+            },
+            {
+                "speaker": "peri",
+                "dialogue": "I'm not feeling well, Kenneth. I know you told me where to go, but I still missed my spot more than a featherful of times. Maybe I'll never get the hang of this."
+            },
+            {
+                "speaker": "kenneth",
+                "dialogue": "Don't be so hard on yourself! Today is just a blip in the world's great pie speakert. Tomorrow, I know you'll do just fine. I'll even give you another heads up on where your spot is supposed to be, what do you say?"
+            },
+            {
+                "speaker": "peri",
+                "dialogue": "That's so nice, Kenneth! I'm so glad to have a friend like you by my side. Tomorrow is a new day!"
+            }
+        ],
+
+        "siesta": [
+            {
+                "speaker": "siesta",
+                "dialogue": "Heyy, Periwinkle. How goes it? *yawn*"
+            },
+            {
+                "speaker": "peri",
+                "dialogue": "It's not going that well, Siesta. I did what you said and took it slow and easy, but I'm still a bad flier."
+            },
+            {
+                "speaker": "siesta",
+                "dialogue": "Periwinkle, just because you didn't do well today doesn't mean you're a bad flier. It just means that you need a little more practice."
+            },
+            {
+                "speaker": "siesta",
+                "dialogue": "Don't stress yourself out about it too much. Get some *yawn* rest and you'll be a brand new bird tomorrow."
+            },
+            {
+                "speaker": "peri",
+                "dialogue": "You're right Siesta, I just need to take it one day at a time. Thank you so much!"
+            }
+        ],
+
+        "sloane": [
+            {
+                "speaker": "sloane",
+                "dialogue": "PERIWINKLE! How are you doing on this fine evening?",
+                "ducklings": "periwinkle! periwinkle!"
+            },
+            {
+                "speaker": "peri",
+                "dialogue": "I'm not doing great, Sloane. Even with your words of encouragement, I still can't fly as well as the other swans. Maybe I'm just not strong enough to do this."
+            },
+            {
+                "speaker": "sloane",
+                "dialogue": "NONSENSE! Periwinkle, I told you that strength comes from the heart, not your feathers. As long as you stay determined, there's nothing you can't do! NOW GET BACK OUT THERE!",
+                "ducklings": "GET BACK OUT THERE!"
+            },
+            {
+                "speaker": "peri",
+                "dialogue": "YOU'RE RIGHT! I AM STRONG! I AM BRAVE! AAAAAAAAAAA"
+            }
+        ]
+    },
+
+    "ending4": [
+        {
+            "speaker": "peri",
+            "dialogue": "Man, that was tough. I didn't make any friends, and I did horrible at flying..."
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "But that doesn't mean I should give up! I'm what this flock needs and on my tailfeathers, I'm going to show them that!"
+        }
+    ]
+}

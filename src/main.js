@@ -10,7 +10,7 @@ let config = {
         },
     scale: {autoCenter: Phaser.Scale.CENTER_BOTH
     },
-    pixelArt: false,
+    roundPixels: true,
     scene: [Load, Tutorial, Migrate, Story, Ending]
 }
 
@@ -18,7 +18,7 @@ let game = new Phaser.Game(config);
 
 // reserve keyboard vars
 let cursors;
-let key1, key2, key3, keySPACE;
+let key1, key2, key3, keyS, keyC, keyM, keySPACE;
 
 let borderUISize = game.config.height / 30; 
 let borderPadding = borderUISize / 3; 
@@ -31,14 +31,14 @@ let rightBound = game.config.width - leftBound;
 let topBound = 20;
 let btmBound = game.config.height - topBound;
 
-// start game in practice mode (turns off after player completes first practice or story)
-let practice = true;
+// practice mode boolean
+let practice;
 
 // start game at chapter 1
-let chapter = 0;
+let chapter = 3;
 
 // variable to hold power ups
 let power;
 
-// variable for which swan is chosen if socializing
-let swanChoice = "jet"
+// array to hold names of swans talked to
+let swansTalked = [];
