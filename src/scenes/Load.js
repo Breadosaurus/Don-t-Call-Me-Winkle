@@ -17,6 +17,7 @@ class Load extends Phaser.Scene {
         this.load.image('periMigrate', 'img/periMigrate.png');
         this.load.image('swanMigrate', 'img/swanMigrate.png');
         this.load.image('arrow', 'img/arrow.png');
+        this.load.image('textbox', 'img/textbox2.png')
         this.load.spritesheet('periGreen', 'img/periGreen.png', {frameWidth: 56, frameHeight: 60, startFrame: 0, endFrame: 10});
         this.load.spritesheet('win', 'img/win.png', {frameWidth: 119, frameHeight: 119, startFrame: 0, endFrame: 3});
 

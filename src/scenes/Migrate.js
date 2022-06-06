@@ -151,31 +151,30 @@ class Migrate extends Phaser.Scene {
         let dialogueConfig = {
             fontFamily: 'handwrite',
             fontSize: '24px',
-            color: '#e0eefb',
+            color: '#18181A',
             align: 'left',
             padding: {
-                top: 5,
+                top: 10,
                 bottom: 5, 
             },
             autoRound: true,
             resolution: 2.5
         }
-        this.box = this.add.rectangle(game.config.width/10, game.config.height/3, game.config.width - 200, game.config.height/3, 0x172230).setOrigin(0,0);
+        this.box = this.add.image(game.config.width/2, game.config.height/2, 'textbox').setOrigin(0.5,0.5);
 
         this.tutorial = true;
 
-        this.migrateTutorial = this.add.text(this.box.x + 20, this.box.y + 30,
+        this.migrateTutorial = this.add.text(this.box.x, this.box.y -4,
             practice ? 
-                "Welcome to migration practice! Here you will practice getting in formation with the flock. Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n\n(Press SPACE to begin)" : 
+                "Welcome to migration practice! Here you will practice getting in formation with the flock. Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n(Press SPACE to begin)" : 
 
-                "Welcome to your first migration! Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n\n(Press SPACE to begin)"
+                "Welcome to your first migration! Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n(Press SPACE to begin)"
         , dialogueConfig).setWordWrapWidth(600);
-
-        this.passPractice = this.add.text(this.box.x + 20, this.box.y + 30, 
-            "Nice work! Now, here comes the real deal, hope you remember the formations!! \n\n\n\
-            (Press SPACE to continue)"
+        this.migrateTutorial.setOrigin(0.5,0.5);
+        this.passPractice = this.add.text(this.box.x, this.box.y - 4, 
+            "Nice work! Now, here comes the real deal, hope you remember the formations!! \n\n\(Press SPACE to continue)"
         , dialogueConfig).setWordWrapWidth(600).setAlpha(0);
-
+        this.passPractice.setOrigin(0.5,0.5); 
         this.passMigrate = this.add.text(this.box.x + 20, this.box.y + 30, null, dialogueConfig).setWordWrapWidth(600).setAlpha(0);
     }
         
@@ -270,7 +269,8 @@ class Migrate extends Phaser.Scene {
                 this.pass == 1 ? "Getting there!" :
                 this.pass == 2 ? "Not bad!" :
                 "Fantastic flying!"}`
-        
+            this.passMigrate.setOrigin(0.5,0.5);
+            this.passMigrate.setPosition(game.config.width/2, game.config.height/2 - 4);
             this[`pass${practice ? 'Practice' : 'Migrate'}`].setAlpha(1);
 
         } else {
