@@ -2,8 +2,8 @@ class Tutorial extends Phaser.Scene {
     constructor() {
         super("tutorialScene");
 
-        // place peri and jet
-        this.peri_X = game.config.width - 100;        // x,y values to place peri
+        // place peri and jett x, y coords
+        this.peri_X = game.config.width - 100;        
         this.peri_Y = game.config.height - 100;
         this.jett_X = game.config.width - 900;
         this.jett_Y = game.config.height/3;
@@ -12,7 +12,7 @@ class Tutorial extends Phaser.Scene {
         this.jettBox_X = this.jet_X + 50;           
         this.jettBox_Y = this.jet_y;
         this.dialogFont = 'handwrite';
-        // jet text configs
+        // jett text configs
         this.jettText_X = this.jetBox_X + 100;
         this.jettText_Y = this.jetBox_Y + 100;
         this.textSize = 25;
@@ -58,8 +58,8 @@ class Tutorial extends Phaser.Scene {
         //     autoRound: true,
         // } 
 
-        // add bg
-        this.bg = this.add.tileSprite(0, 0, 1024, 768, `bg_${chapter}`).setOrigin(0, 0);
+        // add title screen to initiate game
+        this.title = this.add.sprite(0, 0, 1024, 768, 'titleScreen').setOrigin(0, 0);
 
         // add dialogue box for Pilot Swan
         this.jet = this.add.sprite(game.config.width/3, game.config.height)
@@ -81,12 +81,12 @@ class Tutorial extends Phaser.Scene {
 
     update() {
         
-        if (Phaser.Input.Keyboard.JustDown(cursors.one)) {
+        if (Phaser.Input.Keyboard.JustDown(key1)) {
             this.sound.play('menuSelect');
             this.scene.start('migrateScene');
         }
 
-        if (Phaser.Input.Keyboard.JustDown(cursors.two)) {
+        if (Phaser.Input.Keyboard.JustDown(key2)) {
             this.sound.play('menuSelect');
 
             this.scene.start('storyScene');

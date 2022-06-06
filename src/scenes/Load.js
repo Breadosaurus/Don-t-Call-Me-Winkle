@@ -23,8 +23,12 @@ class Load extends Phaser.Scene {
         this.load.image('swan2', 'img/strongSwan.png');
         this.load.image('swan3', 'img/kindSwan.png');
         this.load.image('swanBox', 'img/textBox.png');
+        this.load.image('vn_Bg', 'img/vnBg.png');
         // misc/ui
-        this.load.image('credits', 'img/credButton.png');
+        this.load.image('titleScreen', 'img/title_001.png');
+        this.load.image('ending', 'img/end_001.png');
+        this.load.image('credits', 'img/credits0000.png');
+        this.load.image('creditButton', 'img/credButton.png');
         this.load.image('start', 'img/startButton.png');
         this.load.image('credStrip', 'img/credStrip.png');
         this.load.image('menuStrip', 'img/menuStrip.png');

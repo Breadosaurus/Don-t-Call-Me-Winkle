@@ -52,7 +52,7 @@ class Migrate extends Phaser.Scene {
         this.zoneTimerConfig = { delay: 500, callback: () => {
             console.log("success");
             this.timeLimit.paused = true;
-            // [ADD CODE HERE]                      // play formation complete sound
+            this.sound.play('win', true);                  // play formation complete sound
 
             this.formActive = false;                // form is complete
 
