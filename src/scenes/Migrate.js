@@ -4,7 +4,7 @@ class Migrate extends Phaser.Scene {
     }
 
     create() {
-        
+        this.cameras.main.fadeIn(400, 0, 0, 0);
         // store current chapter's portion of migration map json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
 
