@@ -17,10 +17,10 @@ class Story extends Phaser.Scene {
 
         // peri dialogue box and text position
         this.CHOICEBOX_X = 640;                                  
-        this.CHOICEBOX_Y = 350;         
-        this.CHOICETEXT_X = 510;
-        this.CHOICETEXT_Y = 310;
-        this.CHOICETEXT_WIDTH = 240;
+        this.CHOICEBOX_Y = 320;         
+        this.CHOICETEXT_X = 500;
+        this.CHOICETEXT_Y = this.CHOICEBOX_Y - 45;
+        this.CHOICETEXT_WIDTH = 260;
         this.PERI_X = 735;
         this.PERI_Y = game.config.height - 250;
 
@@ -96,10 +96,11 @@ class Story extends Phaser.Scene {
         this.babiesText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y + 95, '', babiesConfig).setAlpha(0);          
   
         // peri choice box
-        this.choiceBox = this.add.image(this.CHOICEBOX_X, this.CHOICEBOX_Y, 'periBox').setScale(0.7).setAlpha(0);
+        this.choiceBox = this.add.image(this.CHOICEBOX_X, this.CHOICEBOX_Y, 'periBox').setScale(0.8).setAlpha(0);
         this.choiceSpeaker = this.add.text(this.CHOICETEXT_X, this.CHOICETEXT_Y - 40, 'PERI', speakerConfig).setAlpha(0);
         this.choiceText = this.add.text(this.CHOICETEXT_X, this.CHOICETEXT_Y, '', dialogueConfig)
-            .setWordWrapWidth(this.CHOICETEXT_WIDTH);
+            .setWordWrapWidth(this.CHOICETEXT_WIDTH)
+            .setLineSpacing(8);
 
         // add Peri sprite
         this.peri = this.physics.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
