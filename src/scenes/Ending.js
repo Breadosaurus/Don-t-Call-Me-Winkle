@@ -13,6 +13,7 @@ class Ending extends Phaser.Scene {
 
         // lock C input when menu is the only option
         this.endingOn = true;
+        chapter = 1
         
 
     }

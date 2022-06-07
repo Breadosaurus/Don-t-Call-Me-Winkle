@@ -60,7 +60,7 @@ class Load extends Phaser.Scene {
         this.load.audio('bump4', 'audio/bump4.mp3');
         this.load.audio('bump5', 'audio/bump5.mp3');
         this.load.audio('bump6', 'audio/bump6.mp3');
-        this.load.audio('flap', 'audio/wingBeat1.mp3');
+        this.load.audio('flap', 'audio/flap.mp3');
         
         // ui sfx
         this.load.audio('menuSelect', 'audio/menuSelect.mp3');

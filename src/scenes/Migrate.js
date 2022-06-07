@@ -66,6 +66,7 @@ class Migrate extends Phaser.Scene {
             this.peri.anims.setProgress(0);
 
             this.formActive = false;                    // form is complete
+            this.sound.play('win');                     // trumpets from heaven!! (play success sound :))
             this.peri.x = this.map[this.form].peri[0];  // immobilize peri and move him to exact correct location
             this.peri.y = this.map[this.form].peri[1];
             this.peri.move = false;
@@ -108,6 +109,7 @@ class Migrate extends Phaser.Scene {
                 } else {  
                     this.zoneTimer.paused = true;
                     this.formActive = false;            // form has ended
+                    this.sound.play('fail');            // play fail sound :(
                     this.peri.move = false;             // immobilize peri
                     this.time.delayedCall(2000, () => {
                         this.endForm();                     // move to next formation
@@ -147,7 +149,7 @@ class Migrate extends Phaser.Scene {
 
 //-------------------------------------------------------------------------------------------------
         
-        // for the sake of First Playable Build
+        // dialogue appearance
         let dialogueConfig = {
             fontFamily: 'handwrite',
             fontSize: '24px',
@@ -236,6 +238,7 @@ class Migrate extends Phaser.Scene {
             if (this.physics.overlap(this.peri, this.periZone)) {
                 if (this.zoneTimer.paused) {
                     this.zoneTimer.paused = false;
+                    this.peri.anims.stop();
                     this.peri.anims.play('periGreen');
                 }
             } else if (!this.zoneTimer.paused) {

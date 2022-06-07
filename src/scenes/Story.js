@@ -151,8 +151,14 @@ class Story extends Phaser.Scene {
                 if (this.dialogueLine > this.dialogue.length - 1) {
                     // add powerup
                     power = 'this.swanChoice';
-                    // go to migration scene
-                    this.scene.start('migrateScene');
+                    this.gift = this.sound.add(`${this.swanChoice}Jingle`);
+                    this.gift.play();
+
+                    
+                    if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
+                        // go to migration scene when ready
+                        this.scene.start('migrateScene');
+                    };                        
                 } else {
                     // fade out [SPACE] prompt
                     this.promptBlink.stop();
@@ -218,7 +224,7 @@ class Story extends Phaser.Scene {
         // record chosen swan in this.swanChoice and global swansTalked array
         this.swanChoice = swan;
         swansTalked.push(this.swanChoice);
-
+        
         // store chosen swan's portion of dialogue in this.dialogue
         this.dialogue = this.cache.json.get('dialogue')[this.swanChoice];
 
@@ -299,7 +305,21 @@ class Story extends Phaser.Scene {
         this.typing = true;
 
         // start voice sfx
-        this.voice = this.sound.play(`${this.swanChoice}Voice`, {volume: 0.5, loop: true,});
+        if (this.dialogue[this.dialogueLine].speaker != 'peri') {
+            this.voice = this.sound.add(`${this.swanChoice}Voice`, {volume: 0.5, loop: true,}); 
+            this.voice.play();   // randomized start
+        } else {
+            this.voice = this.sound.add('periChoice'); 
+            this.voice.play();
+        }; 
+        this.paused = '';
+        // this.voice.play(this.voice, this.paused); 
+        // if (!this.paused) {
+        //              // play voice from start if it hasn't been paused before
+        // } else {                        // cont. voice if paused
+        //     this.voice.resume();
+        // }
+        
 
         // clear text
         this.swanText.text = '';
@@ -325,8 +345,9 @@ class Story extends Phaser.Scene {
                         yoyo: true
                     });
 
-                    // stop voice
-                    this.voice.stop();
+                    // pause voice
+                    this.paused = this.voice.addMarker('pause');
+                    this.voice.pause();
 
                     // no longer typing
                     this.typing = false;
