@@ -58,6 +58,6 @@ class Load extends Phaser.Scene {
             frames: this.anims.generateFrameNumbers('win', {start: 0, end: 3, first: 0}),
             fps: 30
         });
-        this.scene.start('tutorialScene');
+        this.scene.start('endScene');
     }
 }
