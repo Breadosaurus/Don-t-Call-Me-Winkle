@@ -34,7 +34,6 @@ class Story extends Phaser.Scene {
 
         // character variables
         this.peri = null;
-        //this.swan = null;
     }
 
     create() {
@@ -105,12 +104,6 @@ class Story extends Phaser.Scene {
         // add Peri sprite
         this.peri = this.physics.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
 
-        // create keys
-        cursors = this.input.keyboard.createCursorKeys();
-        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
-        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
-        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
-
         // add swans for choice segment
         this.kennethChoice = this.add.image(game.config.width/4, game.config.height - 150, 'kenneth').setScale(0.7).setOrigin(0.5, 1);
         this.siestaChoice = this.add.image(game.config.width/2, game.config.height - 150, 'siesta').setScale(0.7).setOrigin(0.5, 1);
@@ -126,6 +119,12 @@ class Story extends Phaser.Scene {
                 this.choiceGroup[swan].setTint(0x777777);
             }
         }
+
+        // create keys
+        cursors = this.input.keyboard.createCursorKeys();
+        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     } // end create()
 
     update() {
@@ -230,20 +229,22 @@ class Story extends Phaser.Scene {
         } else this.typeNextLine();
     }
 
-    // swan choice event handler
+    // swan choice
     chooseSwan(swan) {
         // lock swan choices
         this.choosingSwan = false;
 
         // record chosen swan in this.swanChoice and global swansTalked array
         this.swanChoice = swan;
-        swansTalked.push(this.swanChoice);
+        swansTalked.push(swan);
 
         // store chosen swan's portion of dialogue in this.dialogue
-        this.dialogue = this.cache.json.get('dialogue')[this.swanChoice];
+        this.dialogue = this.cache.json.get('dialogue')[swan];
 
-        // if chosen swan is sloane, set babies text to visible
-        this.babiesText.setAlpha(1);
+        if (swan == 'sloane') {
+            // if chosen swan is sloane, set babies text to visible
+            this.babiesText.setAlpha(1);
+        }
 
         for (swan in this.choiceGroup) {
             if (swan != this.swanChoice) {
@@ -295,14 +296,12 @@ class Story extends Phaser.Scene {
             });
             
             // add swan text box
-            this.addBox = this.tweens.add({
+            this.tweens.add({
                 targets: this.swanBox,
                 alpha: { from: 0, to: 1},
                 duration: 500,
                 ease: 'Linear'
-            });
-
-            this.addBox.on('complete', () => {
+            }).on('complete', () => {
                 // move to next part of scene
                 this.swanTalking = true;
 

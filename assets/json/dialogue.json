@@ -182,7 +182,7 @@
         },
         {
             "speaker": "kenneth",
-            "dialogue": "Your statistics are off the speakerts! I've never seen anything like it! You must let me do a study on you some time."
+            "dialogue": "Your statistics are off the charts! I've never seen anything like it! You must let me do a study on you some time."
         },
         {
             "speaker": "sloane",
@@ -196,10 +196,11 @@
     ],
 
     "ending3": {
+
         "intro": [
             {
                 "speaker": "peri",
-                "dialogue": "Man, I didn't do that well today. Maybe I should get some advice."
+                "dialogue": "Man, I didn't do that well today. Maybe I should get some advice from a friend?"
             }
         ],
 
@@ -214,11 +215,15 @@
             },
             {
                 "speaker": "kenneth",
-                "dialogue": "Don't be so hard on yourself! Today is just a blip in the world's great pie speakert. Tomorrow, I know you'll do just fine. I'll even give you another heads up on where your spot is supposed to be, what do you say?"
+                "dialogue": "Don't be so hard on yourself! Today is just a blip in the world's great pie chart."
+            },
+            {
+                "speaker": "kenneth",
+                "dialogue": "Tomorrow, I know you'll do just fine. I'll even give you another heads up on where your spot is supposed to be, what do you say?"
             },
             {
                 "speaker": "peri",
-                "dialogue": "That's so nice, Kenneth! I'm so glad to have a friend like you by my side. Tomorrow is a new day!"
+                "dialogue": "That's so sweet, Kenneth! I'm so glad to have a friend like you by my side. Tomorrow is a new day!"
             }
         ],
 
@@ -241,7 +246,7 @@
             },
             {
                 "speaker": "peri",
-                "dialogue": "You're right Siesta, I just need to take it one day at a time. Thank you so much!"
+                "dialogue": "You're right, Siesta, I just need to take it one day at a time. Thank you so much!"
             }
         ],
 
@@ -257,12 +262,16 @@
             },
             {
                 "speaker": "sloane",
-                "dialogue": "NONSENSE! Periwinkle, I told you that strength comes from the heart, not your feathers. As long as you stay determined, there's nothing you can't do! NOW GET BACK OUT THERE!",
+                "dialogue": "NONSENSE! Periwinkle, I told you that strength comes from the heart, not your feathers."
+            },
+            {
+                "speaker": "sloane",
+                "dialogue": "As long as you stay determined, there's nothing you can't do! NOW GET BACK OUT THERE!",
                 "babies": "GET BACK OUT THERE!"
             },
             {
                 "speaker": "peri",
-                "dialogue": "YOU'RE RIGHT! I AM STRONG! I AM BRAVE! AAAAAAAAAAA"
+                "dialogue": "YOU'RE RIGHT! I AM STRONG! I AM BRAVE! AAAAAAAAAAAAAAAAAAA!!!!!!!!!!!"
             }
         ]
     },

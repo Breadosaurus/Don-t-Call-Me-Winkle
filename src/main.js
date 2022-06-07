@@ -41,4 +41,7 @@ let chapter = 1;
 let power;
 
 // array to hold names of swans talked to
-let swansTalked = [];
+let swansTalked = ['siesta', 'sloane', 'kenneth'];
+
+// number of migrations where 2 or more formations were passed
+let migrationsPassed = 0;
