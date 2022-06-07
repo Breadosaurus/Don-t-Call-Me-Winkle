@@ -64,9 +64,9 @@ class Tutorial extends Phaser.Scene {
             resolution: 2
         }
         
-        this.dialogue = [];                         // dialogue text array
-        this.dialogueLine = 0;                      // current dialogue line #
-        this.nextLine = null;                       // next line of dialogue
+        this.dialogue = [];                  // dialogue text array
+        this.dialogueLine = 0;               // current dialogue line #
+        this.nextLine = null;                // next line of dialogue
 
         // add text box and text
         this.textBox = this.add.image(this.jettBox_X, this.jettBox_Y, 'swanBox').setOrigin(1, 1).setAlpha(0);
@@ -93,39 +93,61 @@ class Tutorial extends Phaser.Scene {
     } // end create()
 
     update() {
-               
-        // start input check while title screen is active
-        if (Phaser.Input.Keyboard.JustDown(keyS) && chapter == 1 && this.titleActive) {     // if tutorial hasn't been played yet
-            this.sound.play('uiSelect');
-            this.startTutorial();
-            this.titleActive = false;
-            this.tutorialActive = true;
+        // if tutorial hasn't been seen yet, assuming chapters haven't increased passed 1
+        if (chapter == 1 && this.titleActive) {
+            if (Phaser.Input.Keyboard.JustDown(keyS)) {
+                this.sound.play('uiSelect');
+                this.startTutorial();
+                this.titleActive = false;
+                this.tutorialActive = true;
+            }
+            // credits input while title screen is active
+            if (Phaser.Input.Keyboard.JustDown(keyC)) {
+                this.sound.play('menuSelect');
+                this.tweens.add({                       // add press effect! 
+                    targets: this.creditButton,
+                    scale: 0.9,
+                    duration: 100,
+                    ease: 'Cubic',
+                    yoyo: true
+                }).on('complete', () => {
+                    // camera fade-to-black transition
+                    this.time.delayedCall(750, () => {
+                        this.cameras.main.fadeOut(400);
+                        this.time.delayedCall(500, () => {
+                            this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
+                            this.credits.play('creditAnim');
+                            this.endingOn = false;
+                            this.cameras.main.fadeIn(400, 0, 0, 0);
+                        });
+                    });
+                });
+            }
+
         } else if (chapter > 1) {
             this.decision = true;
             this.makeDecision();
+        
+        // otherwise, if conversation has started
+        } else if (this.tutorialActive) {
+            // if space key is pressed and dialogue has finished typing
+            if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing) {
+                // if end of dialogue
+                if (this.dialogueLine > this.dialogue.length - 1) {
+                    // add powerup
+                    this.makeDecision();                   
+                    
+                } else {
+                    // fade out [SPACE] prompt
+                    this.promptBlink.stop();
+
+                    this.typeNextLine();
+                }  
+            }
         }
-        // credits input while title screen is active
-        if (Phaser.Input.Keyboard.JustDown(keyC) && this.titleActive) {
-            this.sound.play('menuSelect');
-            this.tweens.add({                       // add press effect! 
-                targets: this.creditButton,
-                scale: 0.9,
-                duration: 100,
-                ease: 'Cubic',
-                yoyo: true
-            }).on('complete', () => {
-                // camera fade-to-black transition
-                this.time.delayedCall(750, () => {
-                    this.cameras.main.fadeOut(400);
-                    this.time.delayedCall(500, () => {
-                        this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
-                        this.credits.play('creditAnim');
-                        this.endingOn = false;
-                        this.cameras.main.fadeIn(400, 0, 0, 0);
-                    });
-                });
-            });
-        }
+        // start input check while title screen is active
+        
+        
         
         if (Phaser.Input.Keyboard.JustDown(keyM) && this.creditsActive) {
             this.sound.play('uiSelect');
