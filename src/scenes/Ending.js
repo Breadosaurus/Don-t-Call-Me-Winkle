@@ -36,27 +36,27 @@ class Ending extends Phaser.Scene {
         this.peri = null;
 
         // which ending?
-        this.ending = 3;
+        this.ending = null;
     }
 
     create() {
         // fade in from black
         this.cameras.main.fadeIn(400, 0, 0, 0);
 
-        // // calculate ending
-        // if (migrationsPassed > 1) {
-        //     if (swansTalked.length > 1) {
-        //         this.ending = 1;
-        //     } else {
-        //         this.ending = 2;
-        //     }
-        // } else {
-        //     if (swansTalked.length > 0) {
-        //         this.ending = 3;
-        //     } else {
-        //         this.ending = 4;
-        //     }
-        // }
+        // calculate ending
+        if (migrationsPassed > 1) {
+            if (swansTalked.length > 1) {
+                this.ending = 1;
+            } else {
+                this.ending = 2;
+            }
+        } else {
+            if (swansTalked.length > 0) {
+                this.ending = 3;
+            } else {
+                this.ending = 4;
+            }
+        }
 
         this.swanChoice = null;                     // chosen swan
         this.dialogue = [];                         // dialogue text array
