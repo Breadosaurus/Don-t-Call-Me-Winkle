@@ -102,7 +102,7 @@ class Story extends Phaser.Scene {
             .setLineSpacing(8);
 
         // add Peri sprite
-        this.peri = this.physics.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
+        this.peri = this.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
 
         // add swans for choice segment
         this.kennethChoice = this.add.image(game.config.width/4, game.config.height - 150, 'kenneth').setScale(0.7).setOrigin(0.5, 1);
@@ -276,7 +276,7 @@ class Story extends Phaser.Scene {
         // wait until after camera transition
         this.time.delayedCall(1500, () => {
             // add and move swan
-            this[`${this.swanChoice}`] = this.physics.add.sprite(0, this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
+            this[`${this.swanChoice}`] = this.add.sprite(0, this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
             this.tweens.add({
                 startDelay: 100,
                 targets: this[`${this.swanChoice}`],

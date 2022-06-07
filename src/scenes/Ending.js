@@ -36,7 +36,7 @@ class Ending extends Phaser.Scene {
         this.peri = null;
 
         // which ending?
-        this.ending = 3;
+        this.ending = 1;
     }
 
     create() {
@@ -114,8 +114,6 @@ class Ending extends Phaser.Scene {
             .setWordWrapWidth(this.CHOICETEXT_WIDTH)
             .setLineSpacing(8);
 
-        
-
         // create keys
         cursors = this.input.keyboard.createCursorKeys();
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -127,28 +125,64 @@ class Ending extends Phaser.Scene {
         } else {
             this.dialogue = this.cache.json.get('dialogue')[`ending${this.ending}`];
         }
-        
-        // ending 1 starts with all swans talking to peri
-        if (this.ending == 1) {
-            
-        // ending 2 starts with peri, then swan comes in
-        } else if (this.ending == 2) {
 
-        // endings 3 and 4 start with peri talking to himself
-        } else {
-            // dialogue has not started yet
-            this.periTalking = false;
-
-            // add Peri sprite to left of text box
-            this.peri = this.physics.add.sprite(0, 700, 'periStory').setOrigin(1, 1).setFlipX(true);
-
-            // once scene has faded in
-            this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
-                this.addBox = this.tweens.add({
+        // once scene has faded in
+        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
+            // ending 1 starts with all swans talking to peri
+            if (this.ending == 1) {
+                // add and move swans
+                this.allSwans = [
+                    this.sloane = this.add.image(0, this.sloaneY, 'sloane').setOrigin(1, 1),
+                    this.siesta = this.add.image(-150, this.siestaY, 'siesta').setOrigin(1, 1),
+                    this.kenneth = this.add.image(-260, this.kennethY, 'kenneth').setOrigin(1, 1)
+                ];
+                this.tweens.add({
+                    startDelay: 100,
+                    targets: this.allSwans,
+                    x: {value: '+=570'},
+                    duration: 500,
+                    ease: 'Cubic'
+                });
+                // add and move peri
+                this.peri = this.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
+                this.time.delayedCall(200, () => {
+                    this.tweens.add({
+                        targets: this.peri,
+                        x: 735,
+                        duration: 500,
+                        ease: 'Cubic'
+                    })
+                });
+                // add dialogue box
+                this.addBox = this.tweens.add({ 
                     targets: this.swanBox,
                     alpha: { from: 0, to: 1},
                     duration: 500,
                     ease: 'Linear'
+                }).on('complete', () => {
+                    this.swanTalking = true;            // dialogue has started
+                    this.typeNextLine();                // start dialogue
+                });
+            // ending 2 starts with peri, then swan comes in
+            } else if (this.ending == 2) {
+
+            // endings 3 and 4 start with peri talking to himself
+            } else {
+                // dialogue has not started yet
+                this.periTalking = false;
+
+                // add Peri sprite to left of text box
+                this.peri = this.add.image(0, 700, 'periStory').setOrigin(1, 1).setFlipX(true);
+
+                // add dialogue box
+                this.addBox = this.tweens.add({ 
+                    targets: this.swanBox,
+                    alpha: { from: 0, to: 1},
+                    duration: 500,
+                    ease: 'Linear'
+                }).on('complete', () => {
+                    this.periTalking = true;            // dialogue has started
+                    this.typeNextLine();                // start dialogue
                 });
 
                 // move peri
@@ -160,18 +194,21 @@ class Ending extends Phaser.Scene {
                         ease: 'Cubic'
                     })
                 });
-
-                this.addBox.on('complete', () => {
-                    this.periTalking = true;            // dialogue has started
-                    this.typeNextLine();                // start dialogue
-                });
-            });
-        }
+            }
+        });
     } 
 
     update() {
         if (this.ending == 1) {
-
+            if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing && this.swanTalking) {
+                // if end of dialogue, go to endscreen
+                if (this.dialogueLine > this.dialogue.length - 1) {
+                    this.goToEndscreen();
+                } else {
+                    this.promptBlink.stop();    // fade out [SPACE] prompt
+                    this.typeNextLine();        // continue dialogue
+                }
+            }
         } else if (this.ending == 2) {
             
         } else if (this.ending == 3) {
@@ -263,27 +300,66 @@ class Ending extends Phaser.Scene {
         // store next line from json file
         this.nextLine = this.dialogue[this.dialogueLine];
 
-        // if different speaker, switch who's greyed out
-        if (this.nextLine.speaker != lastSpeaker) {
-            this[lastSpeaker].setTint(0x777777);
-            this[this.nextLine.speaker].clearTint();
+        // sprite movements & tints for ending 1
+        if (this.ending == 1) {
+            if (this.dialogueLine == 0) {
+                this.speakerText.x += 250;
+                this.swanText.x += 250;
+            } else if (this.dialogueLine == 1) {
+                for (let swan of this.allSwans) {
+                    swan.setTint(0x777777);
+                }
+                this.peri.clearTint();
+            } else if (this.dialogueLine == 2) {
+                this.speakerText.x -= 250;
+                this.swanText.x -= 250;
+                this.peri.setTint(0x777777);
+                this.siesta.clearTint();
+                // move ken & sloane offscreen
+                this.tweens.add({
+                    targets: [this.kenneth, this.sloane],
+                    x: 0,
+                    duration: 500,
+                    ease: 'Cubic'
+                });
+                // move siesta to normal position
+                this.tweens.add({
+                    targets: this.siesta,
+                    x: this.siestaX,
+                    duration: 500,
+                    ease: 'Cubic'
+                });
+            } else if (this.dialogueLine > 2 && this.dialogueLine < 5) {
+                // move last speaker
+                this.tweens.add({
+                    targets: this[lastSpeaker],
+                    x: 0,
+                    duration: 300,
+                    ease: 'Cubic'
+                }).on('complete', () => {
+                    // move next speaker
+                    this.tweens.add({
+                        targets: this[this.nextLine.speaker],
+                        x: this[`${this.nextLine.speaker}X`],
+                        duration: 300,
+                        ease: 'Cubic'
+                    });
+                    this[this.nextLine.speaker].clearTint();
+                });
+            } else if (this.dialogueLine == 5) {
+                this.sloane.setTint(0x777777);
+                this.peri.clearTint();
+            }
+        } else {
+            // if different speaker, switch who's greyed out
+            if (this.nextLine.speaker != lastSpeaker) {
+                this[lastSpeaker].setTint(0x777777);
+                this[this.nextLine.speaker].clearTint();
+            }
         }
 
-        // if next line has multiple dialogue options, show choice text boxes and choices
-        if (this.nextLine.speaker == 'peri' && this.nextLine.choice) {
-            // show choice text box and text
-            this.choiceBox.setAlpha(1);
-            this.choiceSpeaker.setAlpha(1);
-            this.choiceText.setAlpha(1).setText('');
-            // add numbered choices
-            for (let i = 1; i <= this.nextLine.dialogue.length; i++) {
-                this.choiceText.text += `[${i}] ${this.nextLine.dialogue[i - 1]}\n`;
-            }
-            this.choosingDialogue = true;
-        } else {
-            this.speakerText.text = this.nextLine.speaker.toUpperCase();
-            this.typeText(this.nextLine.branch ? this.nextLine.dialogue[this.choiceNum - 1] : this.nextLine.dialogue);
-        }
+        this.speakerText.text = this.nextLine.speaker.toUpperCase();
+        this.typeText(this.nextLine.dialogue);
     }
 
     // typewriter effect functions based on example from https://blog.ourcade.co/posts/2020/phaser-3-typewriter-text-effect-bitmap/
@@ -395,7 +471,7 @@ class Ending extends Phaser.Scene {
         // wait until after camera transition
         this.time.delayedCall(1500, () => {
             // add and move swan
-            this[`${this.swanChoice}`] = this.physics.add.sprite(0, this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
+            this[`${this.swanChoice}`] = this.add.image(0, this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
             this.tweens.add({
                 startDelay: 100,
                 targets: this[`${this.swanChoice}`],
@@ -420,9 +496,7 @@ class Ending extends Phaser.Scene {
                 alpha: { from: 0, to: 1},
                 duration: 500,
                 ease: 'Linear'
-            });
-
-            this.addBox.on('complete', () => {
+            }).on('complete', () => {
                 // move to next part of scene
                 this.swanTalking = true;
 
