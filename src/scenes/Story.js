@@ -224,7 +224,7 @@ class Story extends Phaser.Scene {
             this.speakerText.text = this.nextLine.speaker.toUpperCase();
             this.typeText(this.nextLine.branch ? this.nextLine.dialogue[this.choiceNum - 1] : this.nextLine.dialogue);
         }
-    }
+    } // end typeNextLine()
 
     // dialogue choice event handler
     chooseDialogue(option) {
@@ -258,9 +258,9 @@ class Story extends Phaser.Scene {
                     });
                 });
             });  
-            
+
         } else this.typeNextLine();
-    }
+    } // end chooseDialogue()
 
     // swan choice
     chooseSwan(swan) {
@@ -355,22 +355,12 @@ class Story extends Phaser.Scene {
         // currently typing
         this.typing = true;
 
-        // start voice sfx
-        if (this.dialogue[this.dialogueLine].speaker !== 'peri') {      // if peri isn't the speaker, add the appropriate swan's voice audio
-            this.voice = this.sound.add(`${this.swanChoice}Voice`, {    
-                volume: 0.5, 
-                loop: true
-            }); 
-            this.voice.play();
-            this.voice.setSeek(Phaser.Math.Between(1, 11));   // randomize playback position
-        } else {
-            this.voice = this.sound.add('periVoice', {                  // otherwise, peri is speaking
-                loop: true
-            }); 
-            this.voice.play();
-            this.voice.setSeek(Phaser.Math.Between(1, 11));
-        }; 
-
+        // speaking sfx
+        this.voice = this.sound.add(`${this.dialogue[this.dialogueLine].speaker}Voice`, {    // add appropriate speaker's voice
+            loop: true
+        }); 
+        this.voice.play();
+        this.voice.setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
 
         // clear text
         this.swanText.text = '';

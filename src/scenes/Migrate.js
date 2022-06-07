@@ -162,7 +162,7 @@ class Migrate extends Phaser.Scene {
             autoRound: true,
             resolution: 2.5
         }
-        this.box = this.add.image(game.config.width/2, game.config.height/2, 'textbox').setOrigin(0.5,0.5);
+        this.box = this.add.image(game.config.width/2, game.config.height/2, 'swanBox').setOrigin(0.5,0.5);
 
         this.tutorial = true;
 

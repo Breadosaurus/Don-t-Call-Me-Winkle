@@ -48,14 +48,18 @@ class Ending extends Phaser.Scene {
         if (migrationsPassed > 1) {
             if (swansTalked.length > 1) {
                 this.ending = 1;
+                console.log('end 1');
             } else {
                 this.ending = 2;
+                console.log('end 2');
             }
         } else {
             if (swansTalked.length > 0) {
                 this.ending = 3;
+                console.log('end 3');
             } else {
                 this.ending = 4;
+                console.log('end 4');
             }
         }
 
@@ -195,6 +199,7 @@ class Ending extends Phaser.Scene {
                 });
             }
         });
+        
     } 
 
     update() {
@@ -221,14 +226,17 @@ class Ending extends Phaser.Scene {
         } else if (this.ending == 3) {
             // if swan choice segment is active
             if (this.choosingSwan) {
-                if (Phaser.Input.Keyboard.JustDown(key1) && swansTalked.includes('kenneth')) {
+                if (Phaser.Input.Keyboard.JustDown(key1) && !swansTalked.includes('kenneth')) {
+                    this.sound.play('kennethJingle');
                     this.chooseSwan('kenneth');
-                } else if (Phaser.Input.Keyboard.JustDown(key2) && swansTalked.includes('siesta')) {
+                } else if (Phaser.Input.Keyboard.JustDown(key2) && !swansTalked.includes('siesta')) {
+                    this.sound.play('siestaJingle');
                     this.chooseSwan('siesta');
-                } else if (Phaser.Input.Keyboard.JustDown(key3) && swansTalked.includes('sloane')) {
+                } else if (Phaser.Input.Keyboard.JustDown(key3) && !swansTalked.includes('sloane')) {
+                    this.sound.play('sloaneJingle');
                     this.chooseSwan('sloane');
                 }
-            } else if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing) {
+            } else if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing && !this.endingOn) {
                 if (this.periTalking) {
                     this.periTalking = false;
                     // fade out peri and text box
@@ -245,7 +253,7 @@ class Ending extends Phaser.Scene {
                         this.showSwans();
                     });
                     
-                } else if (this.swanTalking) {
+                } else if (this.swanTalking && !this.endingOn) {
                     // if end of dialogue, go to endscreen
                     if (this.dialogueLine > this.dialogue.length - 1) {
                         this.goToEndscreen();
@@ -256,7 +264,7 @@ class Ending extends Phaser.Scene {
                 }
             }
         } else if (this.ending == 4) {
-            if (this.periTalking && Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing) {
+            if (this.periTalking && Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing && !this.endingOn) {
                 // if end of dialogue, go to endscreen
                 if (this.dialogueLine > this.dialogue.length - 1) {
                     this.goToEndscreen();
@@ -265,6 +273,19 @@ class Ending extends Phaser.Scene {
                     this.typeNextLine();        // continue dialogue
                 }  
             }
+        }
+        
+        // check for input to switch scenes
+        if (this.endingOn && Phaser.Input.Keyboard.JustDown(keyC)) {
+            this.sound.play('menuSelect');
+            this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
+            this.credits.play('creditAnim');
+            this.endingOn = false;
+            
+        }
+        if (Phaser.Input.Keyboard.JustDown(keyM)) {
+            this.sound.play('uiSelect');
+            this.scene.start('tutorialScene');
         }
     }
 
@@ -386,6 +407,13 @@ class Ending extends Phaser.Scene {
         // currently typing
         this.typing = true;
 
+        // speaking sfx
+        this.voice = this.sound.add(`${this.dialogue[this.dialogueLine].speaker}Voice`, {    // add appropriate speaker's voice
+            loop: true
+        }); 
+        this.voice.play();
+        this.voice.setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
+
         // clear text
         this.swanText.text = '';
 
@@ -428,6 +456,7 @@ class Ending extends Phaser.Scene {
                         yoyo: true
                     });
 
+                    this.voice.stop();          // stop talking audio when typing also done
                     this.typing = false;        // no longer typing
                     this.textTimer.destroy();   // destroy timer
                 }
@@ -535,33 +564,14 @@ class Ending extends Phaser.Scene {
     } // end fadeOut()
 
     goToEndscreen() {
-        // lock C input when menu is the only option
-        this.endingOn = true;
-        chapter = 1
-        
         this.time.delayedCall(750, () => {
             this.cameras.main.fadeOut(400);                         // fade to black
-            this.time.delayedCall(500, () => {
+            this.time.delayedCall(600, () => {
+                this.end = this.add.sprite(0, 0, 'ending').setOrigin(0, 0);         // end screen sprite to "hold" animation
+                this.end.play('endAnim', true);                     // play end screen animation
                 this.cameras.main.fadeIn(400, 0, 0, 0);             // fade back in
             });
         });
 
-        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
-            this.end = this.add.sprite(0, 0, 'ending').setOrigin(0, 0);         // end screen sprite to "hold" animation
-            this.end.play('endAnim', true);                     // play end screen animation
-        });
-
-        // check for input to switch scenes
-        if (this.endingOn && Phaser.Input.Keyboard.JustDown(keyC)) {
-            this.sound.play('menuSelect');
-            this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
-            this.credits.play('creditAnim');
-            this.endingOn = false;
-            
-        }
-        if (Phaser.Input.Keyboard.JustDown(keyM)) {
-            this.sound.play('uiSelect');
-            this.scene.start('tutorialScene');
-        }
     }
 }
