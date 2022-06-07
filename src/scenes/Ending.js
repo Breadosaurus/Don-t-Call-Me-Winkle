@@ -36,27 +36,27 @@ class Ending extends Phaser.Scene {
         this.peri = null;
 
         // which ending?
-        this.ending = 1;
+        this.ending = null;
     }
 
     create() {
         // fade in from black
         this.cameras.main.fadeIn(400, 0, 0, 0);
 
-        // // calculate ending
-        // if (migrationsPassed > 1) {
-        //     if (swansTalked.length > 1) {
-        //         this.ending = 1;
-        //     } else {
-        //         this.ending = 2;
-        //     }
-        // } else {
-        //     if (swansTalked.length > 0) {
-        //         this.ending = 3;
-        //     } else {
-        //         this.ending = 4;
-        //     }
-        // }
+        // calculate ending
+        if (migrationsPassed > 1) {
+            if (swansTalked.length > 1) {
+                this.ending = 1;
+            } else {
+                this.ending = 2;
+            }
+        } else {
+            if (swansTalked.length > 0) {
+                this.ending = 3;
+            } else {
+                this.ending = 4;
+            }
+        }
 
         this.swanChoice = null;                     // chosen swan
         this.dialogue = [];                         // dialogue text array
@@ -128,21 +128,8 @@ class Ending extends Phaser.Scene {
 
         // once scene has faded in
         this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_IN_COMPLETE, () => {
-            // ending 1 starts with all swans talking to peri
-            if (this.ending == 1) {
-                // add and move swans
-                this.allSwans = [
-                    this.sloane = this.add.image(0, this.sloaneY, 'sloane').setOrigin(1, 1),
-                    this.siesta = this.add.image(-150, this.siestaY, 'siesta').setOrigin(1, 1),
-                    this.kenneth = this.add.image(-260, this.kennethY, 'kenneth').setOrigin(1, 1)
-                ];
-                this.tweens.add({
-                    startDelay: 100,
-                    targets: this.allSwans,
-                    x: {value: '+=570'},
-                    duration: 500,
-                    ease: 'Cubic'
-                });
+            // add peri and dialogue box for endings 1 and 2
+            if (this.ending == 1 || this.ending == 2) {
                 // add and move peri
                 this.peri = this.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
                 this.time.delayedCall(200, () => {
@@ -153,6 +140,7 @@ class Ending extends Phaser.Scene {
                         ease: 'Cubic'
                     })
                 });
+
                 // add dialogue box
                 this.addBox = this.tweens.add({ 
                     targets: this.swanBox,
@@ -163,9 +151,28 @@ class Ending extends Phaser.Scene {
                     this.swanTalking = true;            // dialogue has started
                     this.typeNextLine();                // start dialogue
                 });
-            // ending 2 starts with peri, then swan comes in
-            } else if (this.ending == 2) {
 
+                // if ending 1, add group of swans
+                if (this.ending == 1) {
+                    // add and move swans
+                    this.allSwans = [
+                        this.sloane = this.add.image(0, this.sloaneY, 'sloane').setOrigin(1, 1),
+                        this.siesta = this.add.image(-150, this.siestaY, 'siesta').setOrigin(1, 1),
+                        this.kenneth = this.add.image(-260, this.kennethY, 'kenneth').setOrigin(1, 1)
+                    ];
+                    this.tweens.add({
+                        startDelay: 100,
+                        targets: this.allSwans,
+                        x: {value: '+=570'},
+                        duration: 500,
+                        ease: 'Cubic'
+                    });
+                // if ending 2, clear peri tint and add siesta
+                } else {
+                    this.peri.clearTint();
+                    this.siesta = this.add.image(0, this.siestaY, 'siesta').setOrigin(1, 1);
+                }
+                
             // endings 3 and 4 start with peri talking to himself
             } else {
                 // dialogue has not started yet
@@ -173,17 +180,6 @@ class Ending extends Phaser.Scene {
 
                 // add Peri sprite to left of text box
                 this.peri = this.add.image(0, 700, 'periStory').setOrigin(1, 1).setFlipX(true);
-
-                // add dialogue box
-                this.addBox = this.tweens.add({ 
-                    targets: this.swanBox,
-                    alpha: { from: 0, to: 1},
-                    duration: 500,
-                    ease: 'Linear'
-                }).on('complete', () => {
-                    this.periTalking = true;            // dialogue has started
-                    this.typeNextLine();                // start dialogue
-                });
 
                 // move peri
                 this.time.delayedCall(200, () => {
@@ -210,7 +206,15 @@ class Ending extends Phaser.Scene {
                 }
             }
         } else if (this.ending == 2) {
-            
+            if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing && this.swanTalking) {
+                // if end of dialogue, go to endscreen
+                if (this.dialogueLine > this.dialogue.length - 1) {
+                    this.goToEndscreen();
+                } else {
+                    this.promptBlink.stop();    // fade out [SPACE] prompt
+                    this.typeNextLine();        // continue dialogue
+                }
+            }
         } else if (this.ending == 3) {
             // if swan choice segment is active
             if (this.choosingSwan) {
@@ -350,6 +354,14 @@ class Ending extends Phaser.Scene {
                 this.sloane.setTint(0x777777);
                 this.peri.clearTint();
             }
+        } else if (this.ending == 2 && this.dialogueLine == 1) {
+            // move siesta
+            this.tweens.add({
+                targets: this.siesta,
+                x: this.siestaX,
+                duration: 500,
+                ease: 'Cubic'
+            });
         } else {
             // if different speaker, switch who's greyed out
             if (this.nextLine.speaker != lastSpeaker) {

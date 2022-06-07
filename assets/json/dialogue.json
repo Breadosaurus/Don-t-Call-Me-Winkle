@@ -195,6 +195,29 @@
         }
     ],
 
+    "ending2": [
+        {
+            "speaker": "peri",
+            "dialogue": "Well, that marks the end of my first day. I think I did well! And tomorrow, I'll do even better! Maybe I didn't make as many friends as I wanted to, but that's alright. I'll try again another day!"
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "Heyyy Peri, good job flying today... You should totally - *yawn* - come hang out with the flock some time."
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "Thank you! I'd love to hang out, I've just been so busy practicing..."
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "Actually, we're about to - *yawn* - head down to the ocean to catch some Z's... I mean, catch some waves... Wanna come?"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "Oh! Yeah, sure! Let me go get ready..."
+        }
+    ],
+
     "ending3": {
 
         "intro": [
