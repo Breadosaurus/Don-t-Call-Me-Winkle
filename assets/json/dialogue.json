@@ -70,7 +70,7 @@
         },
         {
             "speaker": "peri",
-            "dialogue": "Kind of? No one's talking to me and everyone is so much bigger and what if I say something wr -"
+            "dialogue": "Kind of? I'm trying to make friends but everyone is so much bigger and what if I say something wr-"
         },
         {
             "speaker": "siesta",
@@ -102,7 +102,7 @@
         {
             "speaker": "sloane",
             "dialogue": "HELLO, GOOD SIR!",
-            "ducklings": "hello! hello!"
+            "babies": "hello! hello!"
         },
         {
             "speaker": "peri",
@@ -116,7 +116,7 @@
         {
             "speaker": "sloane",
             "dialogue": "I AM SLOANE! Strongest bird in this flock and your new MENTOR, my fine fellow!",
-            "ducklings": "new mentor! new mentor!"
+            "babies": "new mentor! new mentor!"
         },
         {
             "speaker": "peri",
@@ -144,8 +144,17 @@
         },
         {
             "speaker": "sloane",
-            "dialogue": "NOT HITTING THE OTHER BIRDS! Yes, what a brilliant idea from one such as myself! Such strong ideas from a strong bird! You, too, can be as shining as me, young one! What say you?",
-            "ducklings": "say you? say you?"
+            "dialogue": "NOT HITTING THE OTHER BIRDS! Yes, what a brilliant idea from one such as myself! Such strong ideas from a strong bird!",
+            "babies": "strong bird! strong bird!"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": ". . ."
+        },
+        {
+            "speaker": "sloane",
+            "dialogue": "You, too, can be as shining as me, young one! What say you?",
+            "babies": "say you? say you?"
         },
         {
             "speaker": "peri",
@@ -178,7 +187,7 @@
         {
             "speaker": "sloane",
             "dialogue": "EXCELLENT WORK, YOUNG ONE! I've never seen such strength in such a tiny body! You'll fit into this flock just fine, I just know it!",
-            "ducklings": "tiny body! tiny body!"
+            "babies": "tiny body! tiny body!"
         },
         {
             "speaker": "peri",
@@ -240,7 +249,7 @@
             {
                 "speaker": "sloane",
                 "dialogue": "PERIWINKLE! How are you doing on this fine evening?",
-                "ducklings": "periwinkle! periwinkle!"
+                "babies": "periwinkle! periwinkle!"
             },
             {
                 "speaker": "peri",
@@ -249,7 +258,7 @@
             {
                 "speaker": "sloane",
                 "dialogue": "NONSENSE! Periwinkle, I told you that strength comes from the heart, not your feathers. As long as you stay determined, there's nothing you can't do! NOW GET BACK OUT THERE!",
-                "ducklings": "GET BACK OUT THERE!"
+                "babies": "GET BACK OUT THERE!"
             },
             {
                 "speaker": "peri",

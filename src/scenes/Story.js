@@ -74,15 +74,28 @@ class Story extends Phaser.Scene {
             resolution: 2
         }
 
+        // text style for speaker label
+        let babiesConfig = {
+            fontFamily: 'handwrite',
+            fontSize: '20px',
+            color: '#5d6d82',
+            align: 'left',
+            autoRound: true,
+            resolution: 2
+        }
+
         // add background
         this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);
         
-        // add swan dialogue box
+        // add swan dialogue box and text
         this.swanBox = this.add.image(this.SWANBOX_X, this.SWANBOX_Y, 'swanBox').setOrigin(1, 1).setAlpha(0);
         this.speakerText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y - 40, '', speakerConfig);
         this.swanText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y, '', dialogueConfig)
             .setWordWrapWidth(this.SWANTEXT_WIDTH);
         this.nextText = this.add.text(this.NEXT_X, this.NEXT_Y, '[SPACE]', dialogueConfig).setOrigin(1, 1).setAlpha(0);
+
+        // for sloane
+        this.babiesText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y + 100, '', babiesConfig).setAlpha(0);          
   
         // peri choice box
         this.choiceBox = this.add.image(this.CHOICEBOX_X, this.CHOICEBOX_Y, 'periBox').setScale(0.7).setAlpha(0);
@@ -216,6 +229,9 @@ class Story extends Phaser.Scene {
         // store chosen swan's portion of dialogue in this.dialogue
         this.dialogue = this.cache.json.get('dialogue')[this.swanChoice];
 
+        // if chosen swan is sloane, set babies text to visible
+        this.babiesText.setAlpha(1);
+
         for (swan in this.choiceGroup) {
             if (swan != this.swanChoice) {
                 this.fadeUnchosen = this.tweens.add({
@@ -234,15 +250,16 @@ class Story extends Phaser.Scene {
             }
         }
 
-        // camera fade-to-black transition
+        // camera transition
         this.time.delayedCall(750, () => {
-            this.cameras.main.fadeOut(400);
+            this.cameras.main.fadeOut(400);                         // fade to black
             this.time.delayedCall(500, () => {
-                this.choiceGroup[this.swanChoice].setAlpha(0);
-                this.cameras.main.fadeIn(400, 0, 0, 0);
+                this.choiceGroup[this.swanChoice].setAlpha(0);      // hide swan choice options
+                this.cameras.main.fadeIn(400, 0, 0, 0);             // fade back in
             });
         });
 
+        
         this.time.delayedCall(1500, () => {
             // add and move swan
             this.swan = this.physics.add.sprite(0, this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
@@ -286,21 +303,40 @@ class Story extends Phaser.Scene {
     // typewriter effect functions based on example from https://blog.ourcade.co/posts/2020/phaser-3-typewriter-text-effect-bitmap/
     typeText(text) {
         const lines = this.swanText.getWrappedText(text);
-	    const wrappedText = lines.join('\n');
-        const length = wrappedText.length;
-        
+	    let wrappedText = lines.join('\n');
+        let origLength;
+    
         // currently typing
         this.typing = true;
 
         // clear text
         this.swanText.text = '';
+        if (this.swanChoice == 'sloane') this.babiesText.text = '';
+
+        // babies text for sloane
+        if (this.swanChoice == 'sloane' && this.dialogue[this.dialogueLine].babies) {
+            origLength = wrappedText.length;                                                // store length of just swan dialogue
+            console.log(origLength);
+            wrappedText += `(${this.dialogue[this.dialogueLine].babies})`;                  // add babies lines to wrappedText
+        }
+
+        // store total length of dialogue (including babies lines if applicable)
+        let length = wrappedText.length;      
+        console.log(length);           
 
         // timer that iterates thru letters in text
         let char = 0;
         this.textTimer = this.time.addEvent({
             delay: 10,
             callback: () => {
-                this.swanText.text += wrappedText[char];
+                // if sloane, check if next char is in babies line
+                if (this.swanChoice == 'sloane' && char > origLength - 1) {
+                    this.babiesText.text += wrappedText[char];
+                } else {
+                    this.swanText.text += wrappedText[char];
+                }
+
+                // increment char
                 char++;
 
                 // after reaching end of line
@@ -331,6 +367,7 @@ class Story extends Phaser.Scene {
         this.dialogueLine++;
     }
 
+    // fade out targets
     fadeOut(tween, targets) {
         this.tweens.add({
             targets: targets,
