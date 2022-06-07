@@ -120,27 +120,36 @@ class Story extends Phaser.Scene {
         // if swan choice segment is active
         if (this.choosingSwan) {
             if (Phaser.Input.Keyboard.JustDown(key1) && !swansTalked.includes('kenneth')) {
-                this.chooseSwan('kenneth');
                 this.sound.play('kennethJingle');
+                this.chooseSwan('kenneth');
             } else if (Phaser.Input.Keyboard.JustDown(key2) && !swansTalked.includes('siesta')) {
-                this.chooseSwan('siesta');
                 this.sound.play('siestaJingle');
+                this.chooseSwan('siesta');
             } else if (Phaser.Input.Keyboard.JustDown(key3) && !swansTalked.includes('sloane')) {
-                this.chooseSwan('sloane');
                 this.sound.play('sloaneJingle');
+                this.chooseSwan('sloane');
             }
 
         // otherwise, if dialogue choice segment is active
         } else if (this.choosingDialogue) {
             if (Phaser.Input.Keyboard.JustDown(key1)) {
-                this.chooseDialogue(1);
-                this.sound.play('periChoice');
+                this.choiceSFX = this.sound.add('periChoice');
+                this.choiceSFX.play();
+                this.choiceSFX.on('complete', () => { 
+                    this.chooseDialogue(1);
+                });               
             } else if (Phaser.Input.Keyboard.JustDown(key2)) {
-                this.chooseDialogue(2);
-                this.sound.play('periChoice');
+                this.choiceSFX = this.sound.add('periChoice');
+                this.choiceSFX.play();
+                this.choiceSFX.on('complete', () => { 
+                    this.chooseDialogue(2);
+                });
             } else if (Phaser.Input.Keyboard.JustDown(key3) && this.nextLine.dialogue[2]) {
-                this.chooseDialogue(3);
-                this.sound.play('periChoice');
+                this.choiceSFX = this.sound.add('periChoice');
+                this.choiceSFX.play();
+                this.choiceSFX.on('complete', () => { 
+                    this.chooseDialogue(3);
+                });
             }
             
         // otherwise, if conversation has started
@@ -151,14 +160,13 @@ class Story extends Phaser.Scene {
                 if (this.dialogueLine > this.dialogue.length - 1) {
                     // add powerup
                     power = 'this.swanChoice';
-                    this.gift = this.sound.add(`${this.swanChoice}Jingle`);
-                    this.gift.play();
+                    this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
+                    this.powerSFX.play();
 
-                    
-                    if (Phaser.Input.Keyboard.JustDown(cursors.space)) {
-                        // go to migration scene when ready
+                    // continue to migration only after sfx done
+                    this.powerSFX.on('complete', () => { 
                         this.scene.start('migrateScene');
-                    };                        
+                    });                     
                 } else {
                     // fade out [SPACE] prompt
                     this.promptBlink.stop();
@@ -184,7 +192,9 @@ class Story extends Phaser.Scene {
                 this.choiceText.text += `[${i}] ${this.nextLine.dialogue[i - 1]}\n`;
             }
             this.choosingDialogue = true;
+
         } else {
+
             this.speakerText.text = this.nextLine.speaker.toUpperCase();
             this.typeText(this.nextLine.branch ? this.nextLine.dialogue[this.choiceNum - 1] : this.nextLine.dialogue);
         }
@@ -210,9 +220,13 @@ class Story extends Phaser.Scene {
         if (this.dialogueLine > this.dialogue.length - 1) {
             // add powerup
             power = 'this.swanChoice';
+            this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
+            this.powerSFX.play();
 
-            // go to migration scene
-            this.scene.start('migrateScene');
+            // go to migration scene after power sfx done
+            this.powerSFX.on('complete', () => { 
+                this.scene.start('migrateScene');
+            });
         } else this.typeNextLine();
     }
 
@@ -295,7 +309,7 @@ class Story extends Phaser.Scene {
         }); 
     }
 
-    // typewriter effect functions based on example from https://blog.ourcade.co/posts/2020/phaser-3-typewriter-text-effect-bitmap/
+    // typewriter effect functions originally based on example from https://blog.ourcade.co/posts/2020/phaser-3-typewriter-text-effect-bitmap/
     typeText(text) {
         const lines = this.swanText.getWrappedText(text);
 	    const wrappedText = lines.join('\n');
@@ -305,21 +319,21 @@ class Story extends Phaser.Scene {
         this.typing = true;
 
         // start voice sfx
-        if (this.dialogue[this.dialogueLine].speaker != 'peri') {
-            this.voice = this.sound.add(`${this.swanChoice}Voice`, {volume: 0.5, loop: true,}); 
-            this.voice.play();   // randomized start
-        } else {
-            this.voice = this.sound.add('periChoice'); 
+        if (this.dialogue[this.dialogueLine].speaker !== 'peri') {      // if peri isn't the speaker, add the appropriate swan's voice audio
+            this.voice = this.sound.add(`${this.swanChoice}Voice`, {    
+                volume: 0.5, 
+                loop: true
+            }); 
             this.voice.play();
+            this.voice.setSeek(Phaser.Math.Between(1, 11));   // randomize playback position
+        } else {
+            this.voice = this.sound.add('periVoice', {                  // otherwise, peri is speaking
+                loop: true
+            }); 
+            this.voice.play();
+            this.voice.setSeek(Phaser.Math.Between(1, 11));
         }; 
-        this.paused = '';
-        // this.voice.play(this.voice, this.paused); 
-        // if (!this.paused) {
-        //              // play voice from start if it hasn't been paused before
-        // } else {                        // cont. voice if paused
-        //     this.voice.resume();
-        // }
-        
+
 
         // clear text
         this.swanText.text = '';
@@ -346,8 +360,7 @@ class Story extends Phaser.Scene {
                     });
 
                     // pause voice
-                    this.paused = this.voice.addMarker('pause');
-                    this.voice.pause();
+                    this.voice.stop();
 
                     // no longer typing
                     this.typing = false;
@@ -363,6 +376,7 @@ class Story extends Phaser.Scene {
         // advance dialogue line
         this.dialogueLine++;
     }
+
 
     fadeOut(tween, targets) {
         this.tweens.add({

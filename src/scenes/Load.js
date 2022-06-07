@@ -76,6 +76,7 @@ class Load extends Phaser.Scene {
         this.load.audio('kennethVoice', 'audio/kennethDialogue.mp3');
         this.load.audio('jettVoice', 'audio/jettDialogue.mp3');
         this.load.audio('periChoice', 'audio/periChoice.mp3');
+        this.load.audio('periVoice', 'audio/periVoice.mp3');
 
     }
 
