@@ -134,10 +134,13 @@ class Story extends Phaser.Scene {
         } else if (this.choosingDialogue) {
             if (Phaser.Input.Keyboard.JustDown(key1)) {
                 this.chooseDialogue(1);
+                this.sound.play('periChoice');
             } else if (Phaser.Input.Keyboard.JustDown(key2)) {
                 this.chooseDialogue(2);
+                this.sound.play('periChoice');
             } else if (Phaser.Input.Keyboard.JustDown(key3) && this.nextLine.dialogue[2]) {
                 this.chooseDialogue(3);
+                this.sound.play('periChoice');
             }
             
         // otherwise, if conversation has started
@@ -295,6 +298,9 @@ class Story extends Phaser.Scene {
         // currently typing
         this.typing = true;
 
+        // start voice sfx
+        this.voice = this.sound.play(`${this.swanChoice}Voice`, {volume: 0.5, loop: true,});
+
         // clear text
         this.swanText.text = '';
 
@@ -318,6 +324,9 @@ class Story extends Phaser.Scene {
                         onStop: this.fadeOut,
                         yoyo: true
                     });
+
+                    // stop voice
+                    this.voice.stop();
 
                     // no longer typing
                     this.typing = false;

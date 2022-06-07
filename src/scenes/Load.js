@@ -134,7 +134,7 @@ class Load extends Phaser.Scene {
                 zeroPad: 3
             }),
             frameRate: 8,
-            repeat: 2,
+            repeat: 1,
         });
         
         // start first real game scene
