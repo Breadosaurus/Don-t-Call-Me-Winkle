@@ -71,7 +71,7 @@
             "choice": true,
             "dialogue": [
                 "That'd be amazing!",
-                "Why are you helping me, anyway?"
+                "I don't need your pity. Why are you helping me, anyway?"
             ]
         },
         {
@@ -103,7 +103,7 @@
         },
         {
             "speaker": "peri",
-            "dialogue": "Kind of? No one's talking to me and everyone is so much bigger and what if I say something wr -"
+            "dialogue": "Kind of? I'm trying to make friends but everyone is so much bigger and what if I say something wr-"
         },
         {
             "speaker": "siesta",
@@ -135,7 +135,7 @@
         {
             "speaker": "sloane",
             "dialogue": "HELLO, GOOD SIR!",
-            "ducklings": "hello! hello!"
+            "babies": "hello! hello!"
         },
         {
             "speaker": "peri",
@@ -149,7 +149,7 @@
         {
             "speaker": "sloane",
             "dialogue": "I AM SLOANE! Strongest bird in this flock and your new MENTOR, my fine fellow!",
-            "ducklings": "new mentor! new mentor!"
+            "babies": "new mentor! new mentor!"
         },
         {
             "speaker": "peri",
@@ -177,8 +177,17 @@
         },
         {
             "speaker": "sloane",
-            "dialogue": "NOT HITTING THE OTHER BIRDS! Yes, what a brilliant idea from one such as myself! Such strong ideas from a strong bird! You, too, can be as shining as me, young one! What say you?",
-            "ducklings": "say you? say you?"
+            "dialogue": "NOT HITTING THE OTHER BIRDS! Yes, what a brilliant idea from one such as myself! Such strong ideas from a strong bird!",
+            "babies": "strong bird! strong bird!"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": ". . ."
+        },
+        {
+            "speaker": "sloane",
+            "dialogue": "You, too, can be as shining as me, young one! What say you?",
+            "babies": "say you? say you?"
         },
         {
             "speaker": "peri",
@@ -193,7 +202,7 @@
 
     "ending1": [
         {
-            "speaker": "all",
+            "speaker": "ken, siesta, & sloane",
             "dialogue": "CONGRATULATIONS, PERIWINKLE!!"
         },
         {
@@ -206,12 +215,12 @@
         },
         {
             "speaker": "kenneth",
-            "dialogue": "Your statistics are off the speakerts! I've never seen anything like it! You must let me do a study on you some time."
+            "dialogue": "Your statistics are off the charts! I've never seen anything like it! You must let me do a study on you some time."
         },
         {
             "speaker": "sloane",
             "dialogue": "EXCELLENT WORK, YOUNG ONE! I've never seen such strength in such a tiny body! You'll fit into this flock just fine, I just know it!",
-            "ducklings": "tiny body! tiny body!"
+            "babies": "tiny body! tiny body!"
         },
         {
             "speaker": "peri",
@@ -219,11 +228,35 @@
         }
     ],
 
+    "ending2": [
+        {
+            "speaker": "peri",
+            "dialogue": "Well, that marks the end of my first day. I think I did well! And tomorrow, I'll do even better! Maybe I didn't make as many friends as I wanted to, but that's alright. I'll try again another day!"
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "Heyyy Peri, good job flying today... You should totally - *yawn* - come hang out with the flock some time."
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "Thank you! I'd love to hang out, I've just been so busy practicing..."
+        },
+        {
+            "speaker": "siesta",
+            "dialogue": "Actually, we're about to - *yawn* - head down to the ocean to catch some Z's... I mean, catch some waves... Wanna come?"
+        },
+        {
+            "speaker": "peri",
+            "dialogue": "Oh! Yeah, sure! Let me go get ready..."
+        }
+    ],
+
     "ending3": {
+
         "intro": [
             {
                 "speaker": "peri",
-                "dialogue": "Man, I didn't do that well today. Maybe I should get some advice."
+                "dialogue": "Man, I didn't do that well today. Maybe I should get some advice from a friend?"
             }
         ],
 
@@ -238,11 +271,15 @@
             },
             {
                 "speaker": "kenneth",
-                "dialogue": "Don't be so hard on yourself! Today is just a blip in the world's great pie speakert. Tomorrow, I know you'll do just fine. I'll even give you another heads up on where your spot is supposed to be, what do you say?"
+                "dialogue": "Don't be so hard on yourself! Today is just a blip in the world's great pie chart."
+            },
+            {
+                "speaker": "kenneth",
+                "dialogue": "Tomorrow, I know you'll do just fine. I'll even give you another heads up on where your spot is supposed to be, what do you say?"
             },
             {
                 "speaker": "peri",
-                "dialogue": "That's so nice, Kenneth! I'm so glad to have a friend like you by my side. Tomorrow is a new day!"
+                "dialogue": "That's so sweet, Kenneth! I'm so glad to have a friend like you by my side. Tomorrow is a new day!"
             }
         ],
 
@@ -265,7 +302,7 @@
             },
             {
                 "speaker": "peri",
-                "dialogue": "You're right Siesta, I just need to take it one day at a time. Thank you so much!"
+                "dialogue": "You're right, Siesta, I just need to take it one day at a time. Thank you so much!"
             }
         ],
 
@@ -273,7 +310,7 @@
             {
                 "speaker": "sloane",
                 "dialogue": "PERIWINKLE! How are you doing on this fine evening?",
-                "ducklings": "periwinkle! periwinkle!"
+                "babies": "periwinkle! periwinkle!"
             },
             {
                 "speaker": "peri",
@@ -281,12 +318,16 @@
             },
             {
                 "speaker": "sloane",
-                "dialogue": "NONSENSE! Periwinkle, I told you that strength comes from the heart, not your feathers. As long as you stay determined, there's nothing you can't do! NOW GET BACK OUT THERE!",
-                "ducklings": "GET BACK OUT THERE!"
+                "dialogue": "NONSENSE! Periwinkle, I told you that strength comes from the heart, not your feathers."
+            },
+            {
+                "speaker": "sloane",
+                "dialogue": "As long as you stay determined, there's nothing you can't do! NOW GET BACK OUT THERE!",
+                "babies": "GET BACK OUT THERE!"
             },
             {
                 "speaker": "peri",
-                "dialogue": "YOU'RE RIGHT! I AM STRONG! I AM BRAVE! AAAAAAAAAAA"
+                "dialogue": "YOU'RE RIGHT! I AM STRONG! I AM BRAVE! AAAAAAAAAAAAAAAAAAA!!!!!!!!!!!"
             }
         ]
     },

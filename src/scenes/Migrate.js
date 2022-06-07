@@ -4,7 +4,7 @@ class Migrate extends Phaser.Scene {
     }
 
     create() {
-        
+        this.cameras.main.fadeIn(400, 0, 0, 0);
         // store current chapter's portion of migration map json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
 
@@ -222,11 +222,19 @@ class Migrate extends Phaser.Scene {
                 this.scene.restart();
             // otherwise, progress to next chapter or ending
             } else {
-                if (chapter < 3) {
-                    chapter++;
-                    practice = true;
-                    this.scene.start("tutorialScene");
-                } else this.scene.start("endScene");
+                // fade to black
+                this.cameras.main.fadeOut(400);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                    // go to next scene
+                    this.time.delayedCall(200, () => {
+                        if (chapter < 3) {
+                            chapter++;
+                            practice = true;
+                            this.scene.start("tutorialScene");
+                        } else this.scene.start("endScene");
+                    })
+                }); 
+                
             }
         }
 
@@ -259,7 +267,13 @@ class Migrate extends Phaser.Scene {
     endForm() {
         // if this was the last formation, chapter is complete: progress to next chapter after delay
         if (this.form == 3) {
+            // end of migration
             this.endMigration = true;
+            
+            // increment # formations passed
+            if (this.pass > 1) {
+                migrationsPassed++;
+            }
 
             // end message appears
             this.box.setAlpha(1);

@@ -17,14 +17,12 @@ class Story extends Phaser.Scene {
 
         // peri dialogue box and text position
         this.CHOICEBOX_X = 640;                                  
-        this.CHOICEBOX_Y = 350;         
-        this.CHOICETEXT_X = 510;
-        this.CHOICETEXT_Y = 310;
-        this.CHOICETEXT_WIDTH = 240;
+        this.CHOICEBOX_Y = 320;         
+        this.CHOICETEXT_X = 500;
+        this.CHOICETEXT_Y = this.CHOICEBOX_Y - 45;
+        this.CHOICETEXT_WIDTH = 260;
         this.PERI_X = 735;
         this.PERI_Y = game.config.height - 250;
-        
-        this.FONT_SIZE = 25;
 
         // swan positions
         this.sloaneX = 330;
@@ -36,7 +34,6 @@ class Story extends Phaser.Scene {
 
         // character variables
         this.peri = null;
-        this.swan = null;
     }
 
     create() {
@@ -58,7 +55,7 @@ class Story extends Phaser.Scene {
         let dialogueConfig = {
             fontFamily: 'handwrite',
             fontSize: '26px',
-            color: '#172230',
+            color: '#4e5f8e',
             align: 'left',
             autoRound: true,
             resolution: 2
@@ -68,7 +65,17 @@ class Story extends Phaser.Scene {
         let speakerConfig = {
             fontFamily: 'handwrite',
             fontSize: '32px',
-            color: '#172230',
+            color: '#4e5f8e',
+            align: 'left',
+            autoRound: true,
+            resolution: 2
+        }
+
+        // text style for speaker label
+        let babiesConfig = {
+            fontFamily: 'handwrite',
+            fontSize: '21px',
+            color: '#9e9c9a',
             align: 'left',
             autoRound: true,
             resolution: 2
@@ -77,27 +84,25 @@ class Story extends Phaser.Scene {
         // add background
         this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);
         
-        // add swan dialogue box
+        // add swan dialogue box and text
         this.swanBox = this.add.image(this.SWANBOX_X, this.SWANBOX_Y, 'swanBox').setOrigin(1, 1).setAlpha(0);
         this.speakerText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y - 40, '', speakerConfig);
         this.swanText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y, '', dialogueConfig)
             .setWordWrapWidth(this.SWANTEXT_WIDTH);
         this.nextText = this.add.text(this.NEXT_X, this.NEXT_Y, '[SPACE]', dialogueConfig).setOrigin(1, 1).setAlpha(0);
+
+        // for sloane
+        this.babiesText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y + 95, '', babiesConfig).setAlpha(0);          
   
         // peri choice box
-        this.choiceBox = this.add.image(this.CHOICEBOX_X, this.CHOICEBOX_Y, 'periBox').setScale(0.7).setAlpha(0);
+        this.choiceBox = this.add.image(this.CHOICEBOX_X, this.CHOICEBOX_Y, 'periBox').setScale(0.8).setAlpha(0);
         this.choiceSpeaker = this.add.text(this.CHOICETEXT_X, this.CHOICETEXT_Y - 40, 'PERI', speakerConfig).setAlpha(0);
         this.choiceText = this.add.text(this.CHOICETEXT_X, this.CHOICETEXT_Y, '', dialogueConfig)
-            .setWordWrapWidth(this.CHOICETEXT_WIDTH);
+            .setWordWrapWidth(this.CHOICETEXT_WIDTH)
+            .setLineSpacing(8);
 
         // add Peri sprite
-        this.peri = this.physics.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1);
-
-        // create keys
-        cursors = this.input.keyboard.createCursorKeys();
-        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
-        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
-        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
+        this.peri = this.add.sprite(game.config.width, this.PERI_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
 
         // add swans for choice segment
         this.kennethChoice = this.add.image(game.config.width/4, game.config.height - 150, 'kenneth').setScale(0.7).setOrigin(0.5, 1);
@@ -114,6 +119,12 @@ class Story extends Phaser.Scene {
                 this.choiceGroup[swan].setTint(0x777777);
             }
         }
+
+        // create keys
+        cursors = this.input.keyboard.createCursorKeys();
+        key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
+        key2 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.TWO);
+        key3 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.THREE);
     } // end create()
 
     update() {
@@ -163,10 +174,16 @@ class Story extends Phaser.Scene {
                     this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
                     this.powerSFX.play();
 
-                    // continue to migration only after sfx done
-                    this.powerSFX.on('complete', () => { 
-                        this.scene.start('migrateScene');
+                    // fade to black and go to migration scene only after sfx done
+                    this.powerSFX.on('complete', () => {
+                        this.cameras.main.fadeOut(400);                         
+                        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                            this.time.delayedCall(200, () => {
+                                this.scene.start('migrateScene')
+                            });
+                        });
                     });                     
+                    
                 } else {
                     // fade out [SPACE] prompt
                     this.promptBlink.stop();
@@ -178,8 +195,17 @@ class Story extends Phaser.Scene {
     } // end update()
 
     typeNextLine() {
+        // store last speaker (if first line, set to peri)
+        let lastSpeaker = this.nextLine ? this.nextLine.speaker : 'peri';
+        
         // store next line from json file
         this.nextLine = this.dialogue[this.dialogueLine];
+
+        // if different speaker, switch who's greyed out
+        if (this.nextLine.speaker != lastSpeaker) {
+            this[lastSpeaker].setTint(0x777777);
+            this[this.nextLine.speaker].clearTint();
+        }
 
         // if next line has multiple dialogue options, show choice text boxes and choices
         if (this.nextLine.speaker == 'peri' && this.nextLine.choice) {
@@ -223,24 +249,35 @@ class Story extends Phaser.Scene {
             this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
             this.powerSFX.play();
 
-            // go to migration scene after power sfx done
-            this.powerSFX.on('complete', () => { 
-                this.scene.start('migrateScene');
-            });
+            // fade to black and go to migration scene only after sfx done
+            this.powerSFX.on('complete', () => {
+                this.cameras.main.fadeOut(400);                         
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                    this.time.delayedCall(200, () => {
+                        this.scene.start('migrateScene')
+                    });
+                });
+            });  
+            
         } else this.typeNextLine();
     }
 
-    // swan choice event handler
+    // swan choice
     chooseSwan(swan) {
         // lock swan choices
         this.choosingSwan = false;
 
         // record chosen swan in this.swanChoice and global swansTalked array
         this.swanChoice = swan;
-        swansTalked.push(this.swanChoice);
-        
+        swansTalked.push(swan);
+
         // store chosen swan's portion of dialogue in this.dialogue
-        this.dialogue = this.cache.json.get('dialogue')[this.swanChoice];
+        this.dialogue = this.cache.json.get('dialogue')[swan];
+
+        if (swan == 'sloane') {
+            // if chosen swan is sloane, set babies text to visible
+            this.babiesText.setAlpha(1);
+        }
 
         for (swan in this.choiceGroup) {
             if (swan != this.swanChoice) {
@@ -260,21 +297,22 @@ class Story extends Phaser.Scene {
             }
         }
 
-        // camera fade-to-black transition
+        // camera transition
         this.time.delayedCall(750, () => {
-            this.cameras.main.fadeOut(400);
+            this.cameras.main.fadeOut(400);                         // fade to black
             this.time.delayedCall(500, () => {
-                this.choiceGroup[this.swanChoice].setAlpha(0);
-                this.cameras.main.fadeIn(400, 0, 0, 0);
+                this.choiceGroup[this.swanChoice].setAlpha(0);      // hide swan choice options
+                this.cameras.main.fadeIn(400, 0, 0, 0);             // fade back in
             });
         });
-
+        
+        // wait until after camera transition
         this.time.delayedCall(1500, () => {
             // add and move swan
-            this.swan = this.physics.add.sprite(0, this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
+            this[`${this.swanChoice}`] = this.add.sprite(0, this[`${this.swanChoice}Y`], this.swanChoice).setOrigin(1, 1);
             this.tweens.add({
                 startDelay: 100,
-                targets: this.swan,
+                targets: this[`${this.swanChoice}`],
                 x: this[`${this.swanChoice}X`],
                 duration: 500,
                 ease: 'Cubic'
@@ -291,30 +329,29 @@ class Story extends Phaser.Scene {
             });
             
             // add swan text box
-            this.addBox = this.tweens.add({
+            this.tweens.add({
                 targets: this.swanBox,
                 alpha: { from: 0, to: 1},
                 duration: 500,
                 ease: 'Linear'
-            });
-
-            this.addBox.on('complete', () => {
+            }).on('complete', () => {
                 // move to next part of scene
                 this.swanTalking = true;
 
                 // start dialogue
-                this.speakerText.text = this.swanChoice.toUpperCase();
-                this.typeText(this.dialogue[this.dialogueLine].dialogue);
+                this.typeNextLine();
+                // this.speakerText.text = this.swanChoice.toUpperCase();
+                // this.typeText(this.dialogue[this.dialogueLine].dialogue);
             });
         }); 
-    }
+    } // end chooseSwan()
 
     // typewriter effect functions originally based on example from https://blog.ourcade.co/posts/2020/phaser-3-typewriter-text-effect-bitmap/
     typeText(text) {
-        const lines = this.swanText.getWrappedText(text);
-	    const wrappedText = lines.join('\n');
-        const length = wrappedText.length;
-        
+        const lines = this.swanText.getWrappedText(text);      // wrapped lines
+	    let wrappedText = lines.join('\n');                    // add new line character to wrapped lines
+        let origLength;                                        // only used in sloane's dialogue, to hold length minus babies lines
+    
         // currently typing
         this.typing = true;
 
@@ -338,18 +375,36 @@ class Story extends Phaser.Scene {
         // clear text
         this.swanText.text = '';
 
+        // if talking to sloane
+        if (this.swanChoice == 'sloane') {
+            this.babiesText.text = '';                                                   // clear babies text
+            // if babies talk in this line
+            if (this.dialogue[this.dialogueLine].babies) {
+                origLength = wrappedText.length;                                         // store length of just swan dialogue
+                wrappedText += `. . . ${this.dialogue[this.dialogueLine].babies}`;       // add babies lines to wrappedText
+            }
+        }
+
+        // store total length of dialogue
+        let length = wrappedText.length;          
+
         // timer that iterates thru letters in text
         let char = 0;
         this.textTimer = this.time.addEvent({
             delay: 10,
             callback: () => {
-                this.swanText.text += wrappedText[char];
-                char++;
+                // if sloane, check if next char is in babies line
+                if (this.swanChoice == 'sloane' && char > origLength - 1) {     
+                    this.babiesText.text += wrappedText[char];                  // add char to babiesText
+                } else {
+                    this.swanText.text += wrappedText[char];                    // add char to swanText
+                }
+
+                char++;    // increment char
 
                 // after reaching end of line
-                if (this.textTimer.getRepeatCount() == 0) {
-                    // fade prompt in and out
-                    this.promptBlink = this.tweens.add({
+                if (this.textTimer.getRepeatCount() == 0) {    
+                    this.promptBlink = this.tweens.add({    // fade prompt in and out
                         targets: this.nextText,
                         alpha: {from: 0, to: 1},
                         callbackScope: this,
@@ -362,22 +417,18 @@ class Story extends Phaser.Scene {
                     // pause voice
                     this.voice.stop();
 
-                    // no longer typing
-                    this.typing = false;
-
-                    // destroy timer
-                    this.textTimer.destroy();
+                    this.typing = false;        // no longer typing
+                    this.textTimer.destroy();   // destroy timer
                 }
             },
             repeat: length - 1,
             callbackScope: this
         });
 
-        // advance dialogue line
-        this.dialogueLine++;
-    }
+        this.dialogueLine++;    // advance dialogue line
+    } // end typeText()
 
-
+    // fade out targets
     fadeOut(tween, targets) {
         this.tweens.add({
             targets: targets,
@@ -385,5 +436,5 @@ class Story extends Phaser.Scene {
             duration: 200,
             repeat: 0
         });
-    }
+    } // end fadeOut()
 }
