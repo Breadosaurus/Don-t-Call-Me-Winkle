@@ -257,7 +257,7 @@ class Story extends Phaser.Scene {
         this.swanTalking = false;
 
         // set powerup
-        power = 'this.swanChoice';
+        power = this.swanChoice;
         this.powerIcon = this.add.image(this.powerText.x - 75, this.powerBox.y, `${this.swanChoice}Power`).setAlpha(0).setDepth(2).setScale(0.5);
 
         // play sound
