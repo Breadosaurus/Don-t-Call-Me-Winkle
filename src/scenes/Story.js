@@ -368,8 +368,6 @@ class Story extends Phaser.Scene {
 
                 // start dialogue
                 this.typeNextLine();
-                // this.speakerText.text = this.swanChoice.toUpperCase();
-                // this.typeText(this.dialogue[this.dialogueLine].dialogue);
             });
         }); 
     } // end chooseSwan()
