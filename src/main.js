@@ -36,7 +36,7 @@ let practice = null;
 
 // start game at chapter 1 with tutorial, tutorial = false to enable skip
 let chapter = 1;
-let tutorial;
+let tutorial = true;
 
 // variable to hold power ups
 let power = '';

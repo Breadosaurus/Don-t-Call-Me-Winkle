@@ -69,6 +69,10 @@ class Tutorial extends Phaser.Scene {
             autoRound: true,
             resolution: 2
         }
+
+        // add sounds
+        this.jettVoice = this.sound.add('jettVoice', {loop: true});
+        this.periVoice = this.sound.add('periVoice', {loop: true});
         
         this.dialogue = [];                  // dialogue text array
         this.dialogueLine = 0;               // current dialogue line #
@@ -83,10 +87,12 @@ class Tutorial extends Phaser.Scene {
             .setWordWrapWidth(this.textWrapWidth);
         this.nextText = this.add.text(this.prompt_X, this.prompt_Y, '[SPACE]', dialogueConfig).setOrigin(1, 1).setAlpha(0);
 
-        // add tutorial skip banner
-        this.skipBanner = this.add.image(this.skipBanner_X, this.skipBanner_Y, 'swanBox').setOrigin(0, 0).setScale(0.4).setAlpha(0);
-        this.skipText = this.add.text(this.skipBanner_X + 40, this.skipBanner_Y + 40, "[->] to Skip", dialogueConfig).setAlpha(0);
-
+        // add tutorial skip banner if tutorial is skippable
+        if (!tutorial) {
+            this.skipBanner = this.add.image(game.config.width, this.skipBanner_Y, 'swanBox').setOrigin(0, 0).setScale(0.4);
+            this.skipText = this.add.text(this.skipBanner.x + 40, this.skipBanner.y + 40, "[->] to Skip", dialogueConfig);
+        }
+        
         if (chapter == 1) {                         // add title screen only if chapter 1
             // add title screen to initiate game
             this.title = this.add.sprite(0, 0, 'titleScreen').setOrigin(0, 0);
@@ -126,7 +132,6 @@ class Tutorial extends Phaser.Scene {
                 duration: 500,
                 ease: 'Linear'
             }).on('complete', () => {
-                this.decision = true;
                 this.makeDecision();
             });       
         }
@@ -140,7 +145,6 @@ class Tutorial extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(keyS)) {
                 this.sound.play('uiSelect');
                 this.titleActive = false;       // end title segment
-                this.tutorialActive = true;     // move to tutorial segment
                 this.startTutorial();
             }
             // credits input while title screen is active
@@ -169,14 +173,13 @@ class Tutorial extends Phaser.Scene {
 
         // otherwise, if tutorial segment is active
         } else if (this.tutorialActive) {
-            // if space key is pressed and during tutorial
+            let speaker = this.dialogue[this.dialogueLine].speaker;
+            // if space key is pressed and dialogue not typing
             if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing) {
                 // if end of dialogue
                 if (this.dialogueLine > this.dialogue.length - 1) {
                     // end tutorial, start choice
-                    this.voice.stop();
                     this.tutorialActive = false;
-                    this.decision = true;
                     this.makeDecision();                   
                 } else {
                     this.promptBlink.stop();    // fade out [SPACE] prompt
@@ -184,12 +187,16 @@ class Tutorial extends Phaser.Scene {
                 }  
             }
             // if right arrow key is pressed during tutorial and tutorial is skippable
-            if (Phaser.Input.Keyboard.JustDown(cursors.right) && !tutorial) {
-                // go to decision screen                
-                this.voice.stop();
-                if (this.promptBlink) this.promptBlink.stop();    // fade out [SPACE] prompt
-                this.tutorialActive = false;
-                this.decision = true;           // decision segment active
+            if (Phaser.Input.Keyboard.JustDown(cursors.right) && !tutorial) { 
+                // if currently typing
+                if (this.typing) {
+                    this.textTimer.destroy();
+                    this[`${speaker}Voice`].stop();                   // stop voice
+                } else if (this.promptBlink) {
+                    this.promptBlink.stop();    // fade out [SPACE] prompt
+                }
+                this.tutorialActive = false;  
+                // go to decision screen                          
                 this.makeDecision();
             }
         } 
@@ -210,20 +217,27 @@ class Tutorial extends Phaser.Scene {
         // send player to chosen activity when choice screen is active
         if (this.decision) {
             if (Phaser.Input.Keyboard.JustDown(key1)) {
-                this.voice.stop();
                 this.sound.play('uiSelect');
-                this.scene.start('migrateScene');
+                this.cameras.main.fadeOut(400);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                    this.time.delayedCall(200, () => {
+                        this.scene.start('migrateScene');
+                    });
+                });
             } else if (Phaser.Input.Keyboard.JustDown(key2)) {
-                this.voice.stop();
                 this.sound.play('uiSelect');
-                this.scene.start('storyScene');
+                this.cameras.main.fadeOut(400);
+                this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
+                    this.time.delayedCall(200, () => {
+                        this.scene.start('storyScene');
+                    });
+                });
             }
         }
     } // end update()
 
     startTutorial() {
         // grab tutorial section of dialogue json
-        //this.tutorialTxt = this.cache.json.get('dialogue')['tutorial'];
         this.dialogue = this.cache.json.get('dialogue')['tutorial'];
 
         this.tweens.add({                       // "press" start button
@@ -253,28 +267,19 @@ class Tutorial extends Phaser.Scene {
                 // move skip banner
                 this.tweens.add({
                     startDelay: 100,
-                    targets: this.skipBanner,
-                    x: this.skipBanner_X,
+                    targets: [this.skipBanner, this.skipText],
+                    x: {value: '-=190'},
                     duration: 500,
                     ease: 'Cubic'
                 });
 
-                // make banner visible
-                this.tweens.add({
-                    targets: this.skipBanner,
-                    alpha: { from: 0, to: 1 },
-                    duration: 500,
-                    ease: 'Linear'
-                });
-
-                // make text visible
-                this.tweens.add({
-                    targets: this.skipText,
-                    alpha: { from: 0, to: 1 },
-                    duration: 500,
-                    ease: 'Linear'
-                });
-                
+                // // make banner visible
+                // this.tweens.add({
+                //     targets: [this.skipBanner, this.skipText],
+                //     alpha: { from: 0, to: 1 },
+                //     duration: 500,
+                //     ease: 'Linear'
+                // });
             }
 
             // add and move jett
@@ -315,8 +320,8 @@ class Tutorial extends Phaser.Scene {
     } // end startTutorial()
 
     makeDecision() {
-        // reset dialogue line and load choice dialogue
-        this.dialogueLine = 0;
+        this.decision = true;   // decision segment active
+        this.dialogueLine = 0;  // reset dialogue line and load choice dialogue
         this.dialogue = this.cache.json.get('dialogue')['choice'];
         
         // if tutorial skipped fade skip banner
@@ -370,12 +375,9 @@ class Tutorial extends Phaser.Scene {
         this.typing = true;
 
         // speaking sfx
-        this.voice = this.sound.add(`${this.dialogue[this.dialogueLine].speaker}Voice`, {    // add appropriate speaker's voice
-            loop: true
-        }); 
-        this.voice.play();
-        this.voice.setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
-
+        let speaker = this.dialogue[this.dialogueLine].speaker;
+        this[`${speaker}Voice`].play();
+        this[`${speaker}Voice`].setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
 
         // clear text
         this.swanText.text = '';
@@ -391,13 +393,15 @@ class Tutorial extends Phaser.Scene {
                 this.swanText.text += wrappedText[char];    // add char to swanText
                 char++;                                     // increment char
 
-                // if decision, change prompt text
-                if (this.decision) {
-                    this.nextText.text = '[1] or [2]';
-                }
+                
 
                 // after reaching end of line
-                if (this.textTimer.getRepeatCount() == 0) {    
+                if (this.textTimer.getRepeatCount() == 0) {  
+                    // if decision, change prompt text
+                    if (this.decision) {
+                        this.nextText.text = '[1] or [2]';
+                    }
+                    
                     this.promptBlink = this.tweens.add({    // fade prompt in and out
                         targets: this.nextText,
                         alpha: {from: 0, to: 1},
@@ -409,7 +413,7 @@ class Tutorial extends Phaser.Scene {
                     });
 
                     // pause voice
-                    this.voice.stop();
+                    this[`${speaker}Voice`].stop();
 
                     this.typing = false;        // no longer typing
                     this.textTimer.destroy();   // destroy timer
