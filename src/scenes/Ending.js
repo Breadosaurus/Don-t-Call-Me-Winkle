@@ -580,8 +580,9 @@ class Ending extends Phaser.Scene {
 
     goToEndscreen() {
         this.swanTalking = false;
+        this.periTalking = false;
         this.endscreen = true;
-        this.time.delayedCall(750, () => {
+        this.time.delayedCall(400, () => {
             this.cameras.main.fadeOut(400);                                         // fade to black
             this.time.delayedCall(600, () => {
                 this.end = this.add.sprite(0, 0, 'ending').setOrigin(0, 0);         // end screen sprite to "hold" animation
