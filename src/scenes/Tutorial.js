@@ -28,6 +28,9 @@ class Tutorial extends Phaser.Scene {
     } // end constructor()
 
     create() {
+        // fade in scene
+        this.cameras.main.fadeIn(400, 0, 0, 0);
+        
         practice = true;
 
         // sequence of scenes
