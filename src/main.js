@@ -32,7 +32,7 @@ let topBound = 20;
 let btmBound = game.config.height - topBound;
 
 // practice mode boolean
-let practice = true;
+let practice = null;
 
 // start game at chapter 1 with tutorial, tutorial = false to enable skip
 let chapter = 1;

@@ -158,7 +158,7 @@ class Migrate extends Phaser.Scene {
         this.endMigration = false;
 
         // current formation
-        this.form = 3;
+        this.form = 1;
 
         // number of formations passed
         this.pass = 0;
