@@ -138,6 +138,7 @@ class Tutorial extends Phaser.Scene {
             }
             // credits input while title screen is active
             if (Phaser.Input.Keyboard.JustDown(keyC)) {
+                this.creditsActive = true;
                 this.sound.play('menuSelect');
                 this.tweens.add({                       // add press effect! 
                     targets: this.creditButton,
@@ -147,9 +148,9 @@ class Tutorial extends Phaser.Scene {
                     yoyo: true
                 }).on('complete', () => {
                     // camera fade-to-black transition
-                    this.time.delayedCall(750, () => {
+                    this.time.delayedCall(400, () => {
                         this.cameras.main.fadeOut(400);
-                        this.time.delayedCall(500, () => {
+                        this.time.delayedCall(400, () => {
                             this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
                             this.credits.play('creditAnim');
                             this.endingOn = false;
