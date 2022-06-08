@@ -41,6 +41,7 @@ class Ending extends Phaser.Scene {
         // endscreen
         this.endscreen = false;
         this.creditsScreen = false;
+
     }
 
 
@@ -52,14 +53,18 @@ class Ending extends Phaser.Scene {
         if (migrationsPassed > 1) {
             if (swansTalked.length > 1) {
                 this.ending = 1;
+                console.log(1)
             } else {
                 this.ending = 2;
+                console.log(2)
             }
         } else {
             if (swansTalked.length > 0) {
                 this.ending = 3;
+                console.log(3)
             } else {
                 this.ending = 4;
+                console.log(4)
             }
         }
 
@@ -100,7 +105,7 @@ class Ending extends Phaser.Scene {
         }
 
         // add background
-        this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);
+        this.bg = this.add.image(0, 0, `bg${chapter}`).setOrigin(0, 0);
 
         // add swan dialogue box and text
         this.swanBox = this.add.image(this.SWANBOX_X, this.SWANBOX_Y, 'swanBox').setOrigin(1, 1).setAlpha(0);
@@ -579,6 +584,12 @@ class Ending extends Phaser.Scene {
     } // end fadeOut()
 
     goToEndscreen() {
+        // reset global variables, mark tutorial skippable
+        chapter = 1;
+        tutorial = false;
+        swansTalked = [];
+        migrationsPassed = 0;
+
         this.swanTalking = false;
         this.periTalking = false;
         this.endscreen = true;

@@ -25,6 +25,9 @@ class Tutorial extends Phaser.Scene {
         this.jett = null;
         this.peri = null;
 
+        this.skipBanner_X = game.config.width - 250;
+        this.skipBanner_Y = this.jettBox_Y - 690;
+
     } // end constructor()
 
     create() {
@@ -71,7 +74,7 @@ class Tutorial extends Phaser.Scene {
         this.dialogueLine = 0;               // current dialogue line #
         this.nextLine = null;                // next line of dialogue
 
-        this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);       // set bg under title screen
+        this.bg = this.add.image(0, 0, `bg${chapter}`).setOrigin(0, 0);       // set bg under title screen
 
         // add text box and text
         this.textBox = this.add.image(this.jettBox_X, this.jettBox_Y, 'swanBox').setOrigin(1, 1).setAlpha(0);
@@ -79,6 +82,10 @@ class Tutorial extends Phaser.Scene {
         this.swanText = this.add.text(this.jettText_X, this.jettText_Y, '', dialogueConfig)
             .setWordWrapWidth(this.textWrapWidth);
         this.nextText = this.add.text(this.prompt_X, this.prompt_Y, '[SPACE]', dialogueConfig).setOrigin(1, 1).setAlpha(0);
+
+        // add tutorial skip banner
+        this.skipBanner = this.add.image(this.skipBanner_X, this.skipBanner_Y, 'swanBox').setOrigin(0, 0).setScale(0.4).setAlpha(0);
+        this.skipText = this.add.text(this.skipBanner_X + 40, this.skipBanner_Y + 40, "[->] to Skip", dialogueConfig).setAlpha(0);
 
         if (chapter == 1) {                         // add title screen only if chapter 1
             // add title screen to initiate game
@@ -167,6 +174,7 @@ class Tutorial extends Phaser.Scene {
                 // if end of dialogue
                 if (this.dialogueLine > this.dialogue.length - 1) {
                     // end tutorial, start choice
+                    this.voice.stop();
                     this.tutorialActive = false;
                     this.decision = true;
                     this.makeDecision();                   
@@ -174,6 +182,15 @@ class Tutorial extends Phaser.Scene {
                     this.promptBlink.stop();    // fade out [SPACE] prompt
                     this.typeNextLine();        // type next line
                 }  
+            }
+            // if right arrow key is pressed during tutorial and tutorial is skippable
+            if (Phaser.Input.Keyboard.JustDown(cursors.right) && !tutorial) {
+                // go to decision screen                
+                this.voice.stop();
+                this.promptBlink.stop();    // fade out [SPACE] prompt
+                this.tutorialActive = false;
+                this.decision = true;           // decision segment active
+                this.makeDecision();
             }
         } 
 
@@ -193,9 +210,11 @@ class Tutorial extends Phaser.Scene {
         // send player to chosen activity when choice screen is active
         if (this.decision) {
             if (Phaser.Input.Keyboard.JustDown(key1)) {
+                this.voice.stop();
                 this.sound.play('uiSelect');
                 this.scene.start('migrateScene');
             } else if (Phaser.Input.Keyboard.JustDown(key2)) {
+                this.voice.stop();
                 this.sound.play('uiSelect');
                 this.scene.start('storyScene');
             }
@@ -228,6 +247,35 @@ class Tutorial extends Phaser.Scene {
         
         // wait until after camera transition
         this.time.delayedCall(1500, () => {
+
+            // if tutorial skip enabled show skip banner
+            if (!tutorial) {
+                // move skip banner
+                this.tweens.add({
+                    startDelay: 100,
+                    targets: this.skipBanner,
+                    x: this.skipBanner_X,
+                    duration: 500,
+                    ease: 'Cubic'
+                });
+
+                // make banner visible
+                this.tweens.add({
+                    targets: this.skipBanner,
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                    ease: 'Linear'
+                });
+
+                // make text visible
+                this.tweens.add({
+                    targets: this.skipText,
+                    alpha: { from: 0, to: 1 },
+                    duration: 500,
+                    ease: 'Linear'
+                });
+                
+            }
 
             // add and move jett
             this.jett = this.add.image(0, this.jett_Y, 'jett').setOrigin(1, 1);
@@ -270,6 +318,25 @@ class Tutorial extends Phaser.Scene {
         // reset dialogue line and load choice dialogue
         this.dialogueLine = 0;
         this.dialogue = this.cache.json.get('dialogue')['choice'];
+        
+        // if tutorial skipped fade skip banner
+        if (chapter == 1 && !tutorial) {
+            // make banner fade
+            this.tweens.add({
+                targets: this.skipBanner,
+                alpha: { from: 1, to: 0 },
+                duration: 500,
+                ease: 'Linear'
+            });
+
+            //  fade text
+            this.tweens.add({
+                targets: this.skipText,
+                alpha: { from: 1, to: 0 },
+                duration: 500,
+                ease: 'Linear'
+            });
+        }
 
         // start dialogue
         this.typeNextLine();

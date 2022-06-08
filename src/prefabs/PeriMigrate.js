@@ -54,4 +54,5 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
             this.setAcceleration(0);
         }
     } // end update()
+
 }

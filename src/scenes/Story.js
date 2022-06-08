@@ -34,7 +34,7 @@ class Story extends Phaser.Scene {
 
         // character variables
         this.peri = null;
-    }
+    } // end constructor()
 
     create() {
         // set practice mode to false if player chooses to socialize
@@ -82,7 +82,7 @@ class Story extends Phaser.Scene {
         }
 
         // add background
-        this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);
+        this.bg = this.add.image(0, 0, `bg${chapter}`).setOrigin(0, 0);
         
         // add swan dialogue box and text
         this.swanBox = this.add.image(this.SWANBOX_X, this.SWANBOX_Y, 'swanBox').setOrigin(1, 1).setAlpha(0);

@@ -37,7 +37,21 @@ class Migrate extends Phaser.Scene {
         }
         
         // set colliders between peri and swans
-        this.physics.add.collider(this.peri, this.swanGroup);
+        this.physics.add.collider(this.peri, this.swanGroup, () => {
+            // randomize collision sfx (later)
+            this.bumped = true;
+            
+            // if (Phaser.Math.Between(0, 1) == 0) {
+            //     this.bump1 = this.sound.add('bump1');
+            //     this.bump1.play();
+            // } else {
+            //     this.bump2 = this.sound.add('bump1');
+            //     this.bump2.play();
+            // }
+            this.time.delayedCall(700, () => {
+                this.bumped = false;
+            });
+        });
 
         // swans switch formations faster as chapters progress
         switch (chapter) {
@@ -145,7 +159,6 @@ class Migrate extends Phaser.Scene {
 
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
-        //keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
 //-------------------------------------------------------------------------------------------------
         
@@ -170,7 +183,7 @@ class Migrate extends Phaser.Scene {
             practice ? 
                 "Welcome to migration practice! Here you will practice getting in formation with the flock. Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n(Press SPACE to begin)" : 
 
-                "Welcome to your first migration! Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n(Press SPACE to begin)"
+                "Welcome to the official migration! Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n(Press SPACE to begin)"
         , dialogueConfig).setWordWrapWidth(600);
         this.migrateTutorial.setOrigin(0.5,0.5);
         this.passPractice = this.add.text(this.box.x, this.box.y - 4, 
@@ -279,7 +292,7 @@ class Migrate extends Phaser.Scene {
             this.box.setAlpha(1);
             this.add.text(game.config.width/2, game.config.height/4, 
                 practice ? 'practice complete!':'stage complete!',
-            {fontSize: 60, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(2);
+            {font: 'handwrite', fontSize: 400, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(2);
             
             this.passMigrate.text = `You passed ${this.pass} out of 3 formations.\n\n${
                 this.pass == 0 ? "Don't give up!" :
@@ -350,4 +363,5 @@ class Migrate extends Phaser.Scene {
             repeat: 0
         });
     }
+
 }

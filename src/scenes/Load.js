@@ -31,7 +31,9 @@ class Load extends Phaser.Scene {
         this.load.spritesheet('win', 'img/win.png', {frameWidth: 119, frameHeight: 119, startFrame: 0, endFrame: 3});
 
         // load story assets
-        this.load.image('bg', 'img/bg.png');
+        this.load.image('bg1', 'img/bg.png');
+        this.load.image('bg2', 'img/bg2.png');
+        this.load.image('bg3', 'img/bg3.png');
         this.load.image('jett', 'img/jett.png');
         this.load.image('periStory', 'img/periStory.png');
         this.load.image('sloane', 'img/sloane.png');
@@ -42,7 +44,7 @@ class Load extends Phaser.Scene {
         //this.load.image('jeff', 'img/jeffrey_thomas.png');
 
         // load font
-        this.load.bitmapFont('handwrite', 'font/handwrite.png', 'font/handwrite.xml');
+        // this.load.bitmapFont('handwrite', 'font/handwrite.png', 'font/handwrite.xml');
 
         // load texture atlas for animations
         this.load.atlas('peri_atlas', 'img/periSheet.png', 'json/periSheet.json');
