@@ -173,13 +173,13 @@ class Tutorial extends Phaser.Scene {
 
         // otherwise, if tutorial segment is active
         } else if (this.tutorialActive) {
-            let speaker = this.dialogue[this.dialogueLine].speaker;
             // if space key is pressed and dialogue not typing
             if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing) {
                 // if end of dialogue
                 if (this.dialogueLine > this.dialogue.length - 1) {
                     // end tutorial, start choice
                     this.tutorialActive = false;
+                    this.promptBlink.stop(); 
                     this.makeDecision();                   
                 } else {
                     this.promptBlink.stop();    // fade out [SPACE] prompt
@@ -188,6 +188,7 @@ class Tutorial extends Phaser.Scene {
             }
             // if right arrow key is pressed during tutorial and tutorial is skippable
             if (Phaser.Input.Keyboard.JustDown(cursors.right) && !tutorial) { 
+                let speaker = this.dialogue[this.dialogueLine].speaker;
                 // if currently typing
                 if (this.typing) {
                     this.textTimer.destroy();
@@ -401,7 +402,7 @@ class Tutorial extends Phaser.Scene {
                     if (this.decision) {
                         this.nextText.text = '[1] or [2]';
                     }
-                    
+
                     this.promptBlink = this.tweens.add({    // fade prompt in and out
                         targets: this.nextText,
                         alpha: {from: 0, to: 1},
