@@ -4,9 +4,14 @@ class Migrate extends Phaser.Scene {
     }
 
     create() {
+        // fade in scene
         this.cameras.main.fadeIn(400, 0, 0, 0);
+
         // store current chapter's portion of migration map json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
+
+        // if practice, clear powerup 
+        if (practice) power = null;
 
         // add background and clouds
         this.bg = this.add.tileSprite(0, 0, 1024, 768, `sky${chapter}`).setOrigin(0, 0);
@@ -44,19 +49,23 @@ class Migrate extends Phaser.Scene {
             this.swanGroup.add(this[`swan${i}`]);
         }
         
-        // set colliders between peri and swans
-        this.physics.add.collider(this.peri, this.swanGroup, () => {
-            // randomize collision sfx (later)
-            if (!this.bumped) {
-                this.bumped = true;
-                let sound = Phaser.Math.Between(1, 6);
-                this[`bump${sound}`].play();
-                this.time.delayedCall(700, () => {
-                    this.bumped = false;
-                });
-            }  
-        });
+        
 
+        if (power != 'sloane') {                   // SLOANE POWERUP: you don't collide with other swans
+            // set colliders between peri and swans
+            this.physics.add.collider(this.peri, this.swanGroup, () => {
+                // randomize collision sfx (later)
+                if (!this.bumped) {
+                    this.bumped = true;
+                    let sound = Phaser.Math.Between(1, 6);
+                    this[`bump${sound}`].play();
+                    this.time.delayedCall(700, () => {
+                        this.bumped = false;
+                    });
+                }  
+            });
+        }
+    
         // swans switch formations faster as chapters progress
         switch (chapter) {
             case 1:
@@ -68,6 +77,11 @@ class Migrate extends Phaser.Scene {
             case 3:
                 this.duration = 2500;
                 break;
+        }
+
+        // SIESTA POWERUP: swans take longer to switch formations, giving you extra time
+        if (power == 'siesta') {
+            this.duration += 1000;
         }
 
         // create zone timer to measure how long peri has been in correct zone.
@@ -149,18 +163,6 @@ class Migrate extends Phaser.Scene {
         // number of formations passed
         this.pass = 0;
 
-        // power-ups
-        switch (power) {
-            case "slow": this.duration += 2000;
-            break;
-
-            case "strong": 
-            break;
-
-            case "help": 
-            break;
-        }
-
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
 
@@ -213,6 +215,20 @@ class Migrate extends Phaser.Scene {
             this.migrateTutorial.setAlpha(0);
             this.tutorial = false;
 
+            // KENNETH POWERUP: shows correct spot before switching formations
+            if (power == 'kenneth') {
+                this.arrowTween = this.tweens.add({
+                    targets: this.arrow,
+                    duration: 700,
+                    alpha: { from: 0, to: 1 },
+                    ease: 'Cubic',
+                    yoyo: true,
+                    loop: -1,
+                    callbackScope: this,
+                    onStop: this.fadeOut
+                });
+            }
+            
             // peri can move now
             this.peri.move = true;
 
@@ -233,7 +249,7 @@ class Migrate extends Phaser.Scene {
         // if migration is over, space key progresses you to next chapter or ending
         if (this.endMigration && Phaser.Input.Keyboard.JustDown(cursors.space)) {
             this.sound.play('menuSelect');
-            // if this was practice mode, restart scene with practice mode OFF
+            // if this was practice mode, restart scene with practice mode OFF and no powerups
             if (practice) {
                 practice = false;
                 this.scene.restart();
@@ -323,17 +339,33 @@ class Migrate extends Phaser.Scene {
             // let peri move
             this.peri.move = true;
 
+            // KENNETH POWERUP: shows correct spot before switching formations
+            if (power == 'kenneth') {
+                this.arrowTween = this.tweens.add({
+                    targets: this.arrow,
+                    duration: 700,
+                    alpha: { from: 0, to: 1 },
+                    ease: 'Cubic',
+                    yoyo: true,
+                    loop: -1,
+                    callbackScope: this,
+                    onStop: this.fadeOut
+                });
+            }   
+
+            // move zone and arrow
+            this.periZone.x = this.map[this.form].peri[0];
+            this.periZone.y = this.map[this.form].peri[1];
+            this.arrow.x = this.periZone.getBottomRight().x + 10;
+            this.arrow.y = this.periZone.getBottomRight().y + 10;
+
             // move swans
             for (let swan of this.swanGroup.getChildren()) {
                 this.moveSwan(swan);
             }
 
-            // after swans have finished moving, set periZone to next correct spot
+            // after swans have finished moving, start zone checks
             this.time.delayedCall(this.duration, () => {
-                this.periZone.x = this.map[this.form].peri[0];
-                this.periZone.y = this.map[this.form].peri[1];
-                this.arrow.x = this.periZone.getBottomRight().x + 10;
-                this.arrow.y = this.periZone.getBottomRight().y + 10;
                 this.formActive = true;
             });
         }

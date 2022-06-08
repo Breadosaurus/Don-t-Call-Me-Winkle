@@ -133,6 +133,23 @@ class Ending extends Phaser.Scene {
             .setWordWrapWidth(this.CHOICETEXT_WIDTH)
             .setLineSpacing(8);
 
+        // add sounds
+        this.choiceSFX = this.sound.add('periChoice');
+        this.periVoice = this.sound.add('periVoice', {  
+            loop: true
+        }); 
+        this.siestaVoice = this.sound.add('siestaVoice', {  
+            loop: true
+        }); 
+        this.sloaneVoice = this.sound.add('sloaneVoice', {  
+            loop: true
+        }); 
+        this.kennethVoice = this.sound.add('kennethVoice', {  
+            loop: true
+        }); 
+        this.win = this.sound.add('win');
+
+
         // create keys
         cursors = this.input.keyboard.createCursorKeys();
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -453,12 +470,14 @@ class Ending extends Phaser.Scene {
         this.typing = true;
 
         // speaking sfx
-        this.voice = this.sound.add(`${this.dialogue[this.dialogueLine].speaker}Voice`, {    // add appropriate speaker's voice
-            loop: true
-        }); 
-        this.voice.play();
-        this.voice.setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
+        let speaker = this.dialogue[this.dialogueLine].speaker;
 
+        if (this.ending == 1 && this.dialogueLine == 0) {
+            this.win.play();
+        } else {
+            this[`${speaker}Voice`].play();
+            this[`${speaker}Voice`].setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
+        }
         // clear text
         this.swanText.text = '';
 
@@ -501,16 +520,21 @@ class Ending extends Phaser.Scene {
                         yoyo: true
                     });
 
-                    this.voice.stop();          // stop talking audio when typing also done
+                    if (!(this.ending == 1 && this.dialogueLine == 0)) {
+                        this[`${speaker}Voice`].stop();         // stop talking audio when typing also done
+                    }
+                    
+                    
                     this.typing = false;        // no longer typing
                     this.textTimer.destroy();   // destroy timer
+                    this.dialogueLine++;    // advance dialogue line
                 }
             },
             repeat: length - 1,
             callbackScope: this
         });
 
-        this.dialogueLine++;    // advance dialogue line
+        
     } // end typeText()
 
     // swan choice event handler
@@ -521,14 +545,22 @@ class Ending extends Phaser.Scene {
         // record chosen swan in this.swanChoice
         this.swanChoice = swan;
 
+        // add swan jingle
+        this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
+
+        // play swan jingle
+        this.powerSFX.play();
+
         // store chosen swan's portion of dialogue in this.dialogue
         this.dialogue = this.cache.json.get('dialogue')['ending3'][swan];
 
         // reset dialogue line
         this.dialogueLine = 0;
 
-        // if chosen swan is sloane, set babies text to visible
-        this.babiesText.setAlpha(1);
+        if (swan == 'sloane') {
+            // if chosen swan is sloane, set babies text to visible
+            this.babiesText.setAlpha(1);
+        }
 
         for (swan in this.choiceGroup) {
             if (swan != this.swanChoice) {

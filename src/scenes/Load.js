@@ -41,6 +41,9 @@ class Load extends Phaser.Scene {
         this.load.image('kenneth', 'img/kenneth.png');
         this.load.image('swanBox', 'img/swanBox.png');
         this.load.image('periBox', 'img/periBox.png');
+        this.load.image('kennethPower', 'img/kennethPower.png');
+        this.load.image('siestaPower', 'img/siestaPower.png');
+        this.load.image('sloanePower', 'img/sloanePower.png');
         //this.load.image('jeff', 'img/jeffrey_thomas.png');
 
         // load font

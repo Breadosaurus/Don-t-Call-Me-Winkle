@@ -39,7 +39,7 @@ let chapter = 1;
 let tutorial;
 
 // variable to hold power ups
-let power;
+let power = '';
 
 // array to hold names of swans talked to
 let swansTalked = [];
