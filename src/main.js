@@ -38,7 +38,7 @@ let practice;
 let chapter = 1;
 
 // variable to hold power ups
-let power = null;
+let power = '';
 
 // array to hold names of swans talked to
 let swansTalked = [];

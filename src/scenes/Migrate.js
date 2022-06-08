@@ -195,6 +195,20 @@ class Migrate extends Phaser.Scene {
             this.migrateTutorial.setAlpha(0);
             this.tutorial = false;
 
+            // KENNETH POWERUP: shows correct spot before switching formations
+            if (power == 'kenneth') {
+                this.arrowTween = this.tweens.add({
+                    targets: this.arrow,
+                    duration: 700,
+                    alpha: { from: 0, to: 1 },
+                    ease: 'Cubic',
+                    yoyo: true,
+                    loop: -1,
+                    callbackScope: this,
+                    onStop: this.fadeOut
+                });
+            }
+            
             // peri can move now
             this.peri.move = true;
 
@@ -305,17 +319,33 @@ class Migrate extends Phaser.Scene {
             // let peri move
             this.peri.move = true;
 
+            // KENNETH POWERUP: shows correct spot before switching formations
+            if (power == 'kenneth') {
+                this.arrowTween = this.tweens.add({
+                    targets: this.arrow,
+                    duration: 700,
+                    alpha: { from: 0, to: 1 },
+                    ease: 'Cubic',
+                    yoyo: true,
+                    loop: -1,
+                    callbackScope: this,
+                    onStop: this.fadeOut
+                });
+            }   
+
+            // move zone and arrow
+            this.periZone.x = this.map[this.form].peri[0];
+            this.periZone.y = this.map[this.form].peri[1];
+            this.arrow.x = this.periZone.getBottomRight().x + 10;
+            this.arrow.y = this.periZone.getBottomRight().y + 10;
+
             // move swans
             for (let swan of this.swanGroup.getChildren()) {
                 this.moveSwan(swan);
             }
 
-            // after swans have finished moving, set periZone to next correct spot
+            // after swans have finished moving, start zone checks
             this.time.delayedCall(this.duration, () => {
-                this.periZone.x = this.map[this.form].peri[0];
-                this.periZone.y = this.map[this.form].peri[1];
-                this.arrow.x = this.periZone.getBottomRight().x + 10;
-                this.arrow.y = this.periZone.getBottomRight().y + 10;
                 this.formActive = true;
             });
         }
