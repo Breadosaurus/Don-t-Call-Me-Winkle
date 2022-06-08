@@ -1,0 +1,11 @@
+@font-face {
+    font-family: BasicHandwrite;
+    src: url('./basic_handwrite_neat.ttf');
+}
+
+@font-face {
+    font-family: handwrite;
+    src: url('media/basic_handwrite_neat.ttf');
+    font-weight: 400;
+    font-weight: normal;
+}
