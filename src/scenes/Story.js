@@ -91,6 +91,11 @@ class Story extends Phaser.Scene {
             .setWordWrapWidth(this.SWANTEXT_WIDTH);
         this.nextText = this.add.text(this.NEXT_X, this.NEXT_Y, '[SPACE]', dialogueConfig).setOrigin(1, 1).setAlpha(0);
 
+        // create text box and black tint for ending
+        this.black = this.add.rectangle(0, 0, game.config.width, game.config.height, '0x000000', 0.8).setAlpha(0).setDepth(1).setOrigin(0);
+        this.powerBox = this.add.image(game.config.width / 2, game.config.height / 2, 'swanBox').setAlpha(0).setDepth(2);
+        this.powerText = this.add.text(280, 330, '', dialogueConfig).setWordWrapWidth(600).setAlpha(0).setDepth(2);
+
         // for sloane
         this.babiesText = this.add.text(this.SWANTEXT_X, this.SWANTEXT_Y + 95, '', babiesConfig).setAlpha(0);          
   
@@ -120,6 +125,12 @@ class Story extends Phaser.Scene {
             }
         }
 
+        // add sounds
+        this.choiceSFX = this.sound.add('periChoice');
+        this.periVoice = this.sound.add('periVoice', {  
+            loop: true
+        }); 
+
         // create keys
         cursors = this.input.keyboard.createCursorKeys();
         key1 = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ONE);
@@ -131,36 +142,21 @@ class Story extends Phaser.Scene {
         // if swan choice segment is active
         if (this.choosingSwan) {
             if (Phaser.Input.Keyboard.JustDown(key1) && !swansTalked.includes('kenneth')) {
-                this.sound.play('kennethJingle');
                 this.chooseSwan('kenneth');
             } else if (Phaser.Input.Keyboard.JustDown(key2) && !swansTalked.includes('siesta')) {
-                this.sound.play('siestaJingle');
                 this.chooseSwan('siesta');
             } else if (Phaser.Input.Keyboard.JustDown(key3) && !swansTalked.includes('sloane')) {
-                this.sound.play('sloaneJingle');
                 this.chooseSwan('sloane');
             }
 
         // otherwise, if dialogue choice segment is active
         } else if (this.choosingDialogue) {
             if (Phaser.Input.Keyboard.JustDown(key1)) {
-                this.choiceSFX = this.sound.add('periChoice');
-                this.choiceSFX.play();
-                this.choiceSFX.on('complete', () => { 
-                    this.chooseDialogue(1);
-                });               
+                this.chooseDialogue(1);      
             } else if (Phaser.Input.Keyboard.JustDown(key2)) {
-                this.choiceSFX = this.sound.add('periChoice');
-                this.choiceSFX.play();
-                this.choiceSFX.on('complete', () => { 
-                    this.chooseDialogue(2);
-                });
+                this.chooseDialogue(2);
             } else if (Phaser.Input.Keyboard.JustDown(key3) && this.nextLine.dialogue[2]) {
-                this.choiceSFX = this.sound.add('periChoice');
-                this.choiceSFX.play();
-                this.choiceSFX.on('complete', () => { 
-                    this.chooseDialogue(3);
-                });
+                this.chooseDialogue(3);
             }
             
         // otherwise, if conversation has started
@@ -169,26 +165,10 @@ class Story extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing) {
                 // if end of dialogue
                 if (this.dialogueLine > this.dialogue.length - 1) {
-                    // add powerup
-                    power = 'this.swanChoice';
-                    this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
-                    this.powerSFX.play();
-
-                    // fade to black and go to migration scene only after sfx done
-                    this.powerSFX.on('complete', () => {
-                        this.cameras.main.fadeOut(400);                         
-                        this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
-                            this.time.delayedCall(200, () => {
-                                this.scene.start('migrateScene')
-                            });
-                        });
-                    });                     
-                    
+                    this.endScene();            // go to end of scene
                 } else {
-                    // fade out [SPACE] prompt
-                    this.promptBlink.stop();
-
-                    this.typeNextLine();
+                    this.promptBlink.stop();    // fade out [SPACE] prompt
+                    this.typeNextLine();        // next line
                 }  
             }
         }
@@ -228,8 +208,12 @@ class Story extends Phaser.Scene {
 
     // dialogue choice event handler
     chooseDialogue(option) {
+        this.typing = true;
         // lock choices
         this.choosingDialogue = false;
+
+        // play choice SFX
+        this.choiceSFX.play();
 
         // store # of chosen option
         this.choiceNum = option;
@@ -239,37 +223,81 @@ class Story extends Phaser.Scene {
             targets: [this.choiceBox, this.choiceSpeaker, this.choiceText],
             alpha: { from: 1, to: 0 },
             duration: 200
+        }).on('complete', () => {
+            this.time.delayedCall(400, () => {
+                this.dialogueLine++;
+                if (this.dialogueLine > this.dialogue.length - 1) {
+                    // end scene
+                    this.endScene();
+                } else this.typeNextLine();
+            }); 
+        });
+    } // end chooseDialogue()
+
+    endScene() {
+        // lock space key
+        this.swanTalking = false;
+
+        // set powerup
+        power = 'this.swanChoice';
+        this.powerIcon = this.add.image(this.powerText.x - 75, this.powerBox.y, `${this.swanChoice}Power`).setAlpha(0).setDepth(2).setScale(0.5);
+
+        // play sound
+        this.powerSFX.play();
+
+        // set text
+        this.powerText.text = `${this.swanChoice.toUpperCase()} gave you a powerup!\n\nDuring the next migration, `;
+        this.powerText.text +=
+            this.swanChoice == 'kenneth' ?
+                'you will be shown your spot in each formation.' :
+                this.swanChoice == 'siesta' ?
+                    'swans will switch formation more slowly.' :
+                    // if siesta:
+                    'you can fly past swans without colliding.';
+
+        let toFade = [this.peri, this.choiceBox, this.choiceText, this[`${this.swanChoice}`], this.swanBox, this.swanText, this.speakerText, this.babiesText, this.nextText];
+        toFade = toFade.filter(obj => obj.alpha != 0);
+        // fade out everything under the black layer except for bg
+        this.tweens.add({
+            targets: toFade,
+            alpha: { from: 1, to: 0 },
+            duration: 400
         });
 
-        // advance dialogue
-        this.dialogueLine++;
-        if (this.dialogueLine > this.dialogue.length - 1) {
-            // add powerup
-            power = 'this.swanChoice';
-            this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
-            this.powerSFX.play();
-
-            // fade to black and go to migration scene only after sfx done
-            this.powerSFX.on('complete', () => {
-                this.cameras.main.fadeOut(400);                         
+        // fade in text box and black tint
+        this.tweens.add({
+            targets: [this.black, this.powerBox, this.powerText, this.powerIcon],
+            alpha: { from: 0, to: 1 },
+            duration: 400
+        }).on('complete', () => {
+            cursors.space.once('down', () => {
+                this.cameras.main.fadeOut(400);
                 this.cameras.main.once(Phaser.Cameras.Scene2D.Events.FADE_OUT_COMPLETE, () => {
                     this.time.delayedCall(200, () => {
-                        this.scene.start('migrateScene')
+                        this.scene.start('migrateScene');
                     });
                 });
-            });  
-
-        } else this.typeNextLine();
-    } // end chooseDialogue()
+            });
+        });
+    }
 
     // swan choice
     chooseSwan(swan) {
         // lock swan choices
         this.choosingSwan = false;
-
+    
         // record chosen swan in this.swanChoice and global swansTalked array
         this.swanChoice = swan;
         swansTalked.push(swan);
+
+        // add swan sfx
+        this[`${this.swanChoice}Voice`] = this.sound.add(`${this.swanChoice}Voice`, {  
+            loop: true
+        }); 
+        this.powerSFX = this.sound.add(`${this.swanChoice}Jingle`);
+
+        // play swan jingle
+        this.powerSFX.play();
 
         // store chosen swan's portion of dialogue in this.dialogue
         this.dialogue = this.cache.json.get('dialogue')[swan];
@@ -355,12 +383,9 @@ class Story extends Phaser.Scene {
         // currently typing
         this.typing = true;
 
-        // speaking sfx
-        this.voice = this.sound.add(`${this.dialogue[this.dialogueLine].speaker}Voice`, {    // add appropriate speaker's voice
-            loop: true
-        }); 
-        this.voice.play();
-        this.voice.setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
+        let speaker = this.dialogue[this.dialogueLine].speaker;
+        this[`${speaker}Voice`].play();
+        this[`${speaker}Voice`].setSeek(Phaser.Math.Between(1, 11));         // randomize playback position so voice varies between chunks of dialogue
 
         // clear text
         this.swanText.text = '';
@@ -405,17 +430,18 @@ class Story extends Phaser.Scene {
                     });
 
                     // pause voice
-                    this.voice.stop();
+                    this[`${speaker}Voice`].stop();
 
                     this.typing = false;        // no longer typing
                     this.textTimer.destroy();   // destroy timer
+                    this.dialogueLine++;    // advance dialogue line
                 }
             },
             repeat: length - 1,
             callbackScope: this
         });
 
-        this.dialogueLine++;    // advance dialogue line
+        
     } // end typeText()
 
     // fade out targets

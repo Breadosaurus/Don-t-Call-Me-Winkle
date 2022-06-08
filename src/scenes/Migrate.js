@@ -4,15 +4,19 @@ class Migrate extends Phaser.Scene {
     }
 
     create() {
+        // fade in scene
         this.cameras.main.fadeIn(400, 0, 0, 0);
+
         // store current chapter's portion of migration map json file in this.map
         this.map = this.cache.json.get('migrationMap')[`ch${chapter}`];
+
+        // if practice, clear powerup 
+        if (practice) power = null;
 
         // add background and clouds
         this.bg = this.add.tileSprite(0, 0, 1024, 768, `sky${chapter}`).setOrigin(0, 0);
         this.clouds = this.add.tileSprite(0, 0, 1024, 768, `clouds${chapter}`).setOrigin(0, 0);
         
-
         // set world bounds
         this.physics.world.setBounds(leftBound, topBound, game.config.width - leftBound*2, game.config.height - topBound*2);
 
@@ -37,8 +41,10 @@ class Migrate extends Phaser.Scene {
         }
         
         // set colliders between peri and swans
-        this.physics.add.collider(this.peri, this.swanGroup);
-
+        if (power != 'sloane') {                   // SLOANE POWERUP: you don't collide with other swans
+            this.physics.add.collider(this.peri, this.swanGroup);
+        }
+    
         // swans switch formations faster as chapters progress
         switch (chapter) {
             case 1:
@@ -50,6 +56,11 @@ class Migrate extends Phaser.Scene {
             case 3:
                 this.duration = 2500;
                 break;
+        }
+
+        // SIESTA POWERUP: swans take longer to switch formations, giving you extra time
+        if (power == 'siesta') {
+            this.duration += 1000;
         }
 
         // create zone timer to measure how long peri has been in correct zone.
@@ -131,18 +142,6 @@ class Migrate extends Phaser.Scene {
         // number of formations passed
         this.pass = 0;
 
-        // power-ups
-        switch (power) {
-            case "slow": this.duration += 2000;
-            break;
-
-            case "strong": 
-            break;
-
-            case "help": 
-            break;
-        }
-
         // define keys
         cursors = this.input.keyboard.createCursorKeys();
         //keySPACE = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
@@ -216,7 +215,7 @@ class Migrate extends Phaser.Scene {
         // if migration is over, space key progresses you to next chapter or ending
         if (this.endMigration && Phaser.Input.Keyboard.JustDown(cursors.space)) {
             this.sound.play('menuSelect');
-            // if this was practice mode, restart scene with practice mode OFF
+            // if this was practice mode, restart scene with practice mode OFF and no powerups
             if (practice) {
                 practice = false;
                 this.scene.restart();
