@@ -3,23 +3,23 @@ class Tutorial extends Phaser.Scene {
         super("tutorialScene");
 
         // place peri and jett x, y coords
-        this.peri_X = game.config.width - 100;        
-        this.peri_Y = game.config.height - 100;
-        this.jett_X = game.config.width - 875;
-        this.jett_Y = game.config.height/2.5;
+        this.peri_X = 735;        
+        this.peri_Y = game.config.height - 250;
+        this.jett_X = 310;
+        this.jett_Y = 730;
 
         // dialogue box placement
-        this.jettBox_X = this.jett_X + 10;           
-        this.jettBox_Y = this.jett_Y - 10;
+        this.jettBox_X = game.config.width - 30;           
+        this.jettBox_Y = game.config.height - 30;
+
         // jett text configs
-        this.jettText_X = this.jettBox_X + 100;
-        this.jettText_Y = this.jettBox_Y + 100;
+        this.jettText_X = 330; 
+        this.jettText_Y = 570;
         this.textWrapWidth = 600;
         this.prompt = '[SPACE]';
-        this.prompt_X = game.config.width/3.4 + 620;
-        this.prompt_Y = game.config.height*(2/3)+130;
+        this.prompt_X = this.jettBox_X - 70;
+        this.prompt_Y = this.jettBox_Y - 50;
         this.typeSpeed = 50;
-	
 
         // just jett and peri will talk
         this.jett = null;
@@ -68,13 +68,14 @@ class Tutorial extends Phaser.Scene {
         this.dialogueLine = 0;               // current dialogue line #
         this.nextLine = null;                // next line of dialogue
 
+        this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);       // set bg under title screen
+
         // add text box and text
         this.textBox = this.add.image(this.jettBox_X, this.jettBox_Y, 'swanBox').setOrigin(1, 1).setAlpha(0);
         this.speakerText = this.add.text(this.jettText_X, this.jettText_Y - 40, '', speakerConfig);
         this.swanText = this.add.text(this.jettText_X, this.jettText_Y, '', dialogueConfig)
             .setWordWrapWidth(this.textWrapWidth);
         this.nextText = this.add.text(this.prompt_X, this.prompt_Y, '[SPACE]', dialogueConfig).setOrigin(1, 1).setAlpha(0);
-            
 
         if (chapter == 1) {                         // add title screen only if chapter 1
             // add title screen to initiate game
@@ -82,24 +83,55 @@ class Tutorial extends Phaser.Scene {
             this.title.play('titleAnim', true);
 
             // start and credit buttons
-            this.startButton = this.add.sprite(50, 500, 'startButton').setOrigin(0, 0);
-            this.creditButton = this.add.sprite(50, 600, 'creditButton').setOrigin(0, 0);
-        } else {                                    
-            this.decision = true;                   // show decision in between chapters
-            this.makeDecision();
+            this.startButton = this.add.image(50, 500, 'startButton').setOrigin(0, 0);
+            this.creditButton = this.add.image(50, 600, 'creditButton').setOrigin(0, 0);
+        } else {
+            this.titleActive = false;
+
+            // add and move jett
+            this.jett = this.add.image(0, this.jett_Y, 'jett').setOrigin(1, 1);
+            this.tweens.add({
+                startDelay: 100,
+                targets: this.jett,
+                x: this.jett_X,
+                duration: 500,
+                ease: 'Cubic'
+            });
+
+            // move peri
+            this.time.delayedCall(200, () => {
+                this.peri = this.add.image(game.config.width, this.peri_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
+                this.tweens.add({
+                    targets: this.peri,
+                    x: this.peri_X,
+                    duration: 500,
+                    ease: 'Cubic'
+                })
+            });
+            
+            // add swan text box
+            this.tweens.add({
+                targets: this.textBox,
+                alpha: { from: 0, to: 1 },
+                duration: 500,
+                ease: 'Linear'
+            }).on('complete', () => {
+                this.decision = true;
+                this.makeDecision();
+            });       
         }
 
         // text wrap in dialogue based on example from http://phaser.io/examples/v3/view/game-objects/text/word-wrap-by-width
     } // end create()
 
     update() {
-        // if tutorial hasn't been seen yet, assuming chapters haven't increased passed 1
-        if (chapter == 1 && this.titleActive) {
+        // if tutorial hasn't been seen yet, assuming chapters haven't increased past 1
+        if (this.titleActive) {
             if (Phaser.Input.Keyboard.JustDown(keyS)) {
                 this.sound.play('uiSelect');
+                this.titleActive = false;       // end title segment
+                this.tutorialActive = true;     // move to tutorial segment
                 this.startTutorial();
-                this.titleActive = false;
-                this.tutorialActive = true;
             }
             // credits input while title screen is active
             if (Phaser.Input.Keyboard.JustDown(keyC)) {
@@ -115,7 +147,7 @@ class Tutorial extends Phaser.Scene {
                     this.time.delayedCall(750, () => {
                         this.cameras.main.fadeOut(400);
                         this.time.delayedCall(500, () => {
-                            this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
+                            this.credits = this.add.image(0, 0, 'credits').setOrigin(0, 0);
                             this.credits.play('creditAnim');
                             this.endingOn = false;
                             this.cameras.main.fadeIn(400, 0, 0, 0);
@@ -124,31 +156,24 @@ class Tutorial extends Phaser.Scene {
                 });
             }
 
-        } else if (chapter > 1) {
-            this.decision = true;
-            this.makeDecision();
-        
-        // otherwise, if conversation has started
+        // otherwise, if tutorial segment is active
         } else if (this.tutorialActive) {
-            // if space key is pressed and dialogue has finished typing
+            // if space key is pressed and during tutorial
             if (Phaser.Input.Keyboard.JustDown(cursors.space) && !this.typing) {
                 // if end of dialogue
                 if (this.dialogueLine > this.dialogue.length - 1) {
-                    // add powerup
+                    // end tutorial, start choice
+                    this.tutorialActive = false;
+                    this.decision = true;
                     this.makeDecision();                   
-                    
                 } else {
-                    // fade out [SPACE] prompt
-                    this.promptBlink.stop();
-
-                    this.typeNextLine();
+                    this.promptBlink.stop();    // fade out [SPACE] prompt
+                    this.typeNextLine();        // type next line
                 }  
             }
-        }
-        // start input check while title screen is active
-        
-        
-        
+        } 
+
+        // input check while credits screen is active
         if (Phaser.Input.Keyboard.JustDown(keyM) && this.creditsActive) {
             this.sound.play('uiSelect');
             this.time.delayedCall(750, () => {
@@ -160,20 +185,23 @@ class Tutorial extends Phaser.Scene {
             });
                 
         }
+
         // send player to chosen activity when choice screen is active
-        if (Phaser.Input.Keyboard.JustDown(key1) && this.decision) {
-            this.sound.play('uiSelect');
-            this.scene.start('migrateScene');
-        }
-        if (Phaser.Input.Keyboard.JustDown(key2) && this.decision) {
-            this.sound.play('uiSelect');
-            this.scene.start('storyScene');
+        if (this.decision) {
+            if (Phaser.Input.Keyboard.JustDown(key1)) {
+                this.sound.play('uiSelect');
+                this.scene.start('migrateScene');
+            } else if (Phaser.Input.Keyboard.JustDown(key2)) {
+                this.sound.play('uiSelect');
+                this.scene.start('storyScene');
+            }
         }
     } // end update()
 
     startTutorial() {
         // grab tutorial section of dialogue json
-        this.tutorialTxt = this.cache.json.get('dialogue')['tutorial'];
+        //this.tutorialTxt = this.cache.json.get('dialogue')['tutorial'];
+        this.dialogue = this.cache.json.get('dialogue')['tutorial'];
 
         this.tweens.add({                       // "press" start button
             targets: this.startButton,
@@ -182,14 +210,13 @@ class Tutorial extends Phaser.Scene {
             ease: 'Cubic',
             yoyo: true
         }).on('complete', () => {
-             // // camera fade-to-black transition
+            // camera fade-to-black transition
             this.time.delayedCall(750, () => {
                 this.cameras.main.fadeOut(400);
                 this.time.delayedCall(500, () => {
                     this.title.destroy();               // destroy title screen to minimize computing stress lol
                     this.startButton.destroy();
                     this.creditButton.destroy();
-                    this.bg = this.add.image(0, 0, `bg`).setOrigin(0, 0);       // set bg over title screen
                     this.cameras.main.fadeIn(400, 0, 0, 0);
                 });
             });
@@ -199,7 +226,7 @@ class Tutorial extends Phaser.Scene {
         this.time.delayedCall(1500, () => {
 
             // add and move jett
-            this.jett = this.add.sprite(0, this.jett_Y, 'jett');
+            this.jett = this.add.image(0, this.jett_Y, 'jett').setOrigin(1, 1);
             this.tweens.add({
                 startDelay: 100,
                 targets: this.jett,
@@ -210,7 +237,7 @@ class Tutorial extends Phaser.Scene {
 
             // move peri
             this.time.delayedCall(200, () => {
-                this.peri = this.add.sprite(game.config.width, this.peri_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
+                this.peri = this.add.image(game.config.width, this.peri_Y, 'periStory').setOrigin(0, 1).setTint(0x777777);
                 this.tweens.add({
                     targets: this.peri,
                     x: this.peri_X,
@@ -221,8 +248,8 @@ class Tutorial extends Phaser.Scene {
             
             // add swan text box
             this.tweens.add({
-                targets: this.swanBox,
-                alpha: { from: 0, to: 1},
+                targets: this.textBox,
+                alpha: { from: 0, to: 1 },
                 duration: 500,
                 ease: 'Linear'
             }).on('complete', () => {
@@ -236,7 +263,12 @@ class Tutorial extends Phaser.Scene {
     } // end startTutorial()
 
     makeDecision() {
+        // reset dialogue line and load choice dialogue
+        this.dialogueLine = 0;
+        this.dialogue = this.cache.json.get('dialogue')['choice'];
 
+        // start dialogue
+        this.typeNextLine();
     }
 
     typeNextLine() {
@@ -285,8 +317,13 @@ class Tutorial extends Phaser.Scene {
         this.textTimer = this.time.addEvent({
             delay: 10,
             callback: () => {
+                this.swanText.text += wrappedText[char];    // add char to swanText
+                char++;                                     // increment char
 
-                char++;    // increment char
+                // if decision, change prompt text
+                if (this.decision) {
+                    this.nextText.text = '[1] or [2]';
+                }
 
                 // after reaching end of line
                 if (this.textTimer.getRepeatCount() == 0) {    
@@ -313,5 +350,15 @@ class Tutorial extends Phaser.Scene {
 
         this.dialogueLine++;    // advance dialogue line
     } // end typeText()
+
+    // fade out targets
+    fadeOut(tween, targets) {
+        this.tweens.add({
+            targets: targets,
+            alpha: { from: targets.alpha, to: 0 },
+            duration: 200,
+            repeat: 0
+        });
+    } // end fadeOut()
 
 }

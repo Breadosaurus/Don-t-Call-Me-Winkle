@@ -35,7 +35,7 @@ let btmBound = game.config.height - topBound;
 let practice;
 
 // start game at chapter 1
-let chapter = 1;
+let chapter = 2;
 
 // variable to hold power ups
 let power;
