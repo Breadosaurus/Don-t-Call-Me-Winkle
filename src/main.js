@@ -38,10 +38,10 @@ let practice;
 let chapter = 1;
 
 // variable to hold power ups
-let power = 'sloane';
+let power = null;
 
 // array to hold names of swans talked to
-let swansTalked = ['sloane', 'siesta', 'kenneth'];
+let swansTalked = [];
 
 // number of migrations where 2 or more formations were passed
-let migrationsPassed = 3;
+let migrationsPassed = 0;

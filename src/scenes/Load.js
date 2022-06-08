@@ -144,6 +144,6 @@ class Load extends Phaser.Scene {
         });
         
         // start first real game scene
-        this.scene.start('endScene');
+        this.scene.start('tutorialScene');
     }
 }
