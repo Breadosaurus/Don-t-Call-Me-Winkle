@@ -150,7 +150,7 @@ class Tutorial extends Phaser.Scene {
                     this.time.delayedCall(750, () => {
                         this.cameras.main.fadeOut(400);
                         this.time.delayedCall(500, () => {
-                            this.credits = this.add.image(0, 0, 'credits').setOrigin(0, 0);
+                            this.credits = this.add.sprite(0, 0, 'credits').setOrigin(0, 0);
                             this.credits.play('creditAnim');
                             this.endingOn = false;
                             this.cameras.main.fadeIn(400, 0, 0, 0);
