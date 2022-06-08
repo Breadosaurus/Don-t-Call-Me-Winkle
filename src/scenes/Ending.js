@@ -188,6 +188,16 @@ class Ending extends Phaser.Scene {
                 // add Peri sprite to left of text box
                 this.peri = this.add.image(0, 700, 'periStory').setOrigin(1, 1).setFlipX(true);
 
+                this.addBox = this.tweens.add({
+                    targets: this.swanBox,
+                    alpha: { from: 0, to: 1},
+                    duration: 500,
+                    ease: 'Linear'
+                }).on('complete', () => {
+                    this.periTalking = true;            // dialogue has started
+                    this.typeNextLine();                // start dialogue
+                });
+
                 // move peri
                 this.time.delayedCall(200, () => {
                     this.tweens.add({
