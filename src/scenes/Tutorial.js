@@ -187,7 +187,7 @@ class Tutorial extends Phaser.Scene {
             if (Phaser.Input.Keyboard.JustDown(cursors.right) && !tutorial) {
                 // go to decision screen                
                 this.voice.stop();
-                this.promptBlink.stop();    // fade out [SPACE] prompt
+                if (this.promptBlink) this.promptBlink.stop();    // fade out [SPACE] prompt
                 this.tutorialActive = false;
                 this.decision = true;           // decision segment active
                 this.makeDecision();

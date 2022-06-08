@@ -83,6 +83,15 @@ class Story extends Phaser.Scene {
             resolution: 2
         }
 
+        this.choiceConfig = {
+            fontFamily: 'handwrite',
+            fontSize: 40, 
+            fontWeight: 'bold', 
+            color: '#4e5f8e', 
+            stroke: '#eef7ff', 
+            strokeThickness: 8
+        }
+
         // add background
         this.bg = this.add.image(0, 0, `bg${chapter}`).setOrigin(0, 0);
         
