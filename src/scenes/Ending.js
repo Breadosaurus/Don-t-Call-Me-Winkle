@@ -104,6 +104,15 @@ class Ending extends Phaser.Scene {
             resolution: 2
         }
 
+        this.choiceConfig = {
+            fontFamily: 'handwrite',
+            fontSize: 40, 
+            fontWeight: 'bold', 
+            color: '#4e5f8e', 
+            stroke: '#eef7ff', 
+            strokeThickness: 8
+        }
+
         // add background
         this.bg = this.add.image(0, 0, `bg${chapter}`).setOrigin(0, 0);
 
@@ -323,6 +332,14 @@ class Ending extends Phaser.Scene {
             sloane: this.sloaneChoice
         };
 
+        this.choiceLabels = [
+            this.prompt = this.add.text(game.config.width/2, game.config.height/5, 'Who will you talk to?', this.choiceConfig).setOrigin(0.5),
+            this.kennethNum = this.add.text(this.kennethChoice.x, game.config.height - 70, '[1]', this.choiceConfig).setOrigin(0.5),
+            this.siestaNum = this.add.text(this.siestaChoice.x, game.config.height - 70, '[2]', this.choiceConfig).setOrigin(0.5),
+            this.sloaneNum = this.add.text(this.sloaneChoice.x, game.config.height - 70, '[3]', this.choiceConfig).setOrigin(0.5)
+        ];
+        
+
         // tint swans NOT talked to
         for (let swan in this.choiceGroup) {
             this.choiceGroup[swan].setAlpha(0);
@@ -337,6 +354,14 @@ class Ending extends Phaser.Scene {
             duration: 500,
             ease: 'Linear'
         });
+
+        this.tweens.add({
+            targets: this.choiceLabels,
+            alpha: { from: 0, to: 1 },
+            duration: 500,
+            ease: 'Linear'
+        });
+
 
         this.choosingSwan = true;
     }
@@ -522,6 +547,13 @@ class Ending extends Phaser.Scene {
                 })
             }
         }
+
+        this.tweens.add({
+            targets: this.choiceLabels,
+            alpha: { from: 1, to: 0 },
+            duration: 200
+        });
+        
 
         // camera transition
         this.time.delayedCall(750, () => {

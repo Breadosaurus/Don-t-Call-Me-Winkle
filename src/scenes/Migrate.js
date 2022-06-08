@@ -12,6 +12,14 @@ class Migrate extends Phaser.Scene {
         this.bg = this.add.tileSprite(0, 0, 1024, 768, `sky${chapter}`).setOrigin(0, 0);
         this.clouds = this.add.tileSprite(0, 0, 1024, 768, `clouds${chapter}`).setOrigin(0, 0);
         
+        // create sounds
+        this.bump1 = this.sound.add('bump1');
+        this.bump2 = this.sound.add('bump2');
+        this.bump3 = this.sound.add('bump3');
+        this.bump4 = this.sound.add('bump4');
+        this.bump5 = this.sound.add('bump5');
+        this.bump6 = this.sound.add('bump6');
+        this.win = this.sound.add('win');
 
         // set world bounds
         this.physics.world.setBounds(leftBound, topBound, game.config.width - leftBound*2, game.config.height - topBound*2);
@@ -39,18 +47,14 @@ class Migrate extends Phaser.Scene {
         // set colliders between peri and swans
         this.physics.add.collider(this.peri, this.swanGroup, () => {
             // randomize collision sfx (later)
-            this.bumped = true;
-            
-            // if (Phaser.Math.Between(0, 1) == 0) {
-            //     this.bump1 = this.sound.add('bump1');
-            //     this.bump1.play();
-            // } else {
-            //     this.bump2 = this.sound.add('bump1');
-            //     this.bump2.play();
-            // }
-            this.time.delayedCall(700, () => {
-                this.bumped = false;
-            });
+            if (!this.bumped) {
+                this.bumped = true;
+                let sound = Phaser.Math.Between(1, 6);
+                this[`bump${sound}`].play();
+                this.time.delayedCall(700, () => {
+                    this.bumped = false;
+                });
+            }  
         });
 
         // swans switch formations faster as chapters progress
@@ -70,7 +74,8 @@ class Migrate extends Phaser.Scene {
         // if peri stays within zone for 700 ms, end formation.
         this.zoneTimerConfig = { delay: 700, callback: () => {
             this.timeLimit.paused = true;
-            this.sound.play('win', true);                  // play formation complete sound
+            
+            this.win.play();              // trumpets from heaven!! (play success sound :))
 
             if (this.arrowTween && this.arrowTween.isPlaying()) {          // fade out arrow if visible
                 this.arrowTween.stop();
@@ -80,7 +85,6 @@ class Migrate extends Phaser.Scene {
             this.peri.anims.setProgress(0);
 
             this.formActive = false;                    // form is complete
-            this.sound.play('win');                     // trumpets from heaven!! (play success sound :))
             this.peri.x = this.map[this.form].peri[0];  // immobilize peri and move him to exact correct location
             this.peri.y = this.map[this.form].peri[1];
             this.peri.move = false;
@@ -140,7 +144,7 @@ class Migrate extends Phaser.Scene {
         this.endMigration = false;
 
         // current formation
-        this.form = 1;
+        this.form = 3;
 
         // number of formations passed
         this.pass = 0;
@@ -166,7 +170,7 @@ class Migrate extends Phaser.Scene {
         let dialogueConfig = {
             fontFamily: 'handwrite',
             fontSize: '24px',
-            color: '#18181A',
+            color: '#4e5f8e',
             align: 'left',
             padding: {
                 top: 10,
@@ -181,9 +185,9 @@ class Migrate extends Phaser.Scene {
 
         this.migrateTutorial = this.add.text(this.box.x, this.box.y -4,
             practice ? 
-                "Welcome to migration practice! Here you will practice getting in formation with the flock. Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n(Press SPACE to begin)" : 
+                "Welcome to migration practice! Here, you can take your time and practice finding your spot in the formation. Use the arrow keys to fly around, and try not to bump into anyone. Good luck!\n\n(Press SPACE to begin)" : 
 
-                "Welcome to the official migration! Use arrow keys to move. Try to figure out your spot quick and avoid bumping into your flockmates! Good luck. \n\n(Press SPACE to begin)"
+                `Welcome to your ${chapter == 1 ? 'first' : chapter == 2 ? 'second' : 'third and final'} migration! Remember, use the arrow keys to find your spot in the formation before time runs out. Good luck!\n\n(Press SPACE to begin)`
         , dialogueConfig).setWordWrapWidth(600);
         this.migrateTutorial.setOrigin(0.5,0.5);
         this.passPractice = this.add.text(this.box.x, this.box.y - 4, 
@@ -290,9 +294,9 @@ class Migrate extends Phaser.Scene {
 
             // end message appears
             this.box.setAlpha(1);
-            this.add.text(game.config.width/2, game.config.height/4, 
-                practice ? 'practice complete!':'stage complete!',
-            {font: 'handwrite', fontSize: 400, fontWeight: 'bold', color: '#8e87f1'}).setOrigin(0.5).setDepth(2);
+            this.add.text(game.config.width/2, game.config.height/6, 
+                practice ? 'PRACTICE COMPLETE!':'MIGRATION COMPLETE!',
+            {fontFamily: 'handwrite', fontSize: 60, fontWeight: 'bold', color: '#4e5f8e', stroke: '#eef7ff', strokeThickness: 8}).setOrigin(0.5).setDepth(2);
             
             this.passMigrate.text = `You passed ${this.pass} out of 3 formations.\n\n${
                 this.pass == 0 ? "Don't give up!" :

@@ -23,8 +23,8 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // peri cannot move at first
         this.move = false;
 
-        // add sfx for collisions
-        this.flap = scene.sound.add('flap');
+        // flapping sound
+        //this.flap = scene.sound.add('flap');
 
     } // end constructor
 
@@ -32,20 +32,22 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         // left/right/up/down mvt
         if (this.move) {
             if (cursors.left.isDown) {
+                this.flapWings();
                 this.setAccelerationX(-this.accel);
-                this.anims.play('wings', true);
-                this.flap.play();
+                //this.flap.play();
             } else if (cursors.right.isDown) {
+                this.flapWings();
                 this.setAccelerationX(this.accel);
             } else {
                 this.setAccelerationX(0);
             }
 
             if (cursors.up.isDown) {
+                this.flapWings();
                 this.setAccelerationY(-this.accel);
-                this.anims.play('wings', true);
-                this.flap.play();
+                //this.flap.play();
             } else if (cursors.down.isDown) {
+                this.flapWings();
                 this.setAccelerationY(this.accel);
             } else {
                 this.setAccelerationY(0);
@@ -53,6 +55,13 @@ class PeriMigrate extends Phaser.Physics.Arcade.Sprite {
         } else {
             this.setAcceleration(0);
         }
+
+
     } // end update()
 
+    flapWings() {
+        if (!this.anims.isPlaying) {
+            this.anims.play('wings', true);
+        }
+    }
 }

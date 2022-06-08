@@ -37,6 +37,8 @@ class Story extends Phaser.Scene {
     } // end constructor()
 
     create() {
+        this.cameras.main.fadeIn(400, 0, 0, 0);
+
         // set practice mode to false if player chooses to socialize
         practice = false;
 
@@ -112,6 +114,13 @@ class Story extends Phaser.Scene {
                              siesta: this.siestaChoice,
                              sloane: this.sloaneChoice
         };
+
+        this.choiceLabels = [
+            this.prompt = this.add.text(game.config.width/2, game.config.height/5, 'Who will you talk to?', this.choiceConfig).setOrigin(0.5),
+            this.kennethNum = this.add.text(this.kennethChoice.x, game.config.height - 70, '[1]', this.choiceConfig).setOrigin(0.5),
+            this.siestaNum = this.add.text(this.siestaChoice.x, game.config.height - 70, '[2]', this.choiceConfig).setOrigin(0.5),
+            this.sloaneNum = this.add.text(this.sloaneChoice.x, game.config.height - 70, '[3]', this.choiceConfig).setOrigin(0.5)
+        ];
 
         // tint already-chosen swans grey
         for (let swan in this.choiceGroup) {
@@ -296,6 +305,12 @@ class Story extends Phaser.Scene {
                 })
             }
         }
+        
+        this.tweens.add({
+            targets: this.choiceLabels,
+            alpha: { from: 1, to: 0 },
+            duration: 200
+        });
 
         // camera transition
         this.time.delayedCall(750, () => {
